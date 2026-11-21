@@ -695,6 +695,13 @@ html,body{max-width:100%;overflow-x:hidden}
 .gstar{position:absolute;right:-10px;top:14px;z-index:5;width:32px;height:32px;border-radius:50%;border:1px solid #c9a24a;background:#15121ce6;color:#e9c46a;font-size:18px;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .2s}.gslot.open .gstar{pointer-events:auto}.gslot.open:hover .gstar,.gslot.open .gstar.on{opacity:1}@media(hover:none){.gslot.open .gstar{opacity:1}}.gstar.on{color:#ffd24a;background:#3a2a08;box-shadow:0 0 12px #ffd24a88}
 .cstar{position:absolute;right:-12px;top:-14px;z-index:4;width:36px;height:36px;border-radius:50%;border:1px solid #c9a24a;background:#15121c;color:#e9c46a;font-size:20px;cursor:pointer;box-shadow:0 4px 12px #000a}.cstar.on{background:#3a2a08;color:#ffd24a;box-shadow:0 0 14px #ffd24a88}
 .ichip{display:inline-flex;align-items:center;gap:5px}.ichip svg,.ichip .rbadge{flex:none}.ichip .ci{font-size:15px;line-height:1}
+.cmbg{display:grid;grid-template-columns:auto repeat(5,minmax(0,1fr));gap:6px;margin-top:10px;align-items:stretch}
+.cmh{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:12px;color:var(--muted,#aaa)}.cmh em{font-style:normal}
+.cmb{position:relative;overflow:hidden;border:1px solid #3a3346;background:#16131c;color:#eee;border-radius:10px;padding:8px 4px 10px;cursor:pointer;display:flex;align-items:baseline;justify-content:center;gap:1px;font:inherit}
+.cmb b{font-size:15px}.cmb small{font-size:11px;opacity:.6}.cmb i{position:absolute;left:0;bottom:0;height:3px;background:var(--gold,#e6c25e)}
+.cmb:hover{border-color:#8a7650}.cmb.on{border-color:var(--gold,#e6c25e);background:#2a2214;box-shadow:0 0 0 1px var(--gold,#e6c25e) inset}.cmb.full{background:#2b2310}.cmb:disabled{opacity:.35;cursor:default}
+.cmbw{grid-column:span 5;display:grid}
+@media(max-width:520px){.cmh em{display:none}.cmb b{font-size:12px}.cmb small{font-size:9px}.cmbg{gap:4px}}
 </style>
 
 <div id="intro" hidden>
@@ -1448,6 +1455,17 @@ const CX_KINDS=[['char',c=>c.k==='char'||c.k==='event'],['treasure',c=>c.k==='tr
 const CX_KI={char:'👤',treasure:'💎',weapon:'⚔️',horse:'🐎',battle:'🏯'};
 const CX_RACES=['人','仙','妖','鬼','龍','神','魔'];
 const CX_ELS=[['木',c=>c.e==='木'],['火',c=>c.e==='火'],['土',c=>c.e==='土'],['金',c=>c.e==='金'],['水',c=>c.e==='水'],['神',c=>c.r==='神'],['魔',c=>c.r==='魔']];
+const COMBT={zh_hant:['種族 × 屬性 收集','點格子即可篩選'],zh_hans:['种族 × 属性 收集','点格子即可筛选'],ja:['種族 × 属性 コレクション','マスをタップで絞り込み'],ko:['종족 × 속성 수집','칸을 누르면 필터'],en:['Race × Element collection','Tap a cell to filter'],es:['Colección raza × elemento','Toca una casilla para filtrar'],fr:['Collection race × élément','Touchez une case pour filtrer'],pt:['Coleção raça × elemento','Toque numa célula para filtrar']};
+let COMBO=null;
+function comboTot(){if(COMBO)return COMBO;COMBO={};for(const c of CARDS){if(!(c.k==='char'||c.k==='event')||!c.r)continue;const k=c.r+(c.e||'');COMBO[k]=(COMBO[k]||0)+1}return COMBO}
+function comboGrid(){const T2=(COMBT[L]||COMBT.en),tot=comboTot(),own={};
+  for(const i of Object.keys(S.owned)){const c=BYID[i];if(!c||!(c.k==='char'||c.k==='event')||!c.r)continue;const k=c.r+(c.e||'');own[k]=(own[k]||0)+1}
+  const EL=['木','火','土','金','水'],cell=(r,e)=>{const k=r+e,t=tot[k]||0,o=own[k]||0,on=cx.race===r&&(e?cx.el===e:true)&&cx.kind==='char';
+    return `<button class="cmb ${on?'on':''} ${o&&o===t?'full':''}" data-cr="${r}" data-ce="${e}" ${t?'':'disabled'}><b>${o.toLocaleString()}</b><small>/${t.toLocaleString()}</small><i style="width:${t?o/t*100:0}%"></i></button>`};
+  return `<div class="box" style="margin-top:14px"><div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:6px"><b>${T2[0]}</b><span class="sub">${T2[1]}</span></div>
+  <div class="cmbg"><span></span>${EL.map(e=>`<span class="cmh">${orbSVG(e,22)}<em>${elName(e)}</em></span>`).join('')}
+  ${['人','仙','妖','鬼','龍'].map(r=>`<span class="cmh">${raceBadge(r,24)}<em>${raceName(r)}</em></span>${EL.map(e=>cell(r,e)).join('')}`).join('')}
+  ${['神','魔'].map(r=>`<span class="cmh">${raceBadge(r,24)}<em>${raceName(r)}</em></span><div class="cmbw">${cell(r,'')}</div>`).join('')}</div></div>`}
 function miniHTML(c,o={}){
   const lock=o.lock;
   return `<div class="mini ${lock?'lock':''} ${o.sel?'sel':''}" style="--rc:var(--r${c.y})" data-id="${c.i}" tabindex="0">${o.isNew?`<span class="newb" style="top:-6px;left:4px">NEW</span>`:''}
@@ -1555,6 +1573,7 @@ function cxList(){
     <div><b style="color:#7fe3d0">${T('showcase')}</b><div class="sub" style="text-align:left">${T('showcase_d')}</div></div><button class="btn ghost" id="showBtn">${T('showcase')}</button></div>
   <div class="box" style="margin-top:14px"><b>${T('groups')}</b><div class="ctrl" style="margin-top:8px"><select class="chip" id="grp"><option value="all">${T('all')}</option>${groups.map(g=>`<option ${cx.group===g?'selected':''}>${esc(g)}</option>`).join('')}</select>
     <input class="chip" id="grpName" placeholder="+" style="width:120px"><button class="chip" id="grpNew">${T('create')}</button></div></div>
+  ${comboGrid()}
   <div class="box" style="margin-top:14px"><div class="ctrl"><span class="muted">${T('sort')}:</span>${sorts.map(s=>`<button class="chip" data-s="${s}" aria-pressed="${cx.sort===s}">${T('s_'+(s==='rarity'?'rarity':s))}${cx.sort===s?(cx.dir>0?' ▲':' ▼'):''}</button>`).join('')}<button class="chip" id="favOnly" aria-pressed="${cx.fav}">${T('s_fav')}</button></div>
    <div class="ctrl" style="margin-top:8px"><span class="muted">${FT(0)}:</span><button class="chip" data-kf="all" aria-pressed="${cx.kind==='all'}">${FT(2)}</button>${CX_KINDS.map(([k])=>`<button class="chip ichip" data-kf="${k}" aria-pressed="${cx.kind===k}"><span class="ci">${CX_KI[k]}</span>${kindName(k)}</button>`).join('')}</div>
    <div class="ctrl" style="margin-top:8px"><span class="muted">${FT(5)}:</span><button class="chip" data-rf="all" aria-pressed="${cx.race==='all'}">${FT(2)}</button>${CX_RACES.map(r=>`<button class="chip ichip" data-rf="${r}" aria-pressed="${cx.race===r}">${raceBadge(r,20)}${raceName(r)}</button>`).join('')}</div>
@@ -1566,6 +1585,7 @@ function cxList(){
   $('#favOnly').onclick=()=>{cx.fav=!cx.fav;cx.page=1;cxList()};
   document.querySelectorAll('[data-kf]').forEach(b=>b.onclick=()=>{cx.kind=b.dataset.kf;cx.page=1;cxList()});
   document.querySelectorAll('[data-rf]').forEach(b=>b.onclick=()=>{cx.race=b.dataset.rf;cx.page=1;cxList()});
+  document.querySelectorAll('[data-cr]').forEach(b=>b.onclick=()=>{const r=b.dataset.cr,e=b.dataset.ce;if(b.classList.contains('on')){cx.race='all';cx.el='all';cx.kind='all'}else{cx.race=r;cx.el=e||'all';cx.kind='char'}cx.page=1;cxList()});
   document.querySelectorAll('[data-ef]').forEach(b=>b.onclick=()=>{cx.el=b.dataset.ef;cx.page=1;cxList()});
   $('#qn').oninput=e=>{cx.q=e.target.value;cx.page=1;cxRows()};$('#qc').oninput=e=>{cx.qc=e.target.value;cx.page=1;cxRows()};
   $('#grp').onchange=e=>{cx.group=e.target.value;cx.page=1;cxRows()};
@@ -1595,7 +1615,7 @@ function cxRows(){
   $('#tb').innerHTML=rows.length?rows.map(c=>`<tr data-id="${c.i}"><td><b class="rb r-${c.y}">${c.y}</b></td><td style="color:#e9a23b">${c.f.toFixed(1)}</td>
     <td><button class="star ${S.fav[c.i]?'on':''}" data-fav="${c.i}" aria-label="${T('fav')}">${S.fav[c.i]?'★':'☆'}</button></td>
     <td><div class="tcell"><div class="thumb" data-im="${c.i}">${glyph(c)}</div><div style="min-width:0"><div style="font-weight:700">${esc(nm(c))} <span class="idc">#${c.i}</span></div>
-      <div style="display:flex;gap:4px;flex-wrap:wrap">${c.r?raceBadge(c.r,20):''}<span class="tag">${kindName(c.k)}</span></div></div></div></td>
+      <div style="display:flex;gap:4px;flex-wrap:wrap">${c.r?raceBadge(c.r,20):''}${c.e?orbSVG(c.e,20):''}<span class="tag">${kindName(c.k)}</span></div></div></div></td>
     <td class="num">${c.a.toLocaleString()}</td><td class="num">${c.d.toLocaleString()}</td><td class="num muted">×${S.owned[c.i]}</td></tr>`).join('')
     :`<tr><td colspan="7" class="muted" style="text-align:center;padding:24px">${T('empty')}</td></tr>`;
   hydrateMinis($('#tb'));
