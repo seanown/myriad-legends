@@ -702,6 +702,28 @@ html,body{max-width:100%;overflow-x:hidden}
 .cmb:hover{border-color:#8a7650}.cmb.on{border-color:var(--gold,#e6c25e);background:#2a2214;box-shadow:0 0 0 1px var(--gold,#e6c25e) inset}.cmb.full{background:#2b2310}.cmb:disabled{opacity:.35;cursor:default}
 .cmbw{grid-column:span 5;display:grid}
 @media(max-width:520px){.cmh em{display:none}.cmb b{font-size:12px}.cmb small{font-size:9px}.cmbg{gap:4px}}
+.obo{position:fixed;inset:0;z-index:60;background:radial-gradient(ellipse at 50% 45%,color-mix(in srgb,var(--rc,#888) 22%,#120d1a) 0%,#0b0812 62%,#060409 100%);display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:14px 12px 16px;cursor:pointer;overflow:hidden;transition:opacity .25s}
+.obo.out{opacity:0}.obo-top{color:#ddd;font-size:14px;letter-spacing:2px}.obo-top b{font-size:20px;color:#fff;margin:0 4px}
+.obo-skip{position:absolute;top:12px;right:14px;background:#0008;border:1px solid #fff3;color:#ddd;border-radius:999px;padding:6px 14px;font:inherit;cursor:pointer;z-index:3}
+.obo-stage{position:relative;flex:1;width:100%;display:flex;align-items:center;justify-content:center;min-height:0}
+.obo-in{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:4px;animation:oboPop .32s cubic-bezier(.2,1.4,.4,1) both}
+.obo-rar{font:900 clamp(44px,9vh,84px)/1 'Cinzel','Noto Serif TC',serif;color:var(--rc);text-shadow:0 0 18px color-mix(in srgb,var(--rc) 70%,transparent),0 3px 0 #0008;letter-spacing:2px}
+.obo-rar span{font-size:.38em;vertical-align:super;margin-left:6px}
+.obo-sub{font:700 12px/1 serif;letter-spacing:5px;color:color-mix(in srgb,var(--rc) 80%,#fff);opacity:.85;margin-bottom:8px}
+.obo-card{position:relative;width:min(300px,72vw,calc((100vh - 280px)*.72));filter:drop-shadow(0 0 22px color-mix(in srgb,var(--rc) 75%,transparent))}
+.obo-card .tcard{width:100%!important}
+.obo-SR .obo-card,.obo-SSR .obo-card{width:min(330px,76vw,calc((100vh - 280px)*.72))}.obo-UR .obo-card,.obo-EXR .obo-card{width:min(360px,80vw,calc((100vh - 280px)*.72))}
+.obo-EXR .obo-rar{background:linear-gradient(90deg,#ff5a5a,#ffd84a,#5aff8a,#5ad2ff,#b45aff,#ff5a5a);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:wmholo 3s linear infinite}
+.obo-tap{color:#fff9;font-size:13px;letter-spacing:2px;margin-top:10px;opacity:0;transition:opacity .3s}.obo.ready .obo-tap{opacity:1;animation:spPulse 1.4s ease-in-out infinite}
+.obo-strip{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.obo-th{width:52px;height:72px;border-radius:6px;border:1px solid #ffffff22;overflow:hidden;background:#1a1424;opacity:.55;transition:transform .2s,opacity .2s}
+.obo-thb,.obo-thb svg{width:100%;height:100%;display:block}
+.obo-th.done{opacity:1;border-color:var(--rc);box-shadow:0 0 8px color-mix(in srgb,var(--rc) 60%,transparent)}.obo-th.cur{transform:translateY(-6px) scale(1.08)}
+.obo-thf{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:linear-gradient(180deg,color-mix(in srgb,var(--rc) 35%,#141019),#141019);padding:3px}
+.obo-thf b{color:var(--rc);font:900 15px serif}.obo-thf span{color:#ddd;font-size:9px;line-height:1.1;text-align:center;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.obo .sp-rays{position:absolute;inset:-30%;z-index:1}
+@keyframes oboPop{0%{transform:scale(.55) translateY(30px);opacity:0}100%{transform:none;opacity:1}}
+@media(max-width:520px){.obo-th{width:40px;height:56px}.obo-strip{gap:5px}}
 </style>
 
 <div id="intro" hidden>
@@ -1276,6 +1298,33 @@ function spotlight(c,isNew){return new Promise(done=>{
   const end=e=>{if(e&&e.target.closest('a'))return;if(!ok)return;host.onclick=null;host.classList.add('out');setTimeout(()=>{host.remove();done()},300)};
   host.onclick=end;
 })}
+// Sean 2026-11-22: like wikigacha, every card (even C) pops out alone, big and clear, with its rarity on top; thumbnails strip below; SR+ hold longer after the cinematic
+const OBO_T={zh_hant:['獲得','跳過'],zh_hans:['获得','跳过'],ja:['獲得','スキップ'],ko:['획득','건너뛰기'],en:['Card','Skip'],es:['Carta','Saltar'],fr:['Carte','Passer'],pt:['Carta','Pular']};
+const OBO_SUB={C:'COMMON',UC:'UNCOMMON',R:'RARE',SR:'SUPER RARE',SSR:'SPECIAL SUPER RARE',UR:'ULTRA RARE',EXR:'EXTRA LEGEND RARE'};
+function oneByOne(res){return new Promise(async done=>{
+  const t=OBO_T[L]||OBO_T.en,n=res.length;let i=0,skip=false,wait=null;
+  const host=document.createElement('div');host.className='obo';
+  host.innerHTML=`<div class="obo-top">${t[0]} <b id="oboN">1</b> / ${n}</div><button class="obo-skip" id="oboSkip">${t[1]} »</button>
+   <div class="obo-stage" id="oboSt"></div>
+   <div class="obo-strip">${res.map(({c},k)=>`<div class="obo-th" data-k="${k}" style="--rc:var(--r${c.y})"><div class="obo-thb">${cardBackSVG().replace('<svg ','<svg preserveAspectRatio="none" ')}</div></div>`).join('')}</div>`;
+  document.body.appendChild(host);
+  host.querySelector('#oboSkip').onclick=e=>{e.stopPropagation();skip=true;if(wait)wait()};
+  const tapWait=ms=>new Promise(r=>{let ok=false;const tm=setTimeout(()=>{ok=true;host.classList.add('ready')},ms);
+    wait=()=>{clearTimeout(tm);host.onclick=null;wait=null;r()};host.onclick=e=>{if(e.target.closest('a,.gstar,.ci-i,.ci-src,.cstar'))return;if(ok&&wait)wait()}});
+  for(i=0;i<n&&!skip;i++){const {c,isNew}=res[i],k=c.y,hi=RAR.indexOf(k)>=3;
+    host.querySelector('#oboN').textContent=i+1;
+    host.querySelectorAll('.obo-th').forEach((el,j)=>el.classList.toggle('cur',j===i));
+    if(hi){host.style.visibility='hidden';await entrance(c);host.style.visibility=''}
+    const st=host.querySelector('#oboSt');host.className='obo obo-'+k;host.style.setProperty('--rc',`var(--r${k})`);
+    st.innerHTML=`${hi?`<div class="sp-rays ${k==='EXR'?'rainbow':''}"></div>`:''}<div class="obo-in"><div class="obo-rar ${k==='UR'?'ur-text':''}" data-r="${k}">${k}<span>✦</span></div><div class="obo-sub">${OBO_SUB[k]}</div>
+      <div class="obo-card">${isNew?`<span class="gnew sp-new">${T('new_card')}</span>`:''}${bigCardHTML(c,isNew)}</div><div class="obo-tap">${SPOT_TAP[L]||SPOT_TAP.en}</div></div>`;
+    setImg(st.querySelector('[data-art]'),c);
+    const th=host.querySelectorAll('.obo-th')[i];th.classList.add('done');th.innerHTML=`<div class="obo-thf"><b>${k}</b><span>${esc(nm(c))}</span></div>`;
+    if(hi&&typeof fx==='function')try{fx(k,host)}catch(e){}
+    await tapWait({SR:1200,SSR:1800,UR:2400,EXR:3000}[k]||(k==='R'?350:220));
+  }
+  host.classList.add('out');setTimeout(()=>{host.remove();done()},250);
+})}
 /* ================= launch campaign notice (Sean 2026-11-22: copy wikigacha's opening notice + share bonus) ================= */
 const NOTICE_ID='launch-s1';
 const NT={
@@ -1420,7 +1469,7 @@ async function showReveal({type,res}){
     if(!quick&&RAR.indexOf(c.y)>=3){await entrance(c);await spotlight(c,res[i].isNew)}
     const el=slots[i];el.classList.add('open');
     if(S.fx!==false&&RAR.indexOf(c.y)>=3)el.classList.add('glow');
-    if(S.fx!==false&&['UR','EXR'].includes(c.y))fx(c.y,Lr.querySelector('.gal-ov'));
+    if(!quick&&S.fx!==false&&['UR','EXR'].includes(c.y))fx(c.y,Lr.querySelector('.gal-ov'));
     update();
   };
   Lr.querySelectorAll('[data-gstar]').forEach(b=>b.onclick=e=>{e.stopPropagation();const c=res[+b.dataset.gstar].c;S.fav[c.i]=!S.fav[c.i];if(!S.fav[c.i])delete S.fav[c.i];save();b.textContent=S.fav[c.i]?'★':'☆';b.classList.toggle('on',!!S.fav[c.i]);toast(S.fav[c.i]?'★ '+T('fav'):'☆')});
@@ -1428,6 +1477,7 @@ async function showReveal({type,res}){
     if(flipped[i]){if(!e.target.closest('a'))detail(res[i].c.i,true);return}
     if(busy)return;busy=true;await flip(i);busy=false;
   });
+  if(S.fx!==false){await oneByOne(res);res.forEach((_,i)=>flip(i,true))}
   $('#gAll').onclick=async()=>{if(busy)return;busy=true;
     for(let i=0;i<res.length;i++){if(flipped[i])continue;
       if(RAR.indexOf(res[i].c.y)>=3){await flip(i)}else{flip(i,true);await sleep(160)}}
