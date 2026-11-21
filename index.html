@@ -670,8 +670,41 @@ async function loadData(){
   for(const c of CARDS){BYID[c.i]=c;(BYRAR[c.y]=BYRAR[c.y]||[]).push(c)}
   POOL=CARDS.filter(c=>c.k!=='event');
 }
+/* live Wikipedia thumbnails for cards without a bundled image (free-licensed lead images only) */
+let WIMG={};try{WIMG=JSON.parse(localStorage.getItem('ml_wimg')||'{}')}catch(e){}
+const WQ={},WP={};let wTimer=null;
+function wSave(){try{localStorage.setItem('ml_wimg',JSON.stringify(WIMG))}catch(e){}}
+function wLangs(c){return ['zh','ja','en','ko'].filter(l=>c.wk&&c.wk[l])}
+function wFlush(){wTimer=null;for(const l in WQ){const q=WQ[l];delete WQ[l];for(let k=0;k<q.length;k+=40)wBatch(l,q.slice(k,k+40))}}
+function wBatch(l,items){
+  const titles=[...new Set(items.map(x=>x.t))];
+  const url=`https://${l}.wikipedia.org/w/api.php?action=query&format=json&formatversion=2&origin=*&redirects=1&prop=pageimages&piprop=thumbnail|name&pithumbsize=480&titles=${encodeURIComponent(titles.join('|'))}`;
+  fetch(url).then(r=>r.json()).then(j=>{
+    const map={};const q=j.query||{};
+    for(const p of q.pages||[])if(p.thumbnail)map[p.title]=[p.thumbnail.source,p.pageimage||''];
+    const fw={};for(const a of [...(q.normalized||[]),...(q.redirects||[])])fw[a.from]=a.to;
+    const res=t=>{let k=t,n=0;while(fw[k]&&n++<3)k=fw[k];return map[k]};
+    for(const x of items)x.done(res(x.t)||null);
+  }).catch(()=>{for(const x of items)x.done(undefined)});
+}
+function wikiImg(c){
+  if(c.i in WIMG)return Promise.resolve(WIMG[c.i]||null);
+  if(WP[c.i])return WP[c.i];
+  const langs=wLangs(c);if(!langs.length)return Promise.resolve(null);
+  return WP[c.i]=new Promise(ok=>{
+    let n=0;const next=()=>{
+      if(n>=langs.length){WIMG[c.i]=0;wSave();return ok(null)}
+      const l=langs[n++];(WQ[l]=WQ[l]||[]).push({t:c.wk[l].replace(/_/g,' '),done:v=>{
+        if(v===undefined){delete WP[c.i];return ok(null)}
+        if(v){WIMG[c.i]=v;wSave();credFill(c);return ok(v)}next()}});
+      if(!wTimer)wTimer=setTimeout(wFlush,40)};next()});
+}
+function wCred(c){const v=WIMG[c.i];return v?'Wikimedia Commons'+(v[1]?': '+v[1].replace(/_/g,' '):''):''}
+function wFile(c){const v=WIMG[c.i];return v&&v[1]?'https://commons.wikimedia.org/wiki/File:'+encodeURIComponent(v[1]):''}
+function credFill(c){document.querySelectorAll(`[data-cred="${c.i}"]`).forEach(e=>{const f=wFile(c);e.innerHTML=(e.dataset.pre||'')+(f?`<a href="${f}" target="_blank" rel="noopener" style="color:inherit">${esc(wCred(c))}</a>`:esc(wCred(c)))})}
 async function imgFor(c){
-  if(!c.m)return null;const [ch,key]=c.m;
+  if(!c.m){if(!c.wk)return null;const v=await wikiImg(c);return v?v[0]:null}
+  const [ch,key]=c.m;
   if(!CHUNKS[ch])CHUNKS[ch]=fetch(`img/${ch}.json`).then(r=>r.json()).catch(()=>({}));
   const d=await CHUNKS[ch];return d[key]||null;
 }
@@ -954,7 +987,7 @@ function bigCardHTML(c,isNew){
    <div class="vtl"><span class="ty">${esc(ty)}</span>${setSym(c.y,30)}</div>
    <div class="vtx">${ls?`<p><span class="lb">${lsLabel(c)}</span>${ls}</p>`:''}${sk?`<p><span class="lb s2">${c.k==='treasure'?t.sk2:t.sk}</span>${sk}</p>`:''}<div class="vds">${esc(dx(c))}</div>${c.e?`<span class="vwm">${symSVG(c.e)}</span>`:''}</div>
    <div class="vpt"><span><i>ATK</i>${c.a.toLocaleString()}</span><em>/</em><span><i>DEF</i>${c.d.toLocaleString()}</span></div>
-   <div class="vcl"><span class="cl"><b>${c.y}</b> · ${String(c.i).padStart(5,'0')}${cred?' · © '+esc(cred):''}</span>${w?`<a href="${w}" target="_blank" rel="noopener" ${lk}>${c.wk?T('wiki'):T('museum_page')} ↗</a>`:''}</div></div></div>`;
+   <div class="vcl"><span class="cl"><b>${c.y}</b> · ${String(c.i).padStart(5,'0')}${cred?' · © '+esc(cred):c.wk?`<span data-cred="${c.i}" data-pre=" · © ">${WIMG[c.i]?' · © '+esc(wCred(c)):''}</span>`:''}</span>${w?`<a href="${w}" target="_blank" rel="noopener" ${lk}>${c.wk?T('wiki'):T('museum_page')} ↗</a>`:''}</div></div></div>`;
 }
 /* per-rarity entrance: SSR = 金光破符, UR = 七彩法陣, EXR = 黑雷天印 */
 function fx(kind,box){
@@ -1256,7 +1289,7 @@ function detail(id,overReveal){
      <div style="display:flex;gap:8px;flex-wrap:wrap">${wl?`<a class="btn ghost" href="${wl}" target="_blank" rel="noopener" data-wiki style="text-decoration:none">${T('wiki')} ↗</a>`:''}
       ${owned?`<button class="btn ghost" data-favb>${S.fav[c.i]?'★':'☆'} ${T('fav')}</button><button class="btn ghost" data-share>${T('share')}</button>`:''}
       ${owned&&Object.keys(S.groups).length?`<select class="chip" data-addg><option value="">+ ${T('groups')}</option>${Object.keys(S.groups).map(g=>`<option>${esc(g)}</option>`).join('')}</select>`:''}</div>
-     <div class="muted" style="font-size:11px;margin-top:12px">${T('img_credit')}: ${c.m?esc(c.c||'Wikimedia Commons'):T('no_img')}${c.u?` · <a href="${c.u}" target="_blank" rel="noopener" style="color:inherit">${T('src')} ↗</a>`:''}${c.wk?' · '+T('src')+': Wikipedia (CC BY-SA 4.0)':''}</div></div></div>`;
+     <div class="muted" style="font-size:11px;margin-top:12px">${T('img_credit')}: ${c.m?esc(c.c||'Wikimedia Commons'):c.wk?`<span data-cred="${c.i}">${WIMG[c.i]?(wFile(c)?`<a href="${wFile(c)}" target="_blank" rel="noopener" style="color:inherit">${esc(wCred(c))}</a>`:esc(wCred(c))):T('no_img')}</span>`:T('no_img')}${c.u?` · <a href="${c.u}" target="_blank" rel="noopener" style="color:inherit">${T('src')} ↗</a>`:''}${c.wk?' · '+T('src')+': Wikipedia (CC BY-SA 4.0)':''}</div></div></div>`;
   document.body.appendChild(host);
   setImg($('[data-art]',host),c);
   const close=()=>host.remove();
