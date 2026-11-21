@@ -652,7 +652,7 @@ html,body{max-width:100%;overflow-x:hidden}
 .ntst{background:#1b1a22;border:1px solid #2e2c38;border-radius:16px;padding:14px}.ntst-h{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}.ntst-h small{display:block;color:#9a937f;font-size:12px}.ntst-h b{font-size:20px;color:#fff}
 .ntfb{border:1px solid #3a3746;border-radius:12px;padding:6px 12px;text-align:right}.ntfb b{font-size:14px;color:#ff9ec7}.ntfb b.bk{color:#ff6b5a}
 .stgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}.stc{position:relative;aspect-ratio:1;border:1px solid #34313f;border-radius:12px;display:grid;place-items:center;background:#121117;opacity:.55}.stc svg{width:62%;height:auto}
-.stc.on{opacity:1;border-color:#2fbf7a;box-shadow:0 0 0 1px #2fbf7a inset}.stc i{position:absolute;top:-6px;right:-6px;background:#2fbf7a;color:#fff;border-radius:50%;width:20px;height:20px;font:700 12px/20px sans-serif;text-align:center;font-style:normal}.stc.blk{border-color:#5a2a2a}
+.stc:not(.blk) svg{filter:saturate(2.2) hue-rotate(-10deg)}.stc:not(.blk).on{background:linear-gradient(135deg,#ff4f8b22,#ffd24a22,#4cc3ff22,#c46bff22)}.stc.on{opacity:1;border-color:#2fbf7a;box-shadow:0 0 0 1px #2fbf7a inset}.stc i{position:absolute;top:-6px;right:-6px;background:#2fbf7a;color:#fff;border-radius:50%;width:20px;height:20px;font:700 12px/20px sans-serif;text-align:center;font-style:normal}.stc.blk{border-color:#5a2a2a}
 .ntf{border-top:1px solid #2a2733;padding:14px 24px 18px;display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}.ntf label{font-size:14px;color:#e8e2d4;display:flex;gap:8px;align-items:center}
 .ntbtn{display:flex;gap:10px}.ntshare{border-color:#6b3a6a!important;background:#24162a!important}.ntnote{grid-column:1/-1;text-align:right;font-size:12px;color:#9ab8d8}
 @media(max-width:640px){.ntb{grid-template-columns:1fr;padding:14px}.nth{padding:16px}.nth h2{font-size:20px}.ntf{grid-template-columns:1fr;padding:12px 16px}.ntbtn{justify-content:flex-end}}
@@ -681,6 +681,19 @@ html,body{max-width:100%;overflow-x:hidden}
 .gb-r.ur-text{text-shadow:none;filter:drop-shadow(0 0 18px #ffd24a88)}.gb-EXR .gb-r{background:linear-gradient(90deg,#ff4f8b,#ffd24a,#5be08a,#4cc3ff,#c46bff);-webkit-background-clip:text;background-clip:text;color:transparent}
 .gb-t{font:700 clamp(18px,3.4vw,30px)/1.3 var(--f-title,serif);color:#f3e6c4;letter-spacing:.12em;margin-top:6px}.gal-best .pre-rule{justify-content:center}
 .gb-C .gb-r,.gb-UC .gb-r,.gb-R .gb-r{font-size:clamp(44px,8vw,72px)}
+
+.cwrap{position:relative;perspective:1400px}.cflip{position:relative;transition:transform .55s cubic-bezier(.3,.7,.3,1);transform-style:preserve-3d}.cflip.flipped{transform:rotateY(180deg)}
+.cflip.flipped .cfront,.cflip:not(.flipped) .cback{pointer-events:none}.cfront,.cback{backface-visibility:hidden;-webkit-backface-visibility:hidden}.cback{position:absolute;inset:0;transform:rotateY(180deg)}
+.cinfo{height:100%;box-sizing:border-box;overflow:auto;background:#0c0b10;border:3px solid #6b5420;border-radius:14px;padding:16px;color:#e8e2d4;font-size:14px}
+.cinfo h4{margin:0 0 10px;font-size:18px;color:#fff;border-bottom:1px solid #333;padding-bottom:8px}.ci-row{display:flex;gap:10px;align-items:center;background:#16151c;border:1px solid #2e2c38;border-radius:10px;padding:10px;margin-bottom:10px}.ci-row b{color:#7fe3d0}
+.ci-kv{margin:6px 0}.ci-links{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.ci-links a{color:#e9c46a;border:1px solid #4a3f22;border-radius:999px;padding:4px 12px;text-decoration:none;font-size:13px}
+.ci-rep{background:#16151c;border:1px solid #2e2c38;border-radius:10px;padding:10px;font-size:13px}.ci-rep b{display:block;color:#f3e6c4;margin-bottom:6px}.ci-rep a{color:#ff9a8a;border:1px solid #5a2a2a;border-radius:999px;padding:3px 12px;text-decoration:none;display:inline-block}
+.ci-back{margin-top:12px;font-size:12px;color:#9a937f;display:flex;align-items:center;gap:8px}.ci-back .cbtn{position:static}
+.cbtn{position:absolute;z-index:3;display:grid;place-items:center;border-radius:50%;border:1px solid #ffffff88;background:#000a;color:#fff;cursor:pointer;text-decoration:none;font:700 14px Georgia,serif}
+.ci-i{left:8px;bottom:8px;width:26px;height:26px;font-style:italic}.ci-src{right:8px;top:8px;width:36px;height:36px;padding:0;background:#000b}.ci-src .rbadge{pointer-events:none}
+.cbtn:hover{border-color:var(--gold);box-shadow:0 0 10px var(--gold)}
+.gstar{position:absolute;right:-10px;top:14px;z-index:5;width:32px;height:32px;border-radius:50%;border:1px solid #c9a24a;background:#15121ce6;color:#e9c46a;font-size:18px;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .2s}.gslot.open .gstar{pointer-events:auto}.gslot.open:hover .gstar,.gslot.open .gstar.on{opacity:1}@media(hover:none){.gslot.open .gstar{opacity:1}}.gstar.on{color:#ffd24a;background:#3a2a08;box-shadow:0 0 12px #ffd24a88}
+.cstar{position:absolute;right:-12px;top:-14px;z-index:4;width:36px;height:36px;border-radius:50%;border:1px solid #c9a24a;background:#15121c;color:#e9c46a;font-size:20px;cursor:pointer;box-shadow:0 4px 12px #000a}.cstar.on{background:#3a2a08;color:#ffd24a;box-shadow:0 0 14px #ffd24a88}
 .ichip{display:inline-flex;align-items:center;gap:5px}.ichip svg,.ichip .rbadge{flex:none}.ichip .ci{font-size:15px;line-height:1}
 </style>
 
@@ -1386,7 +1399,7 @@ async function showReveal({type,res}){
     <div class="gal-h"><span>${T('discovered')}</span> <b id="gcount">0</b></div>
     <div class="gal-hint" id="ghint">${T('tap_flip')}</div>
     <div class="gal-row">${res.map(({c,isNew},i)=>`<div class="gslot aura-${c.y}" style="--rc:var(--r${c.y});animation-delay:${i*110}ms" data-i="${i}">${c.y==='EXR'?'<i class="ghalo"></i><i class="ghalo g2"></i>':''}${isNew?`<span class="gnew">${T('new_card')}</span>`:''}
-      <div class="glab"><span>${pad(i+1)}</span><i></i><span class="gy">${c.y}</span></div>
+      <div class="glab"><span>${pad(i+1)}</span><i></i><span class="gy">${c.y}</span></div><button class="gstar ${S.fav[c.i]?'on':''}" data-gstar="${i}" title="${T('fav')}">${S.fav[c.i]?'★':'☆'}</button>
       <div class="flip"><div class="face back">${cardBackSVG().replace('<svg ','<svg preserveAspectRatio="none" ')}</div><div class="face front">${bigCardHTML(c,isNew)}</div></div></div>`).join('')}</div>
     <div class="gal-act" id="gPre"><button class="btn gal-flip" id="gAll">${T('flip_all')}</button></div>
     <div class="gal-act" id="gPost" hidden><button class="btn ghost" id="gCopy">${T('copy_result')}</button><button class="btn ghost" id="gShare">${T('share_result')}</button><button class="btn" id="gAgain">${T('open_next')}</button></div>
@@ -1403,6 +1416,7 @@ async function showReveal({type,res}){
     if(S.fx!==false&&['UR','EXR'].includes(c.y))fx(c.y,Lr.querySelector('.gal-ov'));
     update();
   };
+  Lr.querySelectorAll('[data-gstar]').forEach(b=>b.onclick=e=>{e.stopPropagation();const c=res[+b.dataset.gstar].c;S.fav[c.i]=!S.fav[c.i];if(!S.fav[c.i])delete S.fav[c.i];save();b.textContent=S.fav[c.i]?'★':'☆';b.classList.toggle('on',!!S.fav[c.i]);toast(S.fav[c.i]?'★ '+T('fav'):'☆')});
   slots.forEach((el,i)=>el.onclick=async e=>{
     if(flipped[i]){if(!e.target.closest('a'))detail(res[i].c.i,true);return}
     if(busy)return;busy=true;await flip(i);busy=false;
@@ -1412,7 +1426,10 @@ async function showReveal({type,res}){
       if(RAR.indexOf(res[i].c.y)>=3){await flip(i)}else{flip(i,true);await sleep(160)}}
     busy=false};
   const txt=()=>`${T('game')}：`+res.map(x=>`${x.c.y} ${nm(x.c)}`).join('、');
-  $('#gCopy').onclick=()=>{try{navigator.clipboard.writeText(txt()).then(()=>toast(T('copied')),()=>toast(T('copied')))}catch(e){}};
+  const RSQ={C:'⬜',UC:'⬜',R:'🟩',SR:'🟦',SSR:'🟥',UR:'🟨',EXR:'🟪'};
+  // Sean 2026-11-22: like wikigacha, copying the result also opens a Google search so the AI overview explains the figures
+  const qtxt=()=>`${T('game')} ${({zh_hant:'抽卡結果',zh_hans:'抽卡结果',ja:'ガチャ結果',ko:'뽑기 결과'})[L]||'gacha result'}：`+res.map(x=>`${RSQ[x.c.y]||''}[${x.c.y}] ${nm(x.c)}${RAR.indexOf(x.c.y)>=4?` ATK ${x.c.a} / DEF ${x.c.d}`:''}`).join(' ');
+  $('#gCopy').onclick=()=>{const q=qtxt();try{window.open('https://www.google.com/search?q='+encodeURIComponent(q),'_blank','noopener')}catch(e){}try{navigator.clipboard.writeText(q).then(()=>toast(T('copied')),()=>toast(T('copied')))}catch(e){}};
   $('#gShare').onclick=()=>shareImgOr(txt(),()=>resultPNG(res),'myriad-legends-result.png');
   const close=()=>{Lr.innerHTML='';render()};
   $('#gBack').onclick=close;
@@ -1602,12 +1619,22 @@ function cxThemes(){
   $('#cxBody').innerHTML=`<div class="themes" style="margin-top:14px">${themeList().map(([t,v])=>{const h=v.filter(c=>S.owned[c.i]).length;return `<button class="theme" data-th="${esc(t)}"><b>${esc(t)}</b> <span class="muted">${h}/${v.length}</span><div class="bar"><i style="width:${h/v.length*100}%"></i></div></button>`}).join('')}</div>`;
   $('#cxBody').querySelectorAll('[data-th]').forEach(b=>b.onclick=()=>{cx.theme=b.dataset.th;cxThemes()});
 }
+const CIX={zh_hant:{cat:'分類',el:'屬性',race:'種族',th:'主題',src:'出處',img:'圖片',rep:'內容有問題？',rep2:'回報這張卡',back:'點 i 翻回正面',atk:'ATK（攻擊）',def:'DEF（防禦）',fame:'名望'},zh_hans:{cat:'分类',el:'属性',race:'种族',th:'主题',src:'出处',img:'图片',rep:'内容有问题？',rep2:'反馈这张卡',back:'点 i 翻回正面',atk:'ATK（攻击）',def:'DEF（防御）',fame:'名望'},ja:{cat:'分類',el:'属性',race:'種族',th:'テーマ',src:'出典',img:'画像',rep:'内容に問題がありますか？',rep2:'このカードを報告',back:'i で表に戻る',atk:'ATK（攻撃）',def:'DEF（防御）',fame:'名声'},ko:{cat:'분류',el:'속성',race:'종족',th:'테마',src:'출처',img:'이미지',rep:'내용에 문제가 있나요?',rep2:'이 카드 신고',back:'i를 눌러 앞면으로',atk:'ATK (공격)',def:'DEF (방어)',fame:'명성'},en:{cat:'Category',el:'Element',race:'Race',th:'Themes',src:'Source',img:'Image',rep:'Something wrong with this card?',rep2:'Report this card',back:'Tap i to flip back',atk:'ATK',def:'DEF',fame:'Fame'}};
+const CI=k=>(CIX[L]||CIX.en)[k];
+function cardInfoHTML(c,owned){const wl=wikiLink(c);
+  return `<div class="cinfo"><h4>${esc(nm(c))}</h4><div class="ci-row"><span class="ci-ic">${c.r&&DIA[c.r]?raceBadge(c.r,26):'◆'}</span><div><b>${CI('cat')}</b><div>${kindName(c.k)}${c.r?' · '+raceName(c.r):''}</div></div></div>
+   <div class="ci-kv"><span style="color:#ffb44a">${CI('fame')}</span>：${c.f.toFixed(1)}</div><div class="ci-kv"><span style="color:#ff6b6b">${CI('atk')}</span>：${c.a.toLocaleString()}</div><div class="ci-kv"><span style="color:#5aa7ff">${CI('def')}</span>：${c.d.toLocaleString()}</div>
+   <div class="ci-kv"><span style="color:#cfc4ae">${CI('el')}</span>：${c.e?elName(c.e):'—'}</div>${(c.t||[]).length?`<div class="ci-kv"><span style="color:#cfc4ae">${CI('th')}</span>：${c.t.slice(0,4).map(t=>esc(tagT(t))).join('、')}</div>`:''}
+   <div class="ci-links">${wl?`<a href="${wl}" target="_blank" rel="noopener">${T('wiki')} ↗</a>`:''}${c.u?`<a href="${c.u}" target="_blank" rel="noopener">${CI('src')} ↗</a>`:''}</div>
+   <div class="ci-rep"><b>${CI('rep')}</b><a href="https://github.com/seanown/myriad-legends/issues/new?title=${encodeURIComponent('Card #'+c.i+' '+(c.n.h||''))}" target="_blank" rel="noopener">${CI('rep2')}</a></div>
+   <div class="ci-back"><button class="cbtn" data-cinfo>i</button> ${CI('back')}</div></div>`}
 function detail(id,overReveal){
   const c=BYID[id];if(!c)return;const owned=S.owned[c.i]||0;
   const wl=wikiLink(c);
   const host=document.createElement('div');host.className='ov';host.style.zIndex=40;
   host.innerHTML=`<div class="det"><button class="btn ghost x" data-x>${T('close')}</button>
-    <div>${bigCardHTML(c,false)}</div>
+    <div class="cwrap"><div class="cflip"><div class="cfront">${bigCardHTML(c,false)}</div><div class="cback">${cardInfoHTML(c,owned)}</div></div>
+     ${owned?`<button class="cstar ${S.fav[c.i]?'on':''}" data-cstar title="${T('fav')}">${S.fav[c.i]?'★':'☆'}</button>`:''}</div>
     <div style="min-width:0"><span class="rb r-${c.y}" style="font-size:20px">${c.y}</span> <span class="idc">#${String(c.i).padStart(5,'0')}</span>
      <h3>${esc(nm(c))}</h3>
      <div class="muted" style="font-size:13px">${[c.n.h,c.n.j,c.n.k,c.n.e].filter((v,i,a)=>v&&a.indexOf(v)===i&&v!==nm(c)).map(esc).join(' · ')}</div>
@@ -1621,10 +1648,15 @@ function detail(id,overReveal){
      <div class="muted" style="font-size:11px;margin-top:12px">${T('img_credit')}: ${c.m?esc(c.c||'Wikimedia Commons'):c.wk?`<span data-cred="${c.i}">${WIMG[c.i]?(wFile(c)?`<a href="${wFile(c)}" target="_blank" rel="noopener" style="color:inherit">${esc(wCred(c))}</a>`:esc(wCred(c))):T('no_img')}</span>`:T('no_img')}${c.u?` · <a href="${c.u}" target="_blank" rel="noopener" style="color:inherit">${T('src')} ↗</a>`:''}${c.wk?' · '+T('src')+': Wikipedia (CC BY-SA 4.0)':''}</div></div></div>`;
   document.body.appendChild(host);
   setImg($('[data-art]',host),c);
+  {const art=$('.cfront [data-art]',host);if(art){if(getComputedStyle(art).position==='static')art.style.position='relative';
+    const src=wl||c.u;art.insertAdjacentHTML('beforeend',`<button class="cbtn ci-i" data-cinfo title="info">i</button>${src?`<a class="cbtn ci-src" href="${src}" target="_blank" rel="noopener" data-csrc title="${esc(T('wiki'))}">${c.r&&DIA[c.r]?raceBadge(c.r,26):'↗'}</a>`:''}`)}
+   const fl=$('.cflip',host);host.querySelectorAll('[data-cinfo]').forEach(b=>b.onclick=e=>{e.stopPropagation();e.preventDefault();fl.classList.toggle('flipped')});
+   const cs=$('[data-csrc]',host);if(cs)cs.onclick=e=>{e.stopPropagation();S.mission.wiki=true;save()};
+   const st=$('[data-cstar]',host);if(st)st.onclick=e=>{e.stopPropagation();S.fav[c.i]=!S.fav[c.i];if(!S.fav[c.i])delete S.fav[c.i];save();st.textContent=S.fav[c.i]?'★':'☆';st.classList.toggle('on',!!S.fav[c.i]);const f=$('[data-favb]',host);if(f)f.textContent=(S.fav[c.i]?'★ ':'☆ ')+T('fav');toast(S.fav[c.i]?'★':'☆')}}
   const close=()=>host.remove();
   host.onclick=e=>{if(e.target===host||e.target.closest('[data-x]'))close()};
   const w=$('[data-wiki]',host);if(w)w.onclick=()=>{S.mission.wiki=true;save()};
-  const f=$('[data-favb]',host);if(f)f.onclick=()=>{S.fav[c.i]=!S.fav[c.i];if(!S.fav[c.i])delete S.fav[c.i];save();f.textContent=(S.fav[c.i]?'★ ':'☆ ')+T('fav')};
+  const f=$('[data-favb]',host);if(f)f.onclick=()=>{S.fav[c.i]=!S.fav[c.i];if(!S.fav[c.i])delete S.fav[c.i];save();f.textContent=(S.fav[c.i]?'★ ':'☆ ')+T('fav');const st=$('[data-cstar]',host);if(st){st.textContent=S.fav[c.i]?'★':'☆';st.classList.toggle('on',!!S.fav[c.i])}};
   const s=$('[data-share]',host);if(s)s.onclick=()=>shareImgOr(`${T('game')} · ${c.y} ${nm(c)} (#${c.i}) ATK ${c.a} / DEF ${c.d}${wl?'\n'+wl:''}`,()=>cardPNG(c),`myriad-legends-${c.i}.png`);
   const g=$('[data-addg]',host);if(g)g.onchange=()=>{const n=g.value;if(!n)return;if(!S.groups[n].includes(c.i))S.groups[n].push(c.i);save();toast('✓')};
 }
