@@ -724,6 +724,10 @@ html,body{max-width:100%;overflow-x:hidden}
 .obo .sp-rays{position:absolute;inset:-30%;z-index:1}
 @keyframes oboPop{0%{transform:scale(.55) translateY(30px);opacity:0}100%{transform:none;opacity:1}}
 @media(max-width:520px){.obo-th{width:40px;height:56px}.obo-strip{gap:5px}}
+.vart .ph .phs{left:6%!important;top:7%!important;transform:rotate(-4deg)!important;font-size:7cqw!important;padding:1cqw 1.4cqw 1.3cqw!important;border-radius:1cqw!important;box-shadow:0 0 0 .35cqw #f7ead0 inset,0 0 0 .7cqw #9e2117 inset,0 .8cqw 2cqw #000a!important}
+.vart .ph .phn{position:absolute;left:6%;right:6%;top:46%;transform:translateY(-50%);text-align:center;font-family:var(--f-disp);font-weight:700;line-height:1.15;color:#f7ead0;text-shadow:0 .4cqw 1.6cqw #000,0 0 3cqw color-mix(in srgb,var(--ec) 60%,transparent);word-break:break-word;letter-spacing:.04em}
+.vart .ph .phl{position:absolute;left:50%;bottom:7%;transform:translateX(-50%);font-size:3.6cqw;color:#f7ead0;background:#0009;border:1px solid #f7ead055;border-radius:999px;padding:.6cqw 2.4cqw;text-decoration:none;white-space:nowrap;z-index:2}
+.vart .ph .phl:hover{background:#000c;border-color:#f7ead0}
 </style>
 
 <div id="intro" hidden>
@@ -1114,7 +1118,10 @@ function phArt(c){
   const ec={木:'#4f9a5c',水:'#2a2e36',火:'#c8452f',金:'#cfc6a6',土:'#c99a3e'}[c.e]||(c.r==='魔'?'#7a1f3e':'#b08a3e');
   const mt=`<svg class="phm" viewBox="0 0 100 40" preserveAspectRatio="none"><path d="M0 40V26l9-7 7 5 10-12 9 9 6-4 11 10 8-14 12 13 6-5 9 8 13-9v20z" opacity=".55"/><path d="M0 40V32l12-5 9 4 14-8 10 6 12-3 13 7 10-6 20 5v8z"/></svg>`;
   const rb=c.k==='char'&&DIAIMG[c.r]?`<img class="phr" src="${DIAIMG[c.r]}" alt="">`:'';
-  return `<span class="gl ph" style="--ec:${ec}"><i class="phmoon"></i>${rb}${mt}<b class="phs">${glyph(c)}</b></span>`;
+  // Sean 2026-11-22: like wikigacha, a card with no picture shows its full name big, plus a link to read more
+  const name=nm(c),len=[...name].length,fs=len<=3?17:len<=5?13:len<=8?10:len<=12?7.5:6;
+  const url=wikiLink(c)||c.u||'';const lt=c.u&&!wikiLink(c)?(({zh_hant:'館藏頁面',zh_hans:'馆藏页面',ja:'所蔵ページ',ko:'소장품 페이지'})[L]||'Museum page'):(({zh_hant:'維基百科',zh_hans:'维基百科',ja:'Wikipedia',ko:'위키백과'})[L]||'Wikipedia');
+  return `<span class="gl ph" style="--ec:${ec}"><i class="phmoon"></i>${rb}${mt}<b class="phs">${glyph(c)}</b><b class="phn" style="font-size:${fs}cqw">${esc(name)}</b>${url?`<a class="phl" href="${url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${lt} ↗</a>`:''}</span>`;
 }
 function bigCardHTML(c,isNew){
   const w=wikiLink(c);const t=sT();const lk=`onclick="event.stopPropagation();S.mission.wiki=true;save()"`;
