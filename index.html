@@ -1664,7 +1664,7 @@ function teamEditor(state,onStart,opts={}){
      <div class="muted" style="margin-top:10px;font-size:13px">${sel.type==='card'?T('pick_card'):sel.type==='eq'?T('choose_equip'):T('choose_field')}</div>
      <div class="grid picker">${sel.type!=='card'?`<div class="mini" data-id="-1" style="--rc:var(--line2)"><div class="im">✕</div><div class="nm">${T('none')}</div></div>`:''}${list.map(c=>miniHTML(c,{sel:(sel.type==='card'?state.cards:sel.type==='eq'?state.eq.map(o=>o[sel.k]):[state.field]).includes(c.i)})).join('')}</div>
      <button class="btn" id="go" style="margin-top:10px" ${state.cards.filter(x=>x!=null).length<(opts.need||5)?'disabled':''}>${T('start')}</button><div id="ar" style="margin-top:12px"></div></div>`;
-    bindBack();hydrateMinis($('#app'));
+    bindBack();hydrateMinis($('#app'));if(opts.after)opts.after();
     document.querySelectorAll('[data-slot]').forEach(s=>s.onclick=e=>{if(e.target.closest('[data-eq]'))return;sel={type:'card',i:+s.dataset.slot};draw()});
     document.querySelectorAll('[data-eq]').forEach(b=>b.onclick=()=>{sel={type:'eq',i:+b.dataset.eq,k:b.dataset.k};draw()});
     $('#fld').onclick=()=>{sel={type:'field',i:0};draw()};
@@ -1677,27 +1677,55 @@ function teamEditor(state,onStart,opts={}){
     $('#go').onclick=()=>onStart(state,bonds);
   };draw();
 }
+const TCT={zh_hant:{h:'好友對戰（隊伍碼）',d:'把你的隊伍碼傳給朋友，朋友貼上就能和你的隊伍對戰。也可以貼上朋友的隊伍碼來挑戰他。',ex:'複製我的隊伍碼',in:'貼上對手的隊伍碼',use:'挑戰這隊',clr:'改回隨機對手',vs:'對手：好友隊伍',bad:'隊伍碼無效',need:'先排滿 5 位角色',ok:'已載入對手隊伍',res:'複製結果',friend:'好友'},
+zh_hans:{h:'好友对战（队伍码）',d:'把你的队伍码发给朋友，朋友粘贴就能和你的队伍对战。也可以粘贴朋友的队伍码来挑战他。',ex:'复制我的队伍码',in:'粘贴对手的队伍码',use:'挑战这队',clr:'改回随机对手',vs:'对手：好友队伍',bad:'队伍码无效',need:'先排满 5 位角色',ok:'已载入对手队伍',res:'复制结果',friend:'好友'},
+ja:{h:'フレンド対戦（チームコード）',d:'チームコードを友達に送ると、友達があなたのチームと対戦できます。友達のコードを貼り付けて挑戦することもできます。',ex:'自分のチームコードをコピー',in:'相手のチームコードを貼り付け',use:'このチームに挑戦',clr:'ランダムな相手に戻す',vs:'相手：フレンドのチーム',bad:'無効なチームコード',need:'先に5人そろえてください',ok:'相手チームを読み込みました',res:'結果をコピー',friend:'フレンド'},
+ko:{h:'친구 대전 (팀 코드)',d:'팀 코드를 친구에게 보내면 친구가 내 팀과 대전할 수 있습니다. 친구의 코드를 붙여넣어 도전할 수도 있습니다.',ex:'내 팀 코드 복사',in:'상대 팀 코드 붙여넣기',use:'이 팀에 도전',clr:'랜덤 상대로 돌아가기',vs:'상대: 친구 팀',bad:'잘못된 팀 코드',need:'먼저 5명을 채우세요',ok:'상대 팀을 불러왔습니다',res:'결과 복사',friend:'친구'},
+en:{h:'Friend battle (team code)',d:'Send your team code to a friend so they can fight your team, or paste a friend\'s code to challenge them.',ex:'Copy my team code',in:'Paste an opponent\'s team code',use:'Fight this team',clr:'Back to random opponents',vs:'Opponent: friend\'s team',bad:'Invalid team code',need:'Fill all 5 slots first',ok:'Opponent team loaded',res:'Copy result',friend:'Friend'},
+es:{h:'Duelo con amigos (código de equipo)',d:'Envía tu código de equipo a un amigo para que luche contra tu equipo, o pega el código de un amigo para retarlo.',ex:'Copiar mi código',in:'Pega el código del rival',use:'Luchar contra este equipo',clr:'Volver a rivales aleatorios',vs:'Rival: equipo de amigo',bad:'Código no válido',need:'Completa los 5 puestos',ok:'Equipo rival cargado',res:'Copiar resultado',friend:'Amigo'},
+fr:{h:'Combat entre amis (code d\'équipe)',d:'Envoyez votre code d\'équipe à un ami pour qu\'il affronte votre équipe, ou collez le code d\'un ami pour le défier.',ex:'Copier mon code',in:'Coller le code adverse',use:'Affronter cette équipe',clr:'Revenir aux adversaires aléatoires',vs:'Adversaire : équipe d\'un ami',bad:'Code invalide',need:'Remplissez les 5 places',ok:'Équipe adverse chargée',res:'Copier le résultat',friend:'Ami'},
+pt:{h:'Batalha com amigos (código de equipe)',d:'Envie seu código de equipe a um amigo para ele enfrentar sua equipe, ou cole o código de um amigo para desafiá-lo.',ex:'Copiar meu código',in:'Cole o código do adversário',use:'Enfrentar esta equipe',clr:'Voltar a adversários aleatórios',vs:'Adversário: equipe de amigo',bad:'Código inválido',need:'Preencha as 5 vagas',ok:'Equipe adversária carregada',res:'Copiar resultado',friend:'Amigo'}};
+const TC=k=>(TCT[L]||TCT.en)[k];
+const b64u={enc:s=>btoa(unescape(encodeURIComponent(s))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''),dec:s=>decodeURIComponent(escape(atob(s.replace(/-/g,'+').replace(/_/g,'/'))))};
+function teamCode(st){const o={c:st.cards.slice(0,5),e:(st.eq||[]).slice(0,5).map(x=>x||{}),f:st.field??null};return 'MLT1-'+b64u.enc(JSON.stringify(o))}
+function parseTeamCode(code){try{const m=String(code).trim().match(/MLT1-([A-Za-z0-9_-]+)/);if(!m)return null;const o=JSON.parse(b64u.dec(m[1]));
+  const cards=(o.c||[]).slice(0,5).map(i=>BYID[i]&&(BYID[i].k==='char'||BYID[i].k==='event')?i:null);if(cards.filter(x=>x!=null).length<1)return null;
+  const eq=(o.e||[]).slice(0,5).map(x=>{const r={};for(const[k]of EQK){const v=x&&x[k];if(v!=null&&BYID[v]&&BYID[v].k===k)r[k]=v}return r});while(eq.length<5)eq.push({});
+  const f=o.f!=null&&BYID[o.f]&&(BYID[o.f].k==='battle'||BYID[o.f].k==='realm')?o.f:null;return {cards,eq,field:f}}catch(e){return null}}
 function bTeam(){
-  let level='C';
+  let level='C',enemy=null;
   const st=S.team;
-  const head=()=>`<div class="box" style="margin-bottom:12px"><b>${T('pick_level')}</b><div class="ctrl" style="margin-top:8px" id="lvs">${RAR.map(r=>`<button class="chip" data-lv="${r}" aria-pressed="${level===r}"><span class="rb">${r}</span></button>`).join('')}</div></div>`;
+  const head=()=>`<div class="box" style="margin-bottom:12px"><b>${T('pick_level')}</b><div class="ctrl" style="margin-top:8px" id="lvs">${RAR.map(r=>`<button class="chip" data-lv="${r}" aria-pressed="${level===r}"><span class="rb">${r}</span></button>`).join('')}</div></div>
+   <div class="box" style="margin-bottom:12px"><b style="color:var(--gold)">🤝 ${TC('h')}</b><div class="sub" style="text-align:left;margin:6px 0">${TC('d')}</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn ghost" id="tcEx">${TC('ex')}</button></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><input class="inp" id="tcIn" placeholder="${TC('in')}" style="flex:1;min-width:200px"><button class="btn" id="tcUse">${TC('use')}</button></div>
+    <div id="tcVs" class="sub" style="text-align:left;margin-top:8px"></div></div>`;
+  const showVs=()=>{const el=$('#tcVs');if(!el)return;if(!enemy){el.innerHTML='';const lv=$('#lvs');if(lv)lv.style.opacity=1;return}
+    el.innerHTML=`<b style="color:#7fe3d0">${TC('vs')}</b>：${enemy.cards.filter(x=>x!=null).map(i=>`<span class="rb r-${BYID[i].y}">${BYID[i].y}</span> ${esc(nm(BYID[i]))}`).join('、')} <button class="chip" id="tcClr">${TC('clr')}</button>`;
+    const lv=$('#lvs');if(lv)lv.style.opacity=.35;$('#tcClr').onclick=()=>{enemy=null;showVs()}};
+  const bindCode=()=>{document.querySelectorAll('#lvs [data-lv]').forEach(b=>{b.setAttribute('aria-pressed',b.dataset.lv===level);b.onclick=()=>{level=b.dataset.lv;document.querySelectorAll('#lvs [data-lv]').forEach(x=>x.setAttribute('aria-pressed',x===b))}});const ex=$('#tcEx');if(!ex)return;
+    ex.onclick=()=>{if(st.cards.filter(x=>x!=null).length<5){toast(TC('need'));return}const code=teamCode(st);try{navigator.clipboard.writeText(code).then(()=>toast(T('copied')),()=>prompt('',code))}catch(e){prompt('',code)}};
+    $('#tcUse').onclick=()=>{const t=parseTeamCode($('#tcIn').value);if(!t){toast(TC('bad'));return}enemy=t;toast(TC('ok'));showVs()};showVs()};
   const start=async(state,bonds)=>{
-    const opp=[0,1,2,3,4].map(()=>randomOf(level)).filter(Boolean);
-    const field=state.field!=null?fieldEffect(BYID[state.field]):null;
+    const opp=enemy?enemy.cards.map(i=>i!=null?BYID[i]:null):[0,1,2,3,4].map(()=>randomOf(level)).filter(Boolean);
+    const field=state.field!=null?fieldEffect(BYID[state.field]):enemy&&enemy.field!=null?fieldEffect(BYID[enemy.field]):null;
+    const eb=enemy?teamBonds(opp):null;
     let w=0,l=0,turns=0;const ar=$('#ar');ar.innerHTML='';
     for(let i=0;i<5&&w<3&&l<3;i++){
       const me=BYID[state.cards[i]],op=opp[i];if(!me||!op)continue;
       const box=document.createElement('div');box.style.marginBottom='12px';ar.appendChild(box);
-      const out=await playDuel(fighter(me,{eq:state.eq[i],atkB:bonusFor(me,i,bonds),field,lead:BYID[state.cards[0]]}),fighter(op,{field}),box);
+      const out=await playDuel(fighter(me,{eq:state.eq[i],atkB:bonusFor(me,i,bonds),field,lead:BYID[state.cards[0]]}),enemy?fighter(op,{eq:enemy.eq[i],atkB:bonusFor(op,i,eb),field,lead:opp[0]}):fighter(op,{field}),box);
       turns+=out.turns;if(out.res==='win')w++;else if(out.res==='lose')l++;
       box.insertAdjacentHTML('beforeend',`<p style="text-align:center"><b>${i+1}. ${T(out.res)}</b> · ${w}-${l}</p>`);
     }
     const res=w>l?'win':l>w?'lose':'draw';
-    record('team',`${T('team')} ${w}-${l}`,level,res,turns,state.cards.filter(x=>x!=null));
-    ar.insertAdjacentHTML('beforeend',`<p class="rb" style="font-size:30px;text-align:center;color:${res==='win'?'var(--gold)':'var(--muted)'}">${T(res)} ${w}-${l}</p>`);trophyCheck();
+    const lvl=enemy?opp.filter(Boolean).reduce((a,c)=>RAR.indexOf(c.y)>RAR.indexOf(a)?c.y:a,'C'):level;
+    record('team',`${T('team')}${enemy?' vs '+TC('friend'):''} ${w}-${l}`,lvl,res,turns,state.cards.filter(x=>x!=null));
+    ar.insertAdjacentHTML('beforeend',`<p class="rb" style="font-size:30px;text-align:center;color:${res==='win'?'var(--gold)':'var(--muted)'}">${T(res)} ${w}-${l}</p><div style="text-align:center"><button class="btn ghost" id="tcRes">${TC('res')}</button></div>`);trophyCheck();
+    const rt=`${T('game')} ${T('team')}${enemy?' vs '+TC('friend'):''}：${T(res)} ${w}-${l}\n`+state.cards.filter(x=>x!=null).map(i=>`${BYID[i].y} ${nm(BYID[i])}`).join('、')+'\n'+SITE_URL;
+    $('#tcRes').onclick=()=>shareText(rt);
   };
-  teamEditor(st,start,{title:T('team'),head:head()});
-  document.querySelectorAll('#lvs [data-lv]').forEach(b=>b.onclick=()=>{level=b.dataset.lv;document.querySelectorAll('#lvs [data-lv]').forEach(x=>x.setAttribute('aria-pressed',x===b))});
+  teamEditor(st,start,{title:T('team'),head:head(),after:bindCode});
 }
 function bossCard(){const d=today();let h=0;for(const ch of d)h=(h*31+ch.charCodeAt(0))>>>0;const p=CARDS.filter(c=>c.k==='char'&&['SSR','UR','EXR'].includes(c.y));return p[h%p.length]}
 function bossHP(){return 2500000}
