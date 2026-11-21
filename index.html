@@ -658,7 +658,7 @@ const FRESH=()=>({lang:'zh_hant',packs:PACK_MAX,lastRefill:Date.now(),white:0,rb
   team:{cards:[null,null,null,null,null],eq:[null,null,null,null,null],field:null},introSeen:false,ach:{packC:0}});
 let S=load();
 function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&s.owned)return Object.assign(FRESH(),s)}catch(e){}return FRESH()}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}if(typeof cloudSoon==='function')cloudSoon()}
 let L=I18N[S.lang]?S.lang:'zh_hant';
 const T=k=>(I18N[L]&&I18N[L][k]!==undefined?I18N[L][k]:I18N.en[k]);
 
@@ -1235,10 +1235,46 @@ function vCodex(){
    <div class="tiers">${['EXR','UR','SSR','SR','R'].map(tierBox).join('')}<div class="sep"></div>${['UC','C'].map(tierBox).join('')}</div></div>
   <div id="cxBody"></div>
   <div class="box" style="margin-top:14px"><b style="color:var(--gold)">${T('backup')}</b><div class="sub" style="text-align:left;margin:6px 0">${T('bk_note')}</div>
-   <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="bkExp">${T('bk_export')}</button><button class="btn ghost" id="bkImp">${T('bk_import')}</button><input type="file" id="bkFile" accept=".json,application/json" hidden></div></div>`;
-  bindBackup();
+   <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="bkExp">${T('bk_export')}</button><button class="btn ghost" id="bkImp">${T('bk_import')}</button><input type="file" id="bkFile" accept=".json,application/json" hidden></div></div>${cloudBox()}`;
+  bindBackup();bindCloud();
   document.querySelectorAll('.subtabs button').forEach(b=>b.onclick=()=>{cx.tab=b.dataset.t;cx.theme=null;vCodex()});
   cx.tab==='list'?cxList():cxThemes();
+}
+/* merge another save into S (card counts never go down, so max() is safe) */
+function mergeSave(sv){if(!sv||typeof sv.owned!=='object')return false;
+  for(const[k,v]of Object.entries(sv.owned)){S.owned[k]=Math.max(S.owned[k]||0,v);if(sv.order&&sv.order[k]!=null&&S.order[k]==null)S.order[k]=sv.order[k]}
+  Object.assign(S.fav,sv.fav||{});for(const[g,ids]of Object.entries(sv.groups||{}))S.groups[g]=[...new Set([...(S.groups[g]||[]),...ids])];
+  S.pulls=Math.max(S.pulls,sv.pulls||0);S.packsOpened=Math.max(S.packsOpened,sv.packsOpened||0);S.stamps=Math.max(S.stamps||0,sv.stamps||0);
+  Object.assign(S.trophies,sv.trophies||{});if(sv.story&&(sv.story.stage||0)>(S.story.stage||0))S.story=sv.story;
+  if(sv.boss&&(sv.boss.kills||0)>(S.boss.kills||0))S.boss.kills=sv.boss.kills;
+  if(Array.isArray(sv.showcase)&&!S.showcase.length)S.showcase=sv.showcase;return true}
+/* ===== cloud save by transfer code (Pages Function /api/save + D1) ===== */
+const CLT={zh_hant:{t:'雲端存檔・引繼碼',n:'建立引繼碼後，進度會自動存到伺服器。在手機或其他電腦輸入同一組引繼碼，就能玩同一份卡牌。請保管好引繼碼，知道它的人就能讀取這份存檔。',make:'建立引繼碼',code:'你的引繼碼',sync:'立即同步',copy:'複製',enter:'輸入引繼碼（例：ML-ABCDE-12345）',load:'載入',ok:'已同步',bad:'找不到這組引繼碼',err:'同步失敗，稍後會再試',last:'上次同步',off:'雲端存檔暫時無法使用'},
+ zh_hans:{t:'云端存档・引继码',n:'建立引继码后，进度会自动存到服务器。在手机或其他电脑输入同一组引继码，就能玩同一份卡牌。请保管好引继码，知道它的人就能读取这份存档。',make:'建立引继码',code:'你的引继码',sync:'立即同步',copy:'复制',enter:'输入引继码（例：ML-ABCDE-12345）',load:'载入',ok:'已同步',bad:'找不到这组引继码',err:'同步失败，稍后会再试',last:'上次同步',off:'云端存档暂时无法使用'},
+ ja:{t:'クラウドセーブ・引き継ぎコード',n:'引き継ぎコードを作ると、進行状況が自動でサーバーに保存されます。スマホや別のPCで同じコードを入力すると、同じカードで遊べます。コードを知っている人は誰でもこのセーブを読み込めるので、大切に保管してください。',make:'引き継ぎコードを作成',code:'あなたの引き継ぎコード',sync:'今すぐ同期',copy:'コピー',enter:'引き継ぎコードを入力（例：ML-ABCDE-12345）',load:'読み込む',ok:'同期しました',bad:'このコードは見つかりません',err:'同期に失敗しました。後で再試行します',last:'最終同期',off:'クラウドセーブは現在利用できません'},
+ ko:{t:'클라우드 저장・인계 코드',n:'인계 코드를 만들면 진행 상황이 서버에 자동 저장됩니다. 휴대폰이나 다른 PC에서 같은 코드를 입력하면 같은 카드로 플레이할 수 있습니다. 코드를 아는 사람은 누구나 이 저장 데이터를 불러올 수 있으니 잘 보관하세요.',make:'인계 코드 만들기',code:'내 인계 코드',sync:'지금 동기화',copy:'복사',enter:'인계 코드 입력 (예: ML-ABCDE-12345)',load:'불러오기',ok:'동기화됨',bad:'코드를 찾을 수 없습니다',err:'동기화 실패, 잠시 후 다시 시도합니다',last:'마지막 동기화',off:'클라우드 저장을 지금 사용할 수 없습니다'},
+ en:{t:'Cloud save · transfer code',n:'Create a transfer code and your progress is saved to our server automatically. Enter the same code on your phone or another computer to play with the same cards. Keep the code private: anyone who has it can load this save.',make:'Create transfer code',code:'Your transfer code',sync:'Sync now',copy:'Copy',enter:'Enter a transfer code (e.g. ML-ABCDE-12345)',load:'Load',ok:'Synced',bad:'That code was not found',err:'Sync failed, will retry later',last:'Last synced',off:'Cloud save is unavailable right now'},
+ es:{t:'Guardado en la nube · código',n:'Crea un código de transferencia y tu progreso se guardará solo en nuestro servidor. Introduce el mismo código en el móvil u otro ordenador para jugar con las mismas cartas. Guárdalo en privado: quien lo tenga puede cargar esta partida.',make:'Crear código',code:'Tu código',sync:'Sincronizar',copy:'Copiar',enter:'Introduce un código (p. ej. ML-ABCDE-12345)',load:'Cargar',ok:'Sincronizado',bad:'No se encontró ese código',err:'Falló la sincronización, se reintentará',last:'Última sincronización',off:'El guardado en la nube no está disponible'},
+ fr:{t:'Sauvegarde cloud · code de transfert',n:'Créez un code de transfert et votre progression sera enregistrée automatiquement sur notre serveur. Saisissez le même code sur votre téléphone ou un autre ordinateur pour jouer avec les mêmes cartes. Gardez-le secret : quiconque le possède peut charger cette sauvegarde.',make:'Créer un code',code:'Votre code',sync:'Synchroniser',copy:'Copier',enter:'Saisir un code (ex. ML-ABCDE-12345)',load:'Charger',ok:'Synchronisé',bad:'Code introuvable',err:'Échec de la synchronisation, nouvel essai plus tard',last:'Dernière synchro',off:'La sauvegarde cloud est indisponible'},
+ pt:{t:'Salvamento na nuvem · código',n:'Crie um código de transferência e seu progresso será salvo automaticamente no nosso servidor. Digite o mesmo código no celular ou em outro computador para jogar com as mesmas cartas. Guarde o código: quem tiver ele pode carregar este save.',make:'Criar código',code:'Seu código',sync:'Sincronizar',copy:'Copiar',enter:'Digite um código (ex.: ML-ABCDE-12345)',load:'Carregar',ok:'Sincronizado',bad:'Código não encontrado',err:'Falha ao sincronizar, tentaremos depois',last:'Última sincronização',off:'O salvamento na nuvem não está disponível'}};
+const CT=k=>(CLT[L]||CLT.en)[k];
+const CLOUD={t:null,busy:false};
+function cloudData(){const o=Object.assign({},S);delete o.cloud;delete o.lang;return JSON.stringify(o)}
+async function cloudCall(body){const r=await fetch('/api/save',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body),keepalive:body.action==='put'});const j=await r.json().catch(()=>({}));if(!r.ok)throw Object.assign(new Error(j.error||r.status),{status:r.status});return j}
+async function cloudPush(){if(!S.cloud||CLOUD.busy)return;CLOUD.busy=true;try{const j=await cloudCall({action:'put',code:S.cloud.code,data:cloudData()});S.cloud.at=j.updated;save()}catch(e){}finally{CLOUD.busy=false}}
+function cloudSoon(){if(S.cloud&&!CLOUD.t)CLOUD.t=setTimeout(()=>{CLOUD.t=null;cloudPush()},30000)}
+async function cloudSync(){if(!S.cloud)return false;const j=await cloudCall({action:'get',code:S.cloud.code});mergeSave(JSON.parse(j.data));save();await cloudPush();return true}
+addEventListener('pagehide',()=>{if(S.cloud&&CLOUD.t){clearTimeout(CLOUD.t);CLOUD.t=null;cloudPush()}});
+function cloudBox(){const c=S.cloud;
+  return `<div class="box" style="margin-top:14px"><b style="color:var(--gold)">☁ ${CT('t')}</b><div class="sub" style="text-align:left;margin:6px 0">${CT('n')}</div>
+   ${c?`<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span>${CT('code')}：</span><b id="clCode" style="font:700 18px ui-monospace,monospace;letter-spacing:1px;color:var(--gold)">${esc(c.code)}</b><button class="btn ghost" id="clCopy">${CT('copy')}</button><button class="btn" id="clSync">${CT('sync')}</button></div><div class="sub" style="text-align:left;margin-top:6px">${CT('last')}：${c.at?new Date(c.at).toLocaleString():'—'}</div>`
+     :`<button class="btn" id="clMake">${CT('make')}</button>`}
+   <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><input class="inp" id="clIn" placeholder="${CT('enter')}" style="flex:1;min-width:200px" autocapitalize="characters"><button class="btn ghost" id="clLoad">${CT('load')}</button></div></div>`}
+function bindCloud(){
+  const mk=$('#clMake');if(mk)mk.onclick=async()=>{mk.disabled=true;try{const j=await cloudCall({action:'create',data:cloudData()});S.cloud={code:j.code,at:j.updated};save();toast(CT('ok'));vCodex()}catch(e){mk.disabled=false;toast(CT('off'))}};
+  const cp=$('#clCopy');if(cp)cp.onclick=()=>{try{navigator.clipboard.writeText(S.cloud.code);toast('✓')}catch(e){}};
+  const sy=$('#clSync');if(sy)sy.onclick=async()=>{sy.disabled=true;try{await cloudSync();toast(CT('ok'));render()}catch(e){toast(e.status===404?CT('bad'):CT('err'));sy.disabled=false}};
+  $('#clLoad').onclick=async()=>{const v=$('#clIn').value.trim();if(!v)return;try{const j=await cloudCall({action:'get',code:v});if(!mergeSave(JSON.parse(j.data)))throw 0;S.cloud={code:j.code,at:j.updated};save();await cloudPush();toast(CT('ok'));render()}catch(e){toast(e&&e.status===404||e&&e.status===400?CT('bad'):CT('off'))}};
 }
 function bindBackup(){
   $('#bkExp').onclick=async()=>{const txt=JSON.stringify({game:'wanxiang',v:2,at:new Date().toISOString(),save:S});const fn=`wanxiang-backup-${today()}.json`;
@@ -1247,7 +1283,7 @@ function bindBackup(){
       else{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type:'application/json'}));a.download=fn;document.body.appendChild(a);a.click();a.remove()}
       S.lastBackup=S.packsOpened;save();toast('✓')}catch(e){if(e&&e.code!=='declined')toast(T('bk_bad'))}};
   $('#bkImp').onclick=()=>$('#bkFile').click();
-  $('#bkFile').onchange=async e=>{try{const j=JSON.parse(await e.target.files[0].text());const sv=j.save||j;if(!sv||typeof sv.owned!=='object')throw 0;for(const[k,v]of Object.entries(sv.owned)){S.owned[k]=Math.max(S.owned[k]||0,v);if(sv.order&&sv.order[k]!=null&&S.order[k]==null)S.order[k]=sv.order[k]}Object.assign(S.fav,sv.fav||{});for(const[g,ids]of Object.entries(sv.groups||{}))S.groups[g]=[...new Set([...(S.groups[g]||[]),...ids])];S.pulls=Math.max(S.pulls,sv.pulls||0);S.packsOpened=Math.max(S.packsOpened,sv.packsOpened||0);save();toast(T('bk_ok'));render()}catch(_){toast(T('bk_bad'))}};
+  $('#bkFile').onchange=async e=>{try{const j=JSON.parse(await e.target.files[0].text());const sv=j.save||j;if(!mergeSave(sv))throw 0;save();toast(T('bk_ok'));render()}catch(_){toast(T('bk_bad'))}};
 }
 function cxList(){
   const groups=Object.keys(S.groups);
@@ -1654,5 +1690,5 @@ $('#lang').onchange=e=>{L=S.lang=e.target.value;save();chrome();render()};
 $('#btnTrophy').onclick=showTrophies;$('#btnRules').onclick=showRules;
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('.ov').forEach(o=>o.remove());$('#layer').innerHTML=''}});
 chrome();intro(false);
-(window.DATAP=loadData()).then(()=>{if(S.banner.id!==BANNER.id){S.banner={id:BANNER.id,pulled:0,got:false,start:Date.now()};save()}go('pull')}).catch(e=>{$('#app').innerHTML='<p>Failed to load cards.json</p>'});
+(window.DATAP=loadData()).then(()=>{if(S.cloud)cloudSync().then(()=>render()).catch(()=>{});if(S.banner.id!==BANNER.id){S.banner={id:BANNER.id,pulled:0,got:false,start:Date.now()};save()}go('pull')}).catch(e=>{$('#app').innerHTML='<p>Failed to load cards.json</p>'});
 </script>
