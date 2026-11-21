@@ -638,6 +638,7 @@ html,body{max-width:100%;overflow-x:hidden}
 @keyframes spFade{from{opacity:0}to{opacity:.85}}@keyframes spPulse{50%{opacity:.35}}@keyframes spSheen{to{background-position:200% 0}}
 @media(max-height:700px){.sp-card{width:min(240px,60vw)}.sp-rar{font-size:72px}}
 
+.sycard{display:flex;align-items:center;gap:12px;margin:16px auto 0;width:min(420px,100%);text-align:left;background:#0d0c12;border:1px solid #3a3550;border-radius:14px;padding:10px 14px;color:#e8e2d4;cursor:pointer}.sycard:hover{border-color:var(--gold)}.syic{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#1c2236;font-size:17px;flex:none}.sytx{flex:1;min-width:0}.sytx b{display:block;font-size:15px;color:#fff}.sytx small{display:block;font-size:12px;color:#a9a290;margin-top:2px}.syar{color:var(--gold);font-size:22px}.sycard.on{border-color:#2f7a5a}.sycard.on .syic{background:#173a2c}.sycard.on small{color:#7fe3b0}
 .ntbar{margin:14px auto 0;display:block;background:#15121c;border:1px solid #3a2f4d;color:#e8e2d4;border-radius:10px;padding:8px 14px;font-size:13px;cursor:pointer}.ntbar u{color:#ff9ec7}
 .unoff{font-size:11px;color:#8a8473;text-align:center;margin-top:8px;padding:0 16px}
 .nt-ov{align-items:center;justify-content:center;padding:12px}
@@ -932,7 +933,7 @@ function vPull(){
   </div>`;
   if(ex){const b=$('#bimg');imgFor(ex).then(u=>{if(u)b.style.backgroundImage=`url(${u})`;else{const alt=CARDS.find(x=>x.i===463)||ex;imgFor(alt).then(v=>{if(v)b.style.backgroundImage=`url(${v})`;else b.innerHTML=`<span style="display:grid;place-items:center;height:100%;font:900 40px var(--f-disp);color:#ffe9a8;text-shadow:0 0 12px #ffd24a">${glyph(ex)}</span>`})}})}
   const p=$('#pack');p.onclick=doPull;p.onkeydown=e=>{if(e.key==='Enter')doPull()};
-  {const nb=$('#ntBar');if(nb)nb.onclick=showNotice}$('#fxt').onclick=()=>{S.fx=S.fx===false;save();vPull()};
+  {const nb=$('#ntBar');if(nb)nb.onclick=showNotice;const sy=$('#syCard');if(sy)sy.onclick=openCloud}$('#fxt').onclick=()=>{S.fx=S.fx===false;save();vPull()};
   if(DEV)$('#test10').onclick=()=>{S.packs+=10;save();vPull()};
   document.querySelectorAll('[data-claim]').forEach(b=>b.onclick=()=>{S.mission.claimed[b.dataset.claim]=true;S.packs+=2;save();vPull();toast('+2')});
   heroStart();clearInterval(tick);tick=setInterval(()=>{if(view!=='pull')return clearInterval(tick);const before=S.packs;refill();if(S.packs!==before)return vPull();const cd=$('#cd');if(cd)cd.textContent=Math.ceil((REFILL_MS-((Date.now()-S.lastRefill)%REFILL_MS))/1000);liveFetch();liveShow()},1000);liveFetch();
@@ -1241,7 +1242,9 @@ fr:{t:'Fête de lancement',s:'MYRIAD LEGENDS est lancé ! Saison 1 ouverte.',r10
 pt:{t:'Celebração de lançamento',s:'MYRIAD LEGENDS chegou! Temporada 1 aberta.',r10:['A cada 10 pacotes','O 10º pacote é Dourado com SR ou melhor garantido.'],r100:['A cada 100 pacotes','A cada 100 pacotes, um pacote Arco-íris com SSR ou melhor.'],rd:['Primeiro pacote do dia','Seu primeiro pacote do dia é Arco-íris (SSR+ garantido).'],r5:['A cada 5 selos','5 selos de login = pacote Preto com UR ou melhor.'],st:'Selos',fb:'Bônus de hoje',rb:'Pacote Arco-íris',bk:'Pacote Preto',done:'Recebido',hide:'Não mostrar até amanhã',share:'Compartilhar',ok:'Entendi',note:'Compartilhe e ganhe +1 pacote Arco-íris (1x por dia)',claimed:'Bônus de hoje já recebido.',got:'+1 pacote Arco-íris!',copied:'Imagem e texto copiados.',fail:'Falha ao compartilhar',bar:'Celebração de lançamento!',open:'Ver detalhes',unoff:'Projeto não oficial, sem relação com a Wikipédia ou museus.',stxt:'Estou jogando MYRIAD LEGENDS, um jogo grátis de cartas de mitos orientais! Primeiro pacote do dia SSR+.',img:['LANÇAMENTO','Temporada 1','Primeiro pacote diário SSR+','Arco-íris a cada 100 · Preto a cada 5 selos']}};
 const NTT=k=>(NT[L]||NT.en)[k];
 const SITE_URL='https://mylegends.org';
-function noticeBar(){return `<button class="ntbar" id="ntBar">📜 ${NTT('bar')} <u>${NTT('open')}</u></button><div class="unoff">${NTT('unoff')}</div>`}
+function noticeBar(){return `${syncCard()}<button class="ntbar" id="ntBar">📜 ${NTT('bar')} <u>${NTT('open')}</u></button><div class="unoff">${NTT('unoff')}</div>`}
+const SYT={zh_hant:['伺服器同步','用 Google 或引繼碼同步，PC 和手機玩同一份卡牌','已同步'],zh_hans:['服务器同步','用 Google 或引继码同步，PC 和手机玩同一份卡牌','已同步'],ja:['サーバー同期','Google か引き継ぎコードで PC とスマホを同じデータに','同期中'],ko:['서버 동기화','Google 또는 인계 코드로 PC와 폰을 같은 데이터로','동기화됨'],en:['Cloud sync','Sign in with Google or use a transfer code to play the same cards on PC and phone','Synced'],es:['Sincronización','Usa Google o un código para jugar en PC y móvil con las mismas cartas','Sincronizado'],fr:['Synchronisation','Google ou un code de transfert pour jouer sur PC et mobile','Synchronisé'],pt:['Sincronização','Use Google ou um código para jogar no PC e celular com as mesmas cartas','Sincronizado']};
+function syncCard(){const t=SYT[L]||SYT.en,c=S.cloud;return `<button class="sycard ${c?'on':''}" id="syCard"><span class="syic">☁</span><span class="sytx"><b>${t[0]}</b><small>${c?(c.g?'✓ '+CT('gon'):'✓ '+t[2]+' · '+esc(c.code)):t[1]}</small></span><span class="syar">›</span></button>`}
 function stampGrid(){const n=S.stamps||0,cyc=Math.floor(Math.max(0,n-1)/25)*25;let h='';
   for(let i=1;i<=25;i++){const k=cyc+i,blk=k%5===0,on=k<=n;h+=`<div class="stc ${on?'on':''} ${blk?'blk':''}" title="${k}">${packSVG(blk?'black':'rainbow')}${on?'<i>✓</i>':''}</div>`}return h}
 function showNotice(){
@@ -1412,7 +1415,7 @@ function cloudBtn(){const b=$('#btnCloud');if(!b)return;const on=!!S.cloud;b.cla
 function openCloud(){document.getElementById('cloudOv')?.remove();const host=document.createElement('div');host.className='ov';host.id='cloudOv';host.style.zIndex=40;
   host.innerHTML=`<div class="box" style="max-width:560px;width:100%"><div style="display:flex;justify-content:flex-end"><button class="btn ghost" data-x>${T('close')}</button></div><div id="cloudIn"></div></div>`;
   document.body.appendChild(host);host.querySelector('[data-x]').onclick=()=>host.remove();host.onclick=e=>{if(e.target===host)host.remove()};cloudRefresh()}
-function cloudRefresh(){cloudBtn();const el=$('#cloudIn');if(!el)return;el.innerHTML=cloudBox().replace('class="box" style="margin-top:14px"','style=""');bindCloud()}
+function cloudRefresh(){cloudBtn();if(view==='pull'&&$('#syCard')){const o=$('#syCard');o.outerHTML=syncCard();$('#syCard').onclick=openCloud}const el=$('#cloudIn');if(!el)return;el.innerHTML=cloudBox().replace('class="box" style="margin-top:14px"','style=""');bindCloud()}
 function bindCloud(){
   gButton();
   const mk=$('#clMake');if(mk)mk.onclick=async()=>{mk.disabled=true;try{const j=await cloudCall({action:'create',data:cloudData()});S.cloud={code:j.code,at:j.updated};save();toast(CT('ok'));cloudRefresh();render()}catch(e){mk.disabled=false;toast(CT('off'))}};
