@@ -617,6 +617,26 @@ a.tag{text-decoration:none}
 html,body{max-width:100%;overflow-x:hidden}
 .ptop{pointer-events:none}
 .cloudb{width:auto!important;padding:0 12px;gap:5px;display:inline-flex;align-items:center;border-color:var(--gold)!important;color:var(--gold)}.cloudb .ci{font-size:15px}.cloudb .cl{font-size:13px;font-weight:700}.cloudb.on{border-color:#3e8f6a!important;color:#7fe3b0}@media(max-width:480px){.cloudb{padding:0 8px}.cloudb .ci{display:none}.topin .tabs button{white-space:nowrap;padding-left:6px;padding-right:6px}.topin .lang{max-width:70px;padding:4px 4px}.topin .rt{gap:3px}.topin{gap:4px;padding-left:10px;padding-right:10px}.topin .rt .icon{width:30px;height:30px;font-size:15px}.cloudb .cl{font-size:12px}}.cloudb,.cloudb .cl{white-space:nowrap}
+
+.spot{position:fixed;inset:0;z-index:46;display:grid;place-items:center;background:radial-gradient(circle at 50% 45%,color-mix(in srgb,var(--rc) 35%,#000) 0%,#05030a 70%);overflow:hidden;cursor:pointer;animation:spIn .35s ease-out}
+.spot.out{animation:spOut .3s forwards}
+.sp-rays{position:absolute;inset:-50%;background:repeating-conic-gradient(from 0deg,color-mix(in srgb,var(--rc) 40%,transparent) 0 6deg,transparent 6deg 18deg);animation:cinespin 30s linear infinite;opacity:.55;mask:radial-gradient(circle,#000 10%,transparent 60%);-webkit-mask:radial-gradient(circle,#000 10%,transparent 60%)}
+.sp-rays.rainbow{background:repeating-conic-gradient(#ff4f8b55 0 6deg,transparent 6deg 12deg,#ffd24a55 12deg 18deg,transparent 18deg 24deg,#4cc3ff55 24deg 30deg,transparent 30deg 36deg)}
+.sp-in{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;padding:16px;max-height:100%}
+.sp-rar{font:900 clamp(72px,18vw,150px)/.9 var(--f-title,serif);letter-spacing:.04em;color:var(--rc);text-shadow:0 0 30px var(--rc),0 0 70px var(--rc),0 4px 0 #0008;animation:spRar .7s cubic-bezier(.2,1.8,.4,1) both}
+.sp-rar.ur-text{text-shadow:none;filter:drop-shadow(0 0 22px #fff8) drop-shadow(0 0 50px #ffd24a88);background-size:200% 100%;animation:spRar .7s cubic-bezier(.2,1.8,.4,1) both,spSheen 2.2s linear infinite}
+.spot-EXR .sp-rar{background:linear-gradient(90deg,#fff,#c58cff,#ff3b6b,#ffd9f0,#fff);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent}
+.sp-sub{font:700 clamp(12px,3vw,16px)/1 var(--f-body);letter-spacing:.35em;color:#fff;opacity:.85;animation:spFade .6s .35s both}
+.sp-card{position:relative;width:min(300px,72vw);margin-top:10px;animation:spCard .8s .25s cubic-bezier(.2,1.4,.4,1) both;filter:drop-shadow(0 0 28px var(--rc)) drop-shadow(0 0 60px color-mix(in srgb,var(--rc) 60%,transparent))}
+.sp-card .tcard{width:100%!important}
+.sp-new{position:absolute;top:-12px;left:50%;transform:translateX(-50%);z-index:3}
+.sp-tap{margin-top:14px;color:#fff;font-size:14px;letter-spacing:.2em;opacity:0;transition:opacity .4s}
+.spot.ready .sp-tap{opacity:.8;animation:spPulse 1.4s ease-in-out infinite}
+@keyframes spIn{from{opacity:0}to{opacity:1}}@keyframes spOut{to{opacity:0;transform:scale(1.05)}}
+@keyframes spRar{0%{opacity:0;transform:scale(3)}60%{opacity:1;transform:scale(.92)}100%{transform:scale(1)}}
+@keyframes spCard{0%{opacity:0;transform:translateY(60px) scale(.6) rotateY(90deg)}100%{opacity:1;transform:none}}
+@keyframes spFade{from{opacity:0}to{opacity:.85}}@keyframes spPulse{50%{opacity:.35}}@keyframes spSheen{to{background-position:200% 0}}
+@media(max-height:700px){.sp-card{width:min(240px,60vw)}.sp-rar{font-size:72px}}
 .ichip{display:inline-flex;align-items:center;gap:5px}.ichip svg,.ichip .rbadge{flex:none}.ichip .ci{font-size:15px;line-height:1}
 </style>
 
@@ -1175,6 +1195,23 @@ async function entrance(c){
    }
   }finally{if(cyc)clearInterval(cyc);host.style.transition='opacity .35s';host.style.opacity=0;setTimeout(()=>host.remove(),360)}
 }
+const SPOT_TAP={zh_hant:'點一下繼續',zh_hans:'点一下继续',ja:'タップして続ける',ko:'탭하여 계속',en:'Tap to continue',es:'Toca para continuar',fr:'Touchez pour continuer',pt:'Toque para continuar'};
+const SPOT_SUB={SR:'SUPER RARE',SSR:'SPECIAL SUPER RARE',UR:'ULTRA RARE',EXR:'EXTRA LEGEND RARE'};
+// Sean 2026-11-22: after an SR+ entrance, the card pops out alone with a huge rarity mark, holds a few seconds, tap returns to the 6-card grid
+function spotlight(c,isNew){return new Promise(done=>{
+  const k=c.y,rb=k==='UR'||k==='EXR';
+  const host=document.createElement('div');host.className='spot spot-'+k;host.style.setProperty('--rc',`var(--r${k})`);
+  host.innerHTML=`<div class="sp-rays ${rb?'rainbow':''}"></div><div class="sp-in">
+    <div class="sp-rar ${rb?'ur-text':''}" data-r="${k}">${k}</div><div class="sp-sub">${SPOT_SUB[k]||''}</div>
+    <div class="sp-card">${isNew?`<span class="gnew sp-new">${T('new_card')}</span>`:''}${bigCardHTML(c,isNew)}</div>
+    <div class="sp-tap">${(SPOT_TAP[L]||SPOT_TAP.en)}</div></div>`;
+  document.body.appendChild(host);setImg(host.querySelector('[data-art]'),c);
+  if(S.fx!==false&&typeof fx==='function')try{fx(k,host)}catch(e){}
+  const hold={SR:1200,SSR:1800,UR:2400,EXR:3000}[k]||1500;let ok=false;
+  setTimeout(()=>{ok=true;host.classList.add('ready')},hold);
+  const end=e=>{if(e&&e.target.closest('a'))return;if(!ok)return;host.onclick=null;host.classList.add('out');setTimeout(()=>{host.remove();done()},300)};
+  host.onclick=end;
+})}
 async function showReveal({type,res}){
   const Lr=$('#layer');const flipped=res.map(()=>false);let busy=false;
   const pad=n=>String(n).padStart(2,'0');
@@ -1193,7 +1230,7 @@ async function showReveal({type,res}){
   const update=()=>{const n=flipped.filter(Boolean).length;$('#gcount').textContent=n;if(n===res.length){$('#ghint').textContent=T('tap_explore');$('#gPre').hidden=true;$('#gPost').hidden=false}};
   const flip=async(i,quick)=>{
     if(flipped[i])return;flipped[i]=true;const {c}=res[i];
-    if(!quick&&RAR.indexOf(c.y)>=3)await entrance(c);
+    if(!quick&&RAR.indexOf(c.y)>=3){await entrance(c);await spotlight(c,res[i].isNew)}
     const el=slots[i];el.classList.add('open');
     if(S.fx!==false&&RAR.indexOf(c.y)>=3)el.classList.add('glow');
     if(S.fx!==false&&['UR','EXR'].includes(c.y))fx(c.y,Lr.querySelector('.gal-ov'));
