@@ -1474,7 +1474,7 @@ function mergeSave(sv){if(!sv||typeof sv.owned!=='object')return false;
   for(const[k,v]of Object.entries(sv.owned)){S.owned[k]=Math.max(S.owned[k]||0,v);if(sv.order&&sv.order[k]!=null&&S.order[k]==null)S.order[k]=sv.order[k]}
   Object.assign(S.fav,sv.fav||{});for(const[g,ids]of Object.entries(sv.groups||{}))S.groups[g]=[...new Set([...(S.groups[g]||[]),...ids])];
   S.pulls=Math.max(S.pulls,sv.pulls||0);S.packsOpened=Math.max(S.packsOpened,sv.packsOpened||0);S.stamps=Math.max(S.stamps||0,sv.stamps||0);
-  Object.assign(S.trophies,sv.trophies||{});if(sv.story&&(sv.story.stage||0)>(S.story.stage||0))S.story=sv.story;
+  Object.assign(S.trophies,sv.trophies||{});if(sv.story&&((sv.story.arch||0)>(S.story.arch||0)||((sv.story.arch||0)===(S.story.arch||0)&&(sv.story.stage||0)>(S.story.stage||0))))S.story=sv.story;if(sv.coins){S.coins=S.coins||{};Object.assign(S.coins,sv.coins)}
   if(sv.boss&&(sv.boss.kills||0)>(S.boss.kills||0))S.boss.kills=sv.boss.kills;
   if(Array.isArray(sv.showcase)&&!S.showcase.length)S.showcase=sv.showcase;return true}
 /* ===== cloud save by transfer code (Pages Function /api/save + D1) ===== */
@@ -1868,7 +1868,7 @@ function bBoss(){
     const chars=ownedChars();const left=Math.max(0,bossHP()-S.boss.dmg);
     $('#app').innerHTML=backBar(T('boss'))+`<div class="box"><div class="arena" style="grid-template-columns:140px 1fr"><div>${miniHTML(boss)}</div><div><b style="font-size:20px">${esc(nm(boss))}</b>
       <div>${T('boss_hp')}: <b>${left.toLocaleString()}</b> / ${bossHP().toLocaleString()}</div><div class="hp"><i style="width:${left/bossHP()*100}%;background:linear-gradient(90deg,#c8402c,#ff8a5b)"></i></div>
-      <div class="muted" style="font-size:13px;margin-top:6px">${left<=0?T('boss_down'):T('boss_left')(S.boss.tries)}</div></div></div>
+      <div class="muted" style="font-size:13px;margin-top:6px">${left<=0?T('boss_down'):T('boss_left')(S.boss.tries)}</div><div style="font-size:13px;margin-top:4px">🪙 ${SX('coins')}: <b style="color:var(--gold)">${Object.keys(S.coins||{}).length}</b>${S.coins&&S.coins[boss.i]?' ✓':''}</div></div></div>
       <div style="margin-top:12px"><b>${T('pick50')}</b> (${party.length}/50) <button class="chip" id="all50">+ Top 50</button></div>
       <div class="grid picker">${chars.map(c=>miniHTML(c,{sel:party.includes(c.i)})).join('')}</div>
       <button class="btn" id="go" style="margin-top:10px" ${!party.length||left<=0||S.boss.tries<=0?'disabled':''}>${T('attack')}</button><div id="ar" class="blog" style="display:none"></div></div>`;
@@ -1878,27 +1878,48 @@ function bBoss(){
     $('#go').onclick=async()=>{const ar=$('#ar');ar.style.display='block';let total=0;S.boss.tries--;
       for(const id of party){const c=BYID[id];const m=raceMult(c.r,boss.r);const dmg=Math.round((c.a*2.2+c.d*.4)*m*(.9+Math.random()*.2));total+=dmg;
         ar.insertAdjacentHTML('beforeend',`<p class="${m>1?'adv':m<1?'dis':''}">${esc(nm(c))} -${dmg.toLocaleString()}</p>`);ar.scrollTop=ar.scrollHeight;await sleep(60)}
-      S.boss.dmg+=total;const killed=S.boss.dmg>=bossHP();if(killed){S.boss.kills++;S.packs+=10;toast('+10')}
+      S.boss.dmg+=total;const killed=S.boss.dmg>=bossHP();if(killed){S.boss.kills++;S.packs+=10;toast('+10');S.coins=S.coins||{};if(!S.coins[boss.i]){S.coins[boss.i]=today();setTimeout(()=>toast('🪙 '+SX('coinNew')),900)}}
       record('boss',`${T('boss')}: ${nm(boss)}`,boss.y,killed?'win':'draw',1,party.slice(0,5));save();trophyCheck();
       ar.insertAdjacentHTML('beforeend',`<p class="adv"><b>Σ ${total.toLocaleString()}</b></p>`);setTimeout(draw,1500)};
   };draw();
 }
+const SXT={zh_hant:{auto:'自動修行',reset:'重置修行',resetC:'重置所有修行等級並退還全部知識點？',asc:'飛升',ascC:n=>`飛升後回到第 1 關，修行等級歸零，獲得 ${n} 卷「典藏」，永久提升遠征戰力。確定飛升嗎？`,ascLock:'本次遠征通過第 25 關後可飛升',arch:'典藏',bonus:'永久加成',exp:'飛升次數',best:'最高關卡',coins:'討伐硬幣',coinNew:'獲得新的討伐硬幣！'},
+zh_hans:{auto:'自动修行',reset:'重置修行',resetC:'重置所有修行等级并退还全部知识点？',asc:'飞升',ascC:n=>`飞升后回到第 1 关，修行等级归零，获得 ${n} 卷「典藏」，永久提升远征战力。确定飞升吗？`,ascLock:'本次远征通过第 25 关后可飞升',arch:'典藏',bonus:'永久加成',exp:'飞升次数',best:'最高关卡',coins:'讨伐硬币',coinNew:'获得新的讨伐硬币！'},
+ja:{auto:'自動修行',reset:'修行リセット',resetC:'修行レベルをすべてリセットし、知識ポイントを全額返却しますか？',asc:'昇天',ascC:n=>`第1ステージに戻り修行レベルもリセットされ、「典蔵」を ${n} 獲得します（永続強化）。昇天しますか？`,ascLock:'この遠征でステージ25を突破すると昇天できます',arch:'典蔵',bonus:'永続ボーナス',exp:'昇天回数',best:'最高ステージ',coins:'討伐コイン',coinNew:'新しい討伐コインを獲得！'},
+ko:{auto:'자동 수련',reset:'수련 초기화',resetC:'모든 수련 레벨을 초기화하고 지식 포인트를 돌려받을까요?',asc:'승천',ascC:n=>`1스테이지로 돌아가고 수련 레벨이 초기화되며, 「전장」 ${n}개를 얻어 영구 강화됩니다. 승천할까요?`,ascLock:'이번 원정에서 25스테이지를 넘기면 승천 가능',arch:'전장',bonus:'영구 보너스',exp:'승천 횟수',best:'최고 스테이지',coins:'토벌 코인',coinNew:'새 토벌 코인 획득!'},
+en:{auto:'Auto-train',reset:'Reset training',resetC:'Reset all training levels and refund all knowledge?',asc:'Ascend',ascC:n=>`Ascending returns you to stage 1 and resets training, and grants ${n} Archives for a permanent expedition bonus. Ascend now?`,ascLock:'Clear stage 25 in this expedition to ascend',arch:'Archives',bonus:'Permanent bonus',exp:'Ascensions',best:'Best stage',coins:'Raid coins',coinNew:'New raid coin earned!'}};
+const SX=k=>(SXT[L]||SXT.en)[k];
+const archBonus=()=>Math.min(1,(S.story.arch||0)*0.002); // +0.2% per archive, max +100%
+function trainCost(lv){return (lv+1)*50}
 function bStory(){
-  const st=S.story;if(!st.team.length)st.team=[null,null,null,null,null];
+  const st=S.story;if(!st.team.length)st.team=[null,null,null,null,null];st.arch=st.arch||0;st.exp=st.exp||0;st.best=Math.max(st.best||0,st.stage-1);
   const state={cards:st.team,eq:[{},{},{},{},{}],field:null};
   const head=()=>`<div class="box" style="margin-bottom:12px;display:flex;flex-wrap:wrap;gap:12px;align-items:center"><b>${T('stage')} ${st.stage}</b><span>${T('knowledge')}: <b style="color:var(--gold)">${st.know}</b></span>
-    ${st.team.filter(x=>x!=null).map(id=>`<button class="chip" data-up="${id}">${T('upgrade')} ${esc(nm(BYID[id]))} ${T('lv')}${st.lv[id]||0} (${((st.lv[id]||0)+1)*50})</button>`).join('')}</div>`;
+    ${st.team.filter(x=>x!=null).map(id=>`<button class="chip" data-up="${id}">${T('upgrade')} ${esc(nm(BYID[id]))} ${T('lv')}${st.lv[id]||0} (${((st.lv[id]||0)+1)*50})</button>`).join('')}
+    <div style="flex-basis:100%;display:flex;flex-wrap:wrap;gap:8px;align-items:center;border-top:1px solid var(--line2);padding-top:10px">
+     <button class="chip" id="stAuto">⚙ ${SX('auto')}</button><button class="chip" id="stReset" ${Object.keys(st.lv).length?'':'disabled'}>↺ ${SX('reset')}</button>
+     <button class="chip" id="stAsc" ${st.stage>25?'':'disabled'} title="${esc(SX('ascLock'))}" style="${st.stage>25?'border-color:var(--gold);color:var(--gold)':''}">☁ ${SX('asc')}</button>
+     <span class="muted" style="font-size:13px">${SX('arch')} <b style="color:#c58cff">${st.arch}</b> · ${SX('bonus')} <b style="color:#7fe3d0">+${(archBonus()*100).toFixed(1)}%</b> · ${SX('exp')} ${st.exp} · ${SX('best')} ${st.best}</span>
+     ${st.stage>25?'':`<span class="muted" style="font-size:12px">${SX('ascLock')}</span>`}</div></div>`;
   const start=async(state,bonds)=>{
     const lvl=RAR[Math.min(6,Math.floor((st.stage-1)/5))];const scale=1+((st.stage-1)%5)*.12;
     const ar=$('#ar');ar.innerHTML='';let w=0,l=0,turns=0;
     for(let i=0;i<5&&w<3&&l<3;i++){const me=BYID[state.cards[i]];const op=randomOf(lvl);if(!me||!op)continue;
       const box=document.createElement('div');ar.appendChild(box);const F=fighter(op);F.atk*=scale;F.def*=scale;F.hp=F.max=Math.round(F.max*scale);
-      const out=await playDuel(fighter(me,{lv:st.lv[me.i]||0,atkB:bonusFor(me,i,bonds),lead:BYID[st.team.find(x=>x!=null)]}),F,box);turns+=out.turns;if(out.res==='win')w++;else if(out.res==='lose')l++;}
+      const MF=fighter(me,{lv:st.lv[me.i]||0,atkB:bonusFor(me,i,bonds),lead:BYID[st.team.find(x=>x!=null)]});const ab=1+archBonus();MF.atk*=ab;MF.def*=ab;MF.hp=MF.max=Math.round(MF.max*ab);
+      const out=await playDuel(MF,F,box);turns+=out.turns;if(out.res==='win')w++;else if(out.res==='lose')l++;}
     const res=w>l?'win':'lose';const gain=res==='win'?30+st.stage*5:10;st.know+=gain;if(res==='win')st.stage++;
     record('story',`${T('story')} ${T('stage')} ${res==='win'?st.stage-1:st.stage}`,lvl,res,turns,state.cards.filter(x=>x!=null));save();trophyCheck();
     ar.insertAdjacentHTML('beforeend',`<p class="rb" style="font-size:26px;text-align:center">${T(res)} · ${T('knowledge')} +${gain}</p>`);setTimeout(bStory,1800);
   };
-  teamEditor(state,start,{title:T('story'),head:head()});
+  const bindExtra=()=>{
+    const au=$('#stAuto');if(au)au.onclick=()=>{const ids=st.team.filter(x=>x!=null);if(!ids.length)return;let n=0;
+      for(;;){const id=ids.reduce((a,b)=>(st.lv[b]||0)<(st.lv[a]||0)?b:a);const c=trainCost(st.lv[id]||0);if(st.know<c)break;st.know-=c;st.lv[id]=(st.lv[id]||0)+1;n++}
+      save();toast(n?`+${n} ${T('lv')}`:`${T('knowledge')} < ${trainCost(Math.min(...ids.map(i=>st.lv[i]||0)))}`);bStory()};
+    const rs=$('#stReset');if(rs)rs.onclick=()=>{if(!confirm(SX('resetC')))return;let back=0;for(const id in st.lv){for(let l=0;l<st.lv[id];l++)back+=trainCost(l)}st.lv={};st.know+=back;save();toast(`${T('knowledge')} +${back}`);bStory()};
+    const as=$('#stAsc');if(as)as.onclick=()=>{if(st.stage<=25)return;const gain=st.stage-1;if(!confirm(SX('ascC')(gain)))return;st.arch=Math.min(500,st.arch+gain);st.exp++;st.best=Math.max(st.best,st.stage-1);st.stage=1;st.lv={};st.know=24;save();toast(`${SX('arch')} +${gain}`);bStory()};
+  };
+  teamEditor(state,start,{title:T('story'),head:head(),after:bindExtra});
   document.querySelectorAll('[data-up]').forEach(b=>b.onclick=()=>{const id=b.dataset.up;const cost=((st.lv[id]||0)+1)*50;if(st.know<cost)return toast(`${T('knowledge')} < ${cost}`);st.know-=cost;st.lv[id]=(st.lv[id]||0)+1;save();bStory()});
 }
 
