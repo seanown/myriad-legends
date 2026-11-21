@@ -791,7 +791,7 @@ function openPack(){
     const isNew=!S.owned[c.i];S.owned[c.i]=(S.owned[c.i]||0)+1;if(isNew)S.order[c.i]=S.pulls+i;
     res.push({c,isNew});
   }
-  S.pulls+=PACK_N;S.packsOpened++;S.mission.open++;
+  S.pulls+=PACK_N;S.packsOpened++;S.mission.open++;liveAdd(1);
   if(S.packsOpened-(S.lastBackup||0)>=50&&S.packsOpened%50===0)setTimeout(()=>toast(T('bk_remind')),2500);
   if(res.some(x=>RAR.indexOf(x.c.y)>=3))S.mission.sr=true;
   packTrophies(res.map(x=>x.c));
@@ -878,7 +878,7 @@ function vPull(){
      <div class="sub" style="text-align:left">${esc(tagT(BANNER.theme))} ×${BANNER.boost} · ${T('banner_ends')} ${hh}h ${mm}m</div>
      <div style="font-size:13px;color:var(--gold)">${guardReady()?(T('guard_ready')||'下一包第一張必出三國 SSR 以上'):(T('guard_in')||(t=>'三國 SSR 保底倒數 '+t))(fmtHM((S.banner.nextG||0)-Date.now()))}</div>
      <div style="font-size:13px">${S.banner.got?T('banner_got'):T('banner_spark')(left)}</div><div class="bar"><i style="width:${Math.min(100,S.banner.pulled/BANNER.spark*100)}%"></i></div></div></div>
-   <div class="live">${T('live')}：<b id="live">${liveCount().toLocaleString()}</b> <span style="font-size:11px">${T('live_note')}</span></div>
+   <div class="live">${T('live')}：<b id="live">${liveCount()==null?'…':liveCount().toLocaleString()}</b></div>
    <div class="box missions"><b style="color:var(--gold)">${T('missions')}</b><ul style="list-style:none;padding:0;margin:8px 0 4px">
      ${missions.map(([k,ok])=>`<li><span>${T('m_'+k)}</span>${ok?(ms.claimed[k]?`<span class="ok">${T('done')}</span>`:`<button class="btn" style="padding:2px 10px;font-size:12px" data-claim="${k}">${T('claim')} +2</button>`):`<span class="muted">0/1</span>`}</li>`).join('')}
    </ul><div class="sub" style="text-align:left">${T('m_reward')}</div></div>
@@ -889,9 +889,18 @@ function vPull(){
   $('#fxt').onclick=()=>{S.fx=S.fx===false;save();vPull()};
   if(DEV)$('#test10').onclick=()=>{S.packs+=10;save();vPull()};
   document.querySelectorAll('[data-claim]').forEach(b=>b.onclick=()=>{S.mission.claimed[b.dataset.claim]=true;S.packs+=2;save();vPull();toast('+2')});
-  heroStart();clearInterval(tick);tick=setInterval(()=>{if(view!=='pull')return clearInterval(tick);const before=S.packs;refill();if(S.packs!==before)return vPull();const cd=$('#cd');if(cd)cd.textContent=Math.ceil((REFILL_MS-((Date.now()-S.lastRefill)%REFILL_MS))/1000);const lv=$('#live');if(lv)lv.textContent=liveCount().toLocaleString()},1000);
+  heroStart();clearInterval(tick);tick=setInterval(()=>{if(view!=='pull')return clearInterval(tick);const before=S.packs;refill();if(S.packs!==before)return vPull();const cd=$('#cd');if(cd)cd.textContent=Math.ceil((REFILL_MS-((Date.now()-S.lastRefill)%REFILL_MS))/1000);liveFetch();liveShow()},1000);liveFetch();
 }
-function liveCount(){const base=Date.UTC(2026,10,21);return Math.floor(1280000+(Date.now()-base)/1000*3.7)+S.packsOpened}
+/* real global pack counter: Cloudflare Pages Function /api/packs backed by D1 */
+const LIVE={n:null,pending:0,t:null,last:0};
+function liveCount(){return LIVE.n==null?null:LIVE.n+LIVE.pending}
+function liveShow(){const v=liveCount();const el=$('#live');if(el)el.textContent=v==null?'…':v.toLocaleString();const w=document.querySelector('.live');if(w)w.style.visibility=v==null&&LIVE.dead?'hidden':''}
+function liveFetch(){if(Date.now()-LIVE.last<20000)return;LIVE.last=Date.now();fetch('/api/packs',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{if(j&&typeof j.total==='number'){LIVE.n=j.total}else LIVE.dead=true;liveShow()}).catch(()=>{LIVE.dead=true;liveShow()})}
+function liveFlush(beacon){const k=LIVE.pending;if(!k)return;LIVE.pending=0;clearTimeout(LIVE.t);LIVE.t=null;const body=JSON.stringify({n:k});
+  if(beacon&&navigator.sendBeacon){navigator.sendBeacon('/api/packs',new Blob([body],{type:'application/json'}));if(LIVE.n!=null)LIVE.n+=k;return}
+  fetch('/api/packs',{method:'POST',headers:{'content-type':'application/json'},body}).then(r=>r.ok?r.json():null).then(j=>{if(j&&typeof j.total==='number')LIVE.n=j.total;else if(LIVE.n!=null)LIVE.n+=k;liveShow()}).catch(()=>{LIVE.pending+=k})}
+function liveAdd(k){LIVE.pending+=k;liveShow();if(!LIVE.t)LIVE.t=setTimeout(()=>liveFlush(),8000)}
+addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')liveFlush(true)});addEventListener('pagehide',()=>liveFlush(true));
 function sealSVG(color){
   return `<svg viewBox="0 0 200 200"><g fill="none" stroke="${color}" stroke-width="1.2"><circle cx="100" cy="100" r="96"/><circle cx="100" cy="100" r="80"/><circle cx="100" cy="100" r="40"/>
   <polygon points="100,20 169,140 31,140"/><polygon points="100,180 31,60 169,60"/></g>
