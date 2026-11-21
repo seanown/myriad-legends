@@ -1218,7 +1218,11 @@ function shareText(t){
 }
 
 /* ================= codex ================= */
-let cx={tab:'list',sort:'rarity',dir:-1,q:'',qc:'',page:1,fav:false,group:'all',theme:null};
+let cx={tab:'list',sort:'rarity',dir:-1,q:'',qc:'',page:1,fav:false,group:'all',theme:null,kind:'all',el:'all'};
+const FLT={zh_hant:['類別','屬性','全部','上一頁','下一頁'],zh_hans:['类别','属性','全部','上一页','下一页'],ja:['種類','属性','すべて','前へ','次へ'],ko:['종류','속성','전체','이전','다음'],en:['Type','Element','All','Prev','Next'],es:['Tipo','Elemento','Todo','Anterior','Siguiente'],fr:['Type','Élément','Tout','Préc.','Suiv.'],pt:['Tipo','Elemento','Tudo','Anterior','Próxima']};
+const FT=i=>(FLT[L]||FLT.en)[i];
+const CX_KINDS=[['char',c=>c.k==='char'||c.k==='event'],['treasure',c=>c.k==='treasure'],['weapon',c=>c.k==='weapon'],['horse',c=>c.k==='horse'],['battle',c=>c.k==='battle'||c.k==='realm']];
+const CX_ELS=[['木',c=>c.e==='木'],['火',c=>c.e==='火'],['土',c=>c.e==='土'],['金',c=>c.e==='金'],['水',c=>c.e==='水'],['神',c=>c.r==='神'],['魔',c=>c.r==='魔']];
 function miniHTML(c,o={}){
   const lock=o.lock;
   return `<div class="mini ${lock?'lock':''} ${o.sel?'sel':''}" style="--rc:var(--r${c.y})" data-id="${c.i}" tabindex="0">${o.isNew?`<span class="newb" style="top:-6px;left:4px">NEW</span>`:''}
@@ -1309,12 +1313,16 @@ function cxList(){
     <div><b style="color:#7fe3d0">${T('showcase')}</b><div class="sub" style="text-align:left">${T('showcase_d')}</div></div><button class="btn ghost" id="showBtn">${T('showcase')}</button></div>
   <div class="box" style="margin-top:14px"><b>${T('groups')}</b><div class="ctrl" style="margin-top:8px"><select class="chip" id="grp"><option value="all">${T('all')}</option>${groups.map(g=>`<option ${cx.group===g?'selected':''}>${esc(g)}</option>`).join('')}</select>
     <input class="chip" id="grpName" placeholder="+" style="width:120px"><button class="chip" id="grpNew">${T('create')}</button></div></div>
-  <div class="box" style="margin-top:14px"><div class="ctrl"><span class="muted">${T('sort')}:</span>${sorts.map(s=>`<button class="chip" data-s="${s}" aria-pressed="${cx.sort===s}">${T('s_'+(s==='rarity'?'rarity':s))}</button>`).join('')}<button class="chip" id="favOnly" aria-pressed="${cx.fav}">${T('s_fav')}</button></div>
+  <div class="box" style="margin-top:14px"><div class="ctrl"><span class="muted">${T('sort')}:</span>${sorts.map(s=>`<button class="chip" data-s="${s}" aria-pressed="${cx.sort===s}">${T('s_'+(s==='rarity'?'rarity':s))}${cx.sort===s?(cx.dir>0?' ▲':' ▼'):''}</button>`).join('')}<button class="chip" id="favOnly" aria-pressed="${cx.fav}">${T('s_fav')}</button></div>
+   <div class="ctrl" style="margin-top:8px"><span class="muted">${FT(0)}:</span><button class="chip" data-kf="all" aria-pressed="${cx.kind==='all'}">${FT(2)}</button>${CX_KINDS.map(([k])=>`<button class="chip" data-kf="${k}" aria-pressed="${cx.kind===k}">${kindName(k)}</button>`).join('')}</div>
+   <div class="ctrl" style="margin-top:8px"><span class="muted">${FT(1)}:</span><button class="chip" data-ef="all" aria-pressed="${cx.el==='all'}">${FT(2)}</button>${CX_ELS.map(([e])=>`<button class="chip" data-ef="${e}" aria-pressed="${cx.el===e}">${e==='神'||e==='魔'?raceName(e):elName(e)}</button>`).join('')}</div>
    <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;margin-top:10px;align-items:start"><div style="display:grid;gap:8px"><input class="inp" id="qn" placeholder="${esc(T('search_name'))}" value="${esc(cx.q)}"><input class="inp" id="qc" placeholder="${esc(T('search_cat'))}" value="${esc(cx.qc)}"></div>
    <div class="pager" id="pager"></div></div></div>
-  <div class="tblwrap"><table class="cards"><thead><tr><th>${T('col_rar')}</th><th>${T('col_fame')}</th><th></th><th>${T('col_title')}</th><th class="num">ATK</th><th class="num">DEF</th><th class="num">${T('col_count')}</th></tr></thead><tbody id="tb"></tbody></table></div>`;
+  <div class="tblwrap"><table class="cards"><thead><tr><th>${T('col_rar')}</th><th>${T('col_fame')}</th><th></th><th>${T('col_title')}</th><th class="num">ATK</th><th class="num">DEF</th><th class="num">${T('col_count')}</th></tr></thead><tbody id="tb"></tbody></table></div><div class="pager" id="pager2" style="justify-content:center;margin:14px 0;flex-wrap:wrap"></div>`;
   document.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{if(cx.sort===b.dataset.s)cx.dir*=-1;else{cx.sort=b.dataset.s;cx.dir=['name','id','order'].includes(cx.sort)?1:-1}cx.page=1;cxList()});
   $('#favOnly').onclick=()=>{cx.fav=!cx.fav;cx.page=1;cxList()};
+  document.querySelectorAll('[data-kf]').forEach(b=>b.onclick=()=>{cx.kind=b.dataset.kf;cx.page=1;cxList()});
+  document.querySelectorAll('[data-ef]').forEach(b=>b.onclick=()=>{cx.el=b.dataset.ef;cx.page=1;cxList()});
   $('#qn').oninput=e=>{cx.q=e.target.value;cx.page=1;cxRows()};$('#qc').oninput=e=>{cx.qc=e.target.value;cx.page=1;cxRows()};
   $('#grp').onchange=e=>{cx.group=e.target.value;cx.page=1;cxRows()};
   $('#grpNew').onclick=()=>{const n=$('#grpName').value.trim();if(!n)return;S.groups[n]=S.groups[n]||[];cx.group=n;save();cxList()};
@@ -1324,15 +1332,21 @@ function cxList(){
 function cxRows(){
   let list=Object.keys(S.owned).map(i=>BYID[i]).filter(Boolean);
   if(cx.fav)list=list.filter(c=>S.fav[c.i]);
+  if(cx.kind!=='all'){const f=CX_KINDS.find(x=>x[0]===cx.kind);if(f)list=list.filter(f[1])}
+  if(cx.el!=='all'){const f=CX_ELS.find(x=>x[0]===cx.el);if(f)list=list.filter(f[1])}
   if(cx.group!=='all')list=list.filter(c=>(S.groups[cx.group]||[]).includes(c.i));
   const q=cx.q.trim().toLowerCase();if(q)list=list.filter(c=>Object.values(c.n).some(v=>v&&v.toLowerCase().includes(q)));
   const qc=cx.qc.trim().toLowerCase();if(qc)list=list.filter(c=>[raceName(c.r),kindName(c.k),...(c.t||[])].join(' ').toLowerCase().includes(qc));
   const key={rarity:c=>RAR.indexOf(c.y)*1e6+c.f,cat:c=>c.k+(c.r||''),name:c=>nm(c),id:c=>c.i,atk:c=>c.a,def:c=>c.d,sum:c=>c.a+c.d,count:c=>S.owned[c.i],order:c=>S.order[c.i]??0}[cx.sort];
   list.sort((a,b)=>{const x=key(a),y=key(b);return (x>y?1:x<y?-1:0)*cx.dir});
-  const per=50,pages=Math.max(1,Math.ceil(list.length/per));cx.page=Math.min(cx.page,pages);
+  const per=100,pages=Math.max(1,Math.ceil(list.length/per));cx.page=Math.min(cx.page,pages);
   const rows=list.slice((cx.page-1)*per,cx.page*per);
   $('#pager').innerHTML=`<span class="muted">${T('page')}</span><input class="inp" id="pg" type="number" min="1" max="${pages}" value="${cx.page}"><span class="muted">/ ${pages}</span>`;
   $('#pg').onchange=e=>{cx.page=Math.max(1,Math.min(pages,+e.target.value||1));cxRows()};
+  {const P=cx.page,nums=[...new Set([1,P-2,P-1,P,P+1,P+2,pages])].filter(n=>n>=1&&n<=pages).sort((a,b)=>a-b);let h=`<button class="chip" data-pg="${P-1}" ${P<=1?'disabled':''}>‹ ${FT(3)}</button>`,last=0;
+   for(const n of nums){if(n-last>1)h+='<span class="muted">…</span>';h+=`<button class="chip" data-pg="${n}" aria-pressed="${n===P}">${n}</button>`;last=n}
+   h+=`<button class="chip" data-pg="${P+1}" ${P>=pages?'disabled':''}>${FT(4)} ›</button><span class="muted" style="margin-left:6px">${list.length.toLocaleString()}</span>`;
+   $('#pager2').innerHTML=h;$('#pager2').querySelectorAll('[data-pg]').forEach(b=>b.onclick=()=>{cx.page=+b.dataset.pg;cxRows();$('.tblwrap').scrollIntoView({block:'start'})})}
   $('#tb').innerHTML=rows.length?rows.map(c=>`<tr data-id="${c.i}"><td><b class="rb r-${c.y}">${c.y}</b></td><td style="color:#e9a23b">${c.f.toFixed(1)}</td>
     <td><button class="star ${S.fav[c.i]?'on':''}" data-fav="${c.i}" aria-label="${T('fav')}">${S.fav[c.i]?'★':'☆'}</button></td>
     <td><div class="tcell"><div class="thumb" data-im="${c.i}">${glyph(c)}</div><div style="min-width:0"><div style="font-weight:700">${esc(nm(c))} <span class="idc">#${c.i}</span></div>
