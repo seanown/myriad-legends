@@ -1121,7 +1121,7 @@ function phArt(c){
   // Sean 2026-11-22: like wikigacha, a card with no picture shows its full name big, plus a link to read more
   const name=nm(c),len=[...name].length,fs=len<=3?17:len<=5?13:len<=8?10:len<=12?7.5:6;
   const url=wikiLink(c)||c.u||'';const lt=c.u&&!wikiLink(c)?(({zh_hant:'館藏頁面',zh_hans:'馆藏页面',ja:'所蔵ページ',ko:'소장품 페이지'})[L]||'Museum page'):(({zh_hant:'維基百科',zh_hans:'维基百科',ja:'Wikipedia',ko:'위키백과'})[L]||'Wikipedia');
-  return `<span class="gl ph" style="--ec:${ec}"><i class="phmoon"></i>${rb}${mt}<b class="phs">${glyph(c)}</b><b class="phn" style="font-size:${fs}cqw">${esc(name)}</b>${url?`<a class="phl" href="${url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${lt} ↗</a>`:''}</span>`;
+  return `<span class="gl ph" style="--ec:${ec}"><i class="phmoon"></i>${rb}${mt}<b class="phs">${glyph(c)}</b><b class="phn" style="font-size:${fs}cqw${RAR.indexOf(c.y)>=2?`;color:color-mix(in srgb,var(--r${c.y}) 75%,#fff)`:''}">${esc(name)}</b>${url?`<a class="phl" href="${url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${lt} ↗</a>`:''}</span>`;
 }
 function bigCardHTML(c,isNew){
   const w=wikiLink(c);const t=sT();const lk=`onclick="event.stopPropagation();S.mission.wiki=true;save()"`;
