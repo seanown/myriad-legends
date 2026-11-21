@@ -8,6 +8,9 @@ const H = { 'content-type': 'application/json', 'cache-control': 'no-store' };
 const json = (o, s = 200) => new Response(JSON.stringify(o), { status: s, headers: H });
 const ABC = '23456789ABCDEFGHJKMNPQRSTUVWXYZ';
 const MAX = 900000;
+// Public Google OAuth client ID (not a secret). Env GOOGLE_CLIENT_ID overrides it.
+const GOOGLE_ID = '144165557546-ulqf37rg47kip9e42n1k099aqdid7nff.apps.googleusercontent.com';
+const gid = env => env.GOOGLE_CLIENT_ID || GOOGLE_ID;
 
 function newCode() {
   const b = crypto.getRandomValues(new Uint8Array(10));
@@ -25,11 +28,11 @@ async function ensure(db) {
 }
 // Verify a Google ID token with Google's tokeninfo endpoint. Only the stable account id (sub) is kept, never the email.
 async function googleSub(env, cred) {
-  if (!env.GOOGLE_CLIENT_ID || !cred) return null;
+  if (!cred) return null;
   const r = await fetch('https://oauth2.googleapis.com/tokeninfo?id_token=' + encodeURIComponent(cred));
   if (!r.ok) return null;
   const t = await r.json();
-  if (t.aud !== env.GOOGLE_CLIENT_ID) return null;
+  if (t.aud !== gid(env)) return null;
   if (t.iss !== 'accounts.google.com' && t.iss !== 'https://accounts.google.com') return null;
   if (Number(t.exp) * 1000 < Date.now()) return null;
   return t.sub ? 'g:' + t.sub : null;
@@ -37,7 +40,7 @@ async function googleSub(env, cred) {
 const goodData = d => { try { const o = JSON.parse(d); return !!o && typeof o.owned === 'object'; } catch (e) { return false; } };
 
 export async function onRequestGet({ env }) {
-  return json({ google: env.GOOGLE_CLIENT_ID || null });
+  return json({ google: gid(env) });
 }
 
 export async function onRequestPost({ env, request }) {
