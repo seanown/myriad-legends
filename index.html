@@ -16,7 +16,7 @@
   --bg:#0b0a0d; --bg2:#121016; --panel:#17141b; --panel2:#1f1a24; --line:#2c2532; --line2:#3b3242;
   --ink:#efe6d6; --muted:#9a8f9e; --gold:#e3b866; --gold2:#f5d995; --cin:#c8402c; --jade:#5fb39a;
   --rC:#cfc4ae; --rUC:#c9d4e6; --rR:#5fd18f; --rSR:#5aa7ff; --rSSR:#ff6b6b; --rUR:#ffd24a; --rEXR:#c58cff;
-  --race-人:#6fbf73; --race-仙:#5aa7ff; --race-妖:#ff7a45; --race-鬼:#d9d2b8; --race-龍:#c9974f; --race-神:#ffe28a; --race-魔:#a46bff;
+  --race-人:#6fbf73; --race-仙:#5aa7ff; --race-妖:#ff7a45; --race-鬼:#d9d2b8; --race-龍:#c9974f; --race-神:#e6c25e; --race-魔:#c0395f;
   --f-disp:"LXGW WenKai TC","BiauKai","DFKai-SB","STKaiti","KaiTi",serif; --f-body:"Noto Serif TC","Noto Serif SC","Songti TC","PMingLiU",serif;
 }
 *{box-sizing:border-box}
@@ -283,7 +283,7 @@ a.tag{text-decoration:none}
 @keyframes wordsin{to{opacity:1;transform:scale(1)}}
 @keyframes flashin{0%{opacity:0}40%{opacity:1}100%{opacity:1}}
 @keyframes beat{0%,100%{opacity:0;transform:scaleX(.1)}20%{opacity:1;transform:scaleX(1)}40%{opacity:.2;transform:scaleX(.5)}60%{opacity:1;transform:scaleX(1.1)}}
-.ur-text{background:linear-gradient(90deg,#ff7ab6,#ffd24a,#6ee7b7,#7cc4ff,#b9a3ff);-webkit-background-clip:text;background-clip:text;color:transparent!important}
+.ur-text{background:linear-gradient(90deg,#fff1b8,#ffd24a,#ff9a2a,#ffd24a,#fff1b8);-webkit-background-clip:text;background-clip:text;color:transparent!important}
 .fxc{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
 .st-EXR .bigr{background:linear-gradient(90deg,#c58cff,#ff3b3b,#ffd24a,#c58cff);background-size:200%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:pop .5s cubic-bezier(.2,1.6,.4,1),holo 3s linear infinite}
 .st-UR .bigr{background:linear-gradient(90deg,#ff7ab6,#ffd24a,#6ee7b7,#7cc4ff);-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -396,12 +396,12 @@ a.tag{text-decoration:none}
 @keyframes exrframe{to{background-position:300% 0}}
 .tcard.v4 .in{--f1:#e6e6e6;--f2:#9a9a9a;--f3:#4d4d4d;--pl:#efefef;--ink:#222;border-radius:11px;overflow:hidden;position:relative;display:flex;flex-direction:column;gap:1.4cqw;padding:2.4cqw 2.4cqw 1.8cqw;background:radial-gradient(120% 60% at 30% 0%,#ffffff40,transparent 60%),linear-gradient(160deg,var(--f1),var(--f2) 42%,var(--f3));box-shadow:inset 0 0 0 .5cqw #0005}
 .tcard.v4 .in.eb-木{--f1:#9be38f;--f2:#2f8f3a;--f3:#0f4a17;--pl:#e6f4dd;--ink:#13301a}
-.tcard.v4 .in.eb-水{--f1:#a6d4ff;--f2:#2166c4;--f3:#0b2f66;--pl:#dfeefc;--ink:#0d2242}
+.tcard.v4 .in.eb-水{--f1:#6b7282;--f2:#262a33;--f3:#08090c;--pl:#e4e4e6;--ink:#0e0f12}
 .tcard.v4 .in.eb-火{--f1:#ffb294;--f2:#c92a1c;--f3:#5c0d06;--pl:#fbe4dc;--ink:#3d0d07}
 .tcard.v4 .in.eb-金{--f1:#fff3b8;--f2:#c9971a;--f3:#5a3b00;--pl:#fbf3d6;--ink:#3a2700}
 .tcard.v4 .in.eb-土{--f1:#e9c79a;--f2:#8a5a2b;--f3:#3a2208;--pl:#f2e6d4;--ink:#2e1a06}
-.tcard.v4 .in.rc-神{--f1:#fffbe6;--f2:#e8c766;--f3:#9a7420;--pl:#fffaf0;--ink:#3a2a00}
-.tcard.v4 .in.rc-魔{--f1:#d06bff;--f2:#5a1a6e;--f3:#14041c;--pl:#efe2f6;--ink:#2a0838}
+.tcard.v4 .in.rc-神{--f1:#fff1c4;--f2:#d4a94a;--f3:#4e2a66;--pl:#fffaf0;--ink:#2e1a3a}
+.tcard.v4 .in.rc-魔{--f1:#c0395f;--f2:#4a0f26;--f3:#0e0207;--pl:#f3e2e6;--ink:#2a0812}
 .tcard.v4 .in.rc-神::before,.tcard.v4 .in.rc-魔::before{content:"";position:absolute;inset:0;pointer-events:none;background:conic-gradient(from var(--fa,0deg),#ff6fae55,#ffd24a55,#6ee7a055,#5cc8ff55,#b06bff55,#ff6fae55);mix-blend-mode:overlay;animation:foil 6s linear infinite}
 .tcard.v4 .in.rc-魔::before{background:conic-gradient(from var(--fa,0deg),#ff2b4a66,#7a1cff66,#00000000,#ff2b4a66,#c04dff66,#ff2b4a66);mix-blend-mode:screen;opacity:.6}
 @property --fa{syntax:"<angle>";inherits:false;initial-value:0deg}
@@ -460,13 +460,13 @@ a.tag{text-decoration:none}
 /* v5c: MTGA-like palette, textured frames, light plaques, rarity on type line, race text + orb top-right */
 .tcard.v4 .in{--tx:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");background:var(--tx),linear-gradient(115deg,transparent 30%,#ffffff2a 45%,transparent 60%),linear-gradient(160deg,var(--f1),var(--f2) 50%,var(--f3));box-shadow:inset 0 0 0 .5cqw #0006,inset 0 0 4cqw #0005}
 .tcard.v4 .in.eb-木{--f1:#4f9a52;--f2:#2a6a35;--f3:#123a1a;--pl:#dfe6d2;--pl2:#c5d2b4;--ink:#18240f;--bd:#26401c}
-.tcard.v4 .in.eb-水{--f1:#4d93cf;--f2:#1e5f9e;--f3:#0c3260;--pl:#d9e4ee;--pl2:#bccddd;--ink:#0e1d2e;--bd:#1b3a5c}
+.tcard.v4 .in.eb-水{--f1:#5d6372;--f2:#22252d;--f3:#07080b;--pl:#e2e2e4;--pl2:#c6c7cc;--ink:#0e0f12;--bd:#1b1d23}
 .tcard.v4 .in.eb-火{--f1:#d4573f;--f2:#a42c1d;--f3:#561008;--pl:#eedcd2;--pl2:#dfc0b2;--ink:#2e0f08;--bd:#5a1e14}
 .tcard.v4 .in.eb-金{--f1:#f6f2e6;--f2:#d2c9b2;--f3:#7a705a;--pl:#fbf9f2;--pl2:#ebe5d4;--ink:#2a2620;--bd:#7a705a}
 .tcard.v4 .in.eb-土{--f1:#efcd68;--f2:#c3972a;--f3:#664a0a;--pl:#f7eecb;--pl2:#e9d89c;--ink:#2e2204;--bd:#6e520e}
 .tcard.v4 .in.eb-none{--f1:#b9bcc1;--f2:#878a90;--f3:#4b4e54;--pl:#e9e9e7;--pl2:#d0d1cf;--ink:#1f2023;--bd:#4b4e54}
-.tcard.v4 .in.rc-神{--f1:#f7e3a0;--f2:#c99a36;--f3:#6e4e12;--pl:#fbf6e6;--pl2:#efe2b8;--ink:#33270a;--bd:#8a6a1e}
-.tcard.v4 .in.rc-魔{--f1:#4a4650;--f2:#1d1a22;--f3:#050407;--pl:#e2d9e6;--pl2:#c9b9d0;--ink:#1c0f22;--bd:#2a1832}
+.tcard.v4 .in.rc-神{--f1:#f3d98a;--f2:#b8892e;--f3:#4a2a5e;--pl:#fbf6e6;--pl2:#eadbb8;--ink:#2e1a3a;--bd:#6a4a7a}
+.tcard.v4 .in.rc-魔{--f1:#6e2238;--f2:#2a0a16;--f3:#060104;--pl:#e9dade;--pl2:#d0bac0;--ink:#220a12;--bd:#4a1028}
 .tcard.v4 .vnb,.tcard.v4 .vtl{background:linear-gradient(var(--pl),var(--pl2));border:.45cqw solid var(--bd);border-radius:2.2cqw/40%;box-shadow:0 0 0 .35cqw #ffffff55,0 .5cqw 1cqw #0008,inset 0 .35cqw 0 #ffffffb0,inset 0 -.35cqw 0 #0000001f}
 .tcard.v4 .vnb{padding:.6cqw 1cqw .6cqw 2.8cqw;min-height:11.5cqw;gap:1.2cqw}
 .tcard.v4 .vnb .vn{font-family:var(--f-body);font-weight:900;font-size:6cqw;letter-spacing:.02em}
@@ -625,7 +625,7 @@ html,body{max-width:100%;overflow-x:hidden}
 .sp-in{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;padding:16px;max-height:100%}
 .sp-rar{font:900 clamp(72px,18vw,150px)/.9 var(--f-title,serif);letter-spacing:.04em;color:var(--rc);text-shadow:0 0 30px var(--rc),0 0 70px var(--rc),0 4px 0 #0008;animation:spRar .7s cubic-bezier(.2,1.8,.4,1) both}
 .sp-rar.ur-text{text-shadow:none;filter:drop-shadow(0 0 22px #fff8) drop-shadow(0 0 50px #ffd24a88);background-size:200% 100%;animation:spRar .7s cubic-bezier(.2,1.8,.4,1) both,spSheen 2.2s linear infinite}
-.spot-EXR .sp-rar{background:linear-gradient(90deg,#fff,#c58cff,#ff3b6b,#ffd9f0,#fff);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent}
+.spot-EXR .sp-rar{background:linear-gradient(90deg,#ff4f8b,#ff9a2a,#ffd24a,#5be08a,#4cc3ff,#7c7bff,#c46bff,#ff4f8b);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent}
 .sp-sub{font:700 clamp(12px,3vw,16px)/1 var(--f-body);letter-spacing:.35em;color:#fff;opacity:.85;animation:spFade .6s .35s both}
 .sp-card{position:relative;width:min(300px,72vw);margin-top:10px;animation:spCard .8s .25s cubic-bezier(.2,1.4,.4,1) both;filter:drop-shadow(0 0 28px var(--rc)) drop-shadow(0 0 60px color-mix(in srgb,var(--rc) 60%,transparent))}
 .sp-card .tcard{width:100%!important}
@@ -654,6 +654,31 @@ html,body{max-width:100%;overflow-x:hidden}
 .ntf{border-top:1px solid #2a2733;padding:14px 24px 18px;display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}.ntf label{font-size:14px;color:#e8e2d4;display:flex;gap:8px;align-items:center}
 .ntbtn{display:flex;gap:10px}.ntshare{border-color:#6b3a6a!important;background:#24162a!important}.ntnote{grid-column:1/-1;text-align:right;font-size:12px;color:#9ab8d8}
 @media(max-width:640px){.ntb{grid-template-columns:1fr;padding:14px}.nth{padding:16px}.nth h2{font-size:20px}.ntf{grid-template-columns:1fr;padding:12px 16px}.ntbtn{justify-content:flex-end}}
+
+.pre{position:fixed;inset:0;z-index:44;background:radial-gradient(ellipse at 50% 40%,#3a2e1c 0%,#120e14 55%,#05040a 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;cursor:pointer;animation:spIn .4s}
+.pre.out{animation:spOut .35s forwards}
+.pre-sky i{position:absolute;width:var(--s);height:var(--s);border-radius:50%;background:#ffe7b0;box-shadow:0 0 10px #ffd27a;opacity:.2;animation:preTw 2.4s var(--d) ease-in-out infinite}
+@keyframes preTw{50%{opacity:.9}}
+.pre-top{position:absolute;top:28px;letter-spacing:.35em;font:700 12px Georgia,serif;color:#d8c9a0;opacity:.8}
+.pre-line{font:700 clamp(22px,4.6vw,40px)/1.4 var(--f-title,serif);color:#fff;letter-spacing:.12em;text-align:center;padding:0 20px;text-shadow:0 2px 20px #000;animation:preLine 1.4s ease-out both}
+@keyframes preLine{from{opacity:0;letter-spacing:.4em;filter:blur(6px)}to{opacity:1}}
+.pre-rule{display:flex;align-items:center;gap:10px;color:#e9c46a;margin-top:14px;font-size:12px}.pre-rule i{width:70px;height:1px;background:linear-gradient(90deg,transparent,#e9c46a,transparent)}
+.pre-big{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;pointer-events:none;background:radial-gradient(circle at 50% 45%,color-mix(in srgb,var(--rc) 30%,#000) 0%,#06040a 72%)}
+.pre.big .pre-big{opacity:1;transition:opacity .35s}.pre.big .pre-line,.pre.big .pre-rule{opacity:0;transition:opacity .2s}
+.pre-rays{position:absolute;inset:-50%;background:repeating-conic-gradient(color-mix(in srgb,var(--rc) 45%,transparent) 0 3deg,transparent 3deg 9deg);animation:cinespin 40s linear infinite;mask:radial-gradient(circle,#000 15%,transparent 65%);-webkit-mask:radial-gradient(circle,#000 15%,transparent 65%)}
+.pre-EXR .pre-rays{background:repeating-conic-gradient(#ff4f8b77 0 3deg,transparent 3deg 6deg,#ffd24a77 6deg 9deg,transparent 9deg 12deg,#4cc3ff77 12deg 15deg,transparent 15deg 18deg)}
+.pre-ring{position:absolute;width:min(70vw,520px);aspect-ratio:1;border-radius:50%;border:3px solid var(--rc);box-shadow:0 0 40px var(--rc),inset 0 0 40px var(--rc);opacity:.7}
+.pre.big .pre-ring{animation:preRing 1s cubic-bezier(.2,1.4,.4,1) both}@keyframes preRing{from{transform:scale(.2);opacity:0}}
+.pre-rar{position:relative;font:900 clamp(110px,26vw,240px)/.9 var(--f-title,serif);color:var(--rc);text-shadow:0 0 40px var(--rc),0 6px 0 #0009}
+.pre.big .pre-rar{animation:spRar .8s cubic-bezier(.2,1.8,.4,1) both}
+.pre-rar.ur-text{text-shadow:none;filter:drop-shadow(0 0 30px #ffd24aaa) drop-shadow(0 6px 0 #0009);background-size:200% 100%;animation:spRar .8s cubic-bezier(.2,1.8,.4,1) both,spSheen 2s linear infinite}
+.pre-EXR .pre-rar{background:linear-gradient(90deg,#ff4f8b,#ff9a2a,#ffd24a,#5be08a,#4cc3ff,#7c7bff,#c46bff,#ff4f8b);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none;filter:drop-shadow(0 0 30px #fff8)}
+.pre-sure{position:relative;margin-top:14px;font:900 clamp(30px,6vw,52px)/1 var(--f-title,serif);letter-spacing:.3em;color:#fff;text-shadow:0 0 20px var(--rc);animation:spFade .5s .45s both}
+.pre-tag{position:relative;margin-top:22px;font:600 clamp(16px,3vw,22px)/1.4 var(--f-title,serif);color:#f3e6c4;letter-spacing:.15em;animation:spFade .6s .7s both}
+.gal-best{text-align:center;margin:6px 0 10px}.gb-r{font:900 clamp(64px,12vw,120px)/.95 var(--f-title,serif);color:var(--rc);text-shadow:0 0 30px color-mix(in srgb,var(--rc) 60%,transparent)}
+.gb-r.ur-text{text-shadow:none;filter:drop-shadow(0 0 18px #ffd24a88)}.gb-EXR .gb-r{background:linear-gradient(90deg,#ff4f8b,#ffd24a,#5be08a,#4cc3ff,#c46bff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.gb-t{font:700 clamp(18px,3.4vw,30px)/1.3 var(--f-title,serif);color:#f3e6c4;letter-spacing:.12em;margin-top:6px}.gal-best .pre-rule{justify-content:center}
+.gb-C .gb-r,.gb-UC .gb-r,.gb-R .gb-r{font-size:clamp(44px,8vw,72px)}
 .ichip{display:inline-flex;align-items:center;gap:5px}.ichip svg,.ichip .rbadge{flex:none}.ichip .ci{font-size:15px;line-height:1}
 </style>
 
@@ -860,7 +885,7 @@ function packSVG(type){
   // [bg top, bg bottom, foil frame A, foil frame B, text]
   const P={white:['#1c2448','#070a18','#e9eef8','#8e9bb8','#f2f5ff'],gold:['#4a2f06','#140b02','#fff1c1','#b8862a','#fff1c1'],rainbow:['#fde8ff','#d6f1ff','#ffffff','#b6a8ff','#3a2d5c'],black:['#1a0608','#030102','#ffb3a0','#a3201a','#ffd9cf']}[type];
   const id='p'+type, foil=type==='rainbow'?`url(#${id}rb)`:`url(#${id}f)`;
-  const gems=['#6fbf73','#ff6a3d','#d9a441','#e9e4d4','#5aa7ff'];const cx=120,cy=232,R=36;
+  const gems=['#6fbf73','#ff6a3d','#d9a441','#e9e4d4','#2e333d'];const cx=120,cy=232,R=36;
   const pts=gems.map((c,i)=>{const a=(-90+i*72)*Math.PI/180;return [cx+R*Math.cos(a),cy+R*Math.sin(a),c]});
   const gem=(x,y,c,r)=>`<circle cx="${x}" cy="${y+1.2}" r="${r}" fill="#000" opacity=".5"/><circle cx="${x}" cy="${y}" r="${r}" fill="${c}"/><circle cx="${x}" cy="${y}" r="${r}" fill="url(#${id}gl)"/><ellipse cx="${x-r*.32}" cy="${y-r*.38}" rx="${r*.38}" ry="${r*.24}" fill="#fff" opacity=".75"/>`;
   const stars=Array.from({length:70},(_,i)=>`<circle cx="${(i*67)%228+6}" cy="${(i*113)%380+10}" r="${(i%3)*.45+.35}" fill="#fff" opacity="${.25+(i%5)/10}"/>`).join('');
@@ -971,7 +996,7 @@ const elName=e=>(ELN[L]||ELN.en)[e]||e;
 const KE5={'木':'土','土':'水','水':'火','火':'金','金':'木'};  // A 剋 B
 function elemMult(a,b){if(!a||!b)return 1;if(KE5[a]===b)return 1.2;if(KE5[b]===a)return .8;return 1}
 function gdMult(a,b){if((a==='神'&&b==='魔')||(a==='魔'&&b==='神'))return 1.5;return 1}
-const ORBC={'木':['#b8f5a0','#3fae3a','#0f4d14'],'火':['#ffc0a0','#e8402a','#5e0f06'],'土':['#fff2b8','#e3b83a','#6e5008'],'金':['#ffffff','#e6e3da','#7d776a'],'水':['#c4e6ff','#2f8de6','#0a2e66'],'神':['#ffffff','#f6dc84','#9a7420'],'魔':['#f0c4ff','#8a36c4','#22062e'],'無':['#ffffff','#c4c8cf','#555a62']};
+const ORBC={'木':['#b8f5a0','#3fae3a','#0f4d14'],'火':['#ffc0a0','#e8402a','#5e0f06'],'土':['#fff2b8','#e3b83a','#6e5008'],'金':['#ffffff','#e6e3da','#7d776a'],'水':['#aeb6c4','#2b303a','#030407'],'神':['#fff4d6','#d9a84a','#4a2466'],'魔':['#ffb8c8','#8e1f3e','#1e030c'],'無':['#ffffff','#c4c8cf','#555a62']};
 const ORBP={'水':'<g transform="rotate(14 50 50)"><path d="M50 10C50 10 22 46 22 62a28 28 0 0 0 56 0C78 46 50 10 50 10Z"/><path d="M36 60a14 14 0 0 0 12 17" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="5" stroke-linecap="round"/></g>',
 '火':'<path d="M56 40c-14-6-22-18-16-32 2 10 10 16 20 18-4-8-2-16 4-20-1 10 6 16 14 22 8 7 12 16 10 26a26 26 0 1 1-46-18c2 8 8 12 14 12-4-6-4-14 0-18 0 6 4 10 8 10Z"/>',
 '木':'<g transform="rotate(-12 50 50)"><path d="M50 12c8 0 14 5 16 11 8 1 13 7 13 14 0 4-2 8-5 10 3 3 4 7 3 11-2 7-9 11-16 10-2 3-5 5-9 5h-4c-4 0-7-2-9-5-7 1-14-3-16-10-1-4 0-8 3-11-3-2-5-6-5-10 0-7 5-13 13-14 2-6 8-11 16-11Z"/><path d="M45 62h10l1 14c4 3 9 5 14 6H30c5-1 10-3 14-6Z"/></g>',
@@ -1042,7 +1067,7 @@ function ringSVG(big){
 function galDeco(){let m='';for(let i=0;i<26;i++)m+=`<b style="left:${Math.random()*100}%;--dx:${(Math.random()-.5)*120}px;animation-duration:${7+Math.random()*9}s;animation-delay:${-Math.random()*14}s;width:${2+Math.random()*4}px;height:${2+Math.random()*4}px"></b>`;
   return ringSVG(true)+ringSVG(false)+`<div class="gal-motes">${m}</div><div class="gal-frame"><i></i><i></i><i></i><i></i></div>`}
 function phArt(c){
-  const ec={木:'#4f9a5c',水:'#3b7cc4',火:'#c8452f',金:'#cfc6a6',土:'#c99a3e'}[c.e]||(c.r==='魔'?'#7a3bb0':'#c9a24a');
+  const ec={木:'#4f9a5c',水:'#2a2e36',火:'#c8452f',金:'#cfc6a6',土:'#c99a3e'}[c.e]||(c.r==='魔'?'#7a1f3e':'#b08a3e');
   const mt=`<svg class="phm" viewBox="0 0 100 40" preserveAspectRatio="none"><path d="M0 40V26l9-7 7 5 10-12 9 9 6-4 11 10 8-14 12 13 6-5 9 8 13-9v20z" opacity=".55"/><path d="M0 40V32l12-5 9 4 14-8 10 6 12-3 13 7 10-6 20 5v8z"/></svg>`;
   const rb=c.k==='char'&&DIAIMG[c.r]?`<img class="phr" src="${DIAIMG[c.r]}" alt="">`:'';
   return `<span class="gl ph" style="--ec:${ec}"><i class="phmoon"></i>${rb}${mt}<b class="phs">${glyph(c)}</b></span>`;
@@ -1086,7 +1111,7 @@ const ICON={
  '神':'<circle cx="12" cy="12" r="4.2"/>'+Array.from({length:12},(_,i)=>{const a=i/12*Math.PI*2;return `<line x1="${12+6.3*Math.cos(a)}" y1="${12+6.3*Math.sin(a)}" x2="${12+(i%2?8.6:10)*Math.cos(a)}" y2="${12+(i%2?8.6:10)*Math.sin(a)}" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>`}).join(''),
  '魔':'<path d="M4 3c.4 4 2 6.5 4.6 7.6A5.5 5.5 0 0 0 12 21a5.5 5.5 0 0 0 3.4-10.4C18 9.5 19.6 7 20 3c-2 2.6-4.6 3.8-8 3.8S6 5.6 4 3z"/><path d="M9.6 14.6l2.4 1 2.4-1" stroke="#000" stroke-opacity=".7" stroke-width="1.6" fill="none" stroke-linecap="round"/>'
 };
-const RCOL={'人':'#6fbf73','仙':'#5aa7ff','妖':'#ff7a45','鬼':'#d9d2b8','龍':'#c9974f','神':'#ffe28a','魔':'#a46bff'};
+const RCOL={'人':'#6fbf73','仙':'#5aa7ff','妖':'#ff7a45','鬼':'#d9d2b8','龍':'#c9974f','神':'#e6c25e','魔':'#c0395f'};
 function raceIcon(r,s=18){return DIA[r]?`<span style="display:block;width:${s}px;height:${s}px">${diaSVG(r)}</span>`:''}
 const DIA={
  '人':{c:['#e4ffb0','#8fd14f','#3f7d22'],k:'#1d3a10',p:'<path d="M50 22c3 0 5 3 5 7l1 3c9 0 20-3 30-9-6 12-17 20-29 23l1 9 10 24-13-14-5 3-5-3-13 14 10-24 1-9c-12-3-23-11-29-23 10 6 21 9 30 9l1-3c0-4 2-7 5-7z"/><circle cx="48" cy="27" r="1.3" fill="#e4ffb0"/>'},
@@ -1101,7 +1126,7 @@ const DIAIMG={"人": "data:image/webp;base64,UklGRggmAABXRUJQVlA4WAoAAAAQAAAAxwA
 function diaSVG(r){return DIAIMG[r]?`<img src="${DIAIMG[r]}" alt="" draggable="false" style="display:block;width:100%;height:100%">`:''}
 function raceBadge(r,s=26){if(!r||!DIA[r])return '';return `<span class="rbadge dia" title="${esc(raceName(r))}" style="--rcol:${RCOL[r]};width:${s}px;height:${s}px">${diaSVG(r)}</span>`}
 function cardBackSVG(){
-  const P5=['#6fbf73','#ff6a3d','#d9a441','#e9e4d4','#5aa7ff']; // 人→妖→龍→鬼→仙 (相生 ring; inner star = 相剋)
+  const P5=['#6fbf73','#ff6a3d','#d9a441','#e9e4d4','#2e333d']; // 人→妖→龍→鬼→仙 (相生 ring; inner star = 相剋)
   const gem=(x,y,c,r)=>`<circle cx="${x}" cy="${y+1.5}" r="${r}" fill="#000" opacity=".5"/><circle cx="${x}" cy="${y}" r="${r}" fill="${c}"/><circle cx="${x}" cy="${y}" r="${r}" fill="url(#cbgl)"/><ellipse cx="${x-r*.32}" cy="${y-r*.38}" rx="${r*.38}" ry="${r*.24}" fill="#fff" opacity=".75"/>`;
   const cx=150,cy=262,R=50;const pts=P5.map((c,i)=>{const a=(-90+i*72)*Math.PI/180;return [cx+R*Math.cos(a),cy+R*Math.sin(a),c]});
   const stars=Array.from({length:80},(_,i)=>`<circle cx="${(i*73)%290+5}" cy="${(i*131)%410+5}" r="${(i%3)*.5+.4}" fill="#fff" opacity="${.25+(i%5)/10}"/>`).join('');
@@ -1129,9 +1154,9 @@ async function entrance(c){
   const D=CINE_MS[k],t0=performance.now(),left=()=>D-(performance.now()-t0);
   const host=document.createElement('div');host.className='cine cine-'+k;
   const nameChars=[...nm(c)].slice(0,12);
-  const wtxt={SR:'靈光乍現',SSR:'神光現',UR:'七彩降臨',EXR:'傳說覺醒'}[k];
+  const wtxt={SR:'靈光乍現',SSR:'神光現',UR:'金光降臨',EXR:'傳說覺醒'}[k];
   const rb=k==='UR'||k==='EXR';
-  host.innerHTML=`<div class="void"></div>${k==='SR'||k==='SSR'?'<div class="flames"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>':''}<div class="rays ${rb?'rainbow':''}"></div>${rb?Array.from({length:14},(_,j)=>`<div class="rib" style="--a:${j*360/14}deg;--d:${(j%4)*.12}s"></div>`).join(''):''}${k==='EXR'?'<div class="halo h1"></div><div class="halo h2"></div><div class="halo h3"></div>':''}<div class="pillar"></div>
+  host.innerHTML=`<div class="void"></div>${k==='SR'||k==='SSR'?'<div class="flames"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>':''}<div class="rays ${k==='EXR'?'rainbow':''}"></div>${rb?Array.from({length:14},(_,j)=>`<div class="rib" style="--a:${j*360/14}deg;--d:${(j%4)*.12}s"></div>`).join(''):''}${k==='EXR'?'<div class="halo h1"></div><div class="halo h2"></div><div class="halo h3"></div>':''}<div class="pillar"></div>
    <div class="ring a">${sealSVG('var(--rc)')}</div><div class="ring b">${sealSVG('var(--rc)')}</div>${k!=='SR'&&k!=='SSR'?`<div class="ring c">${sealSVG('var(--rc)')}</div>`:''}
    ${k==='SSR'||k==='SR'?'<div class="tal">敕令召神</div>':''}
    ${k==='EXR'?`<div class="beat"></div><svg class="crack" viewBox="0 0 400 800" preserveAspectRatio="none"><path d="M200 0 L188 90 L214 150 L176 240 L222 330 L190 400 L230 480 L184 560 L216 650 L196 800"/></svg><div class="half l"></div><div class="half r"></div><div class="seal">傳<br>說</div>`:''}
@@ -1157,14 +1182,14 @@ async function entrance(c){
   const runes=(n,col,dur=2600)=>{for(let j=0;j<n;j++){const e=document.createElement('i');e.className='rune';e.textContent=RUNE[Math.floor(Math.random()*RUNE.length)];
     e.style.cssText=`left:${5+Math.random()*90}%;--dx:${(Math.random()-.5)*80}px;--dl:${Math.random()*.9}s;--du:${dur/1000*(.7+Math.random()*.6)}s;color:${col||'var(--rc)'};font-size:${18+Math.random()*26}px`;host.appendChild(e);setTimeout(()=>e.remove(),dur+1200)}};
   const shock=(col)=>{const e=document.createElement('i');e.className='shock';if(col)e.style.borderColor=col;host.appendChild(e);setTimeout(()=>e.remove(),1300)};
-  const pills=()=>{RAINBOW.forEach((cl,j)=>{const e=document.createElement('i');e.className='pill';e.style.cssText=`left:${8+j*13.5}%;--pc:${cl};animation-delay:${j*.12}s`;host.appendChild(e)})};
+  const pills=()=>{(k==='UR'?['#fff1b8','#ffd24a','#ffb02e','#ff9a2a','#ffe27a','#ffd24a','#fff1b8']:RAINBOW).forEach((cl,j)=>{const e=document.createElement('i');e.className='pill';e.style.cssText=`left:${8+j*13.5}%;--pc:${cl};animation-delay:${j*.12}s`;host.appendChild(e)})};
   const orbs=()=>{const w=document.createElement('div');w.className='orbs';w.innerHTML=['木','火','土','金','水'].map((e,j)=>`<span style="--j:${j}">${orbSVG(e,64)}</span>`).join('');host.appendChild(w);return w};
   const cbSpin=()=>{$c('.cb').classList.add('spin')};
   const quake=async ms=>{host.classList.add('quake');await at(ms);host.classList.remove('quake')};
   // keep effects going until only `tail` ms remain
   const sustain=async(tail,every,fn)=>{while(!skip&&left()>tail+every*.5){fn();await at(Math.min(every,left()-tail))}await at(left()-tail)};
   let cyc=null;
-  if(k==='UR'||k==='EXR'){let n=0;const pal=k==='UR'?RAINBOW:['#ffffff','#e9e4ff','#c58cff','#ff3b6b','#ffd9f0'];
+  if(k==='UR'||k==='EXR'){let n=0;const pal=k==='UR'?['#fff1b8','#ffd24a','#ffb02e','#ff9a2a','#ffe27a']:['#ffffff','#e9e4ff','#c58cff','#ff3b6b','#ffd9f0'];
     host.style.setProperty('--rc',pal[0]);cyc=setInterval(()=>host.style.setProperty('--rc',pal[++n%pal.length]),k==='UR'?260:420)}
   try{
    if(k==='SR'){ // Sean 22:41: SR gets the SSR feel, compressed to 3s
@@ -1216,10 +1241,10 @@ const SPOT_TAP={zh_hant:'點一下繼續',zh_hans:'点一下继续',ja:'タッ�
 const SPOT_SUB={SR:'SUPER RARE',SSR:'SPECIAL SUPER RARE',UR:'ULTRA RARE',EXR:'EXTRA LEGEND RARE'};
 // Sean 2026-11-22: after an SR+ entrance, the card pops out alone with a huge rarity mark, holds a few seconds, tap returns to the 6-card grid
 function spotlight(c,isNew){return new Promise(done=>{
-  const k=c.y,rb=k==='UR'||k==='EXR';
+  const k=c.y,rb=k==='EXR';
   const host=document.createElement('div');host.className='spot spot-'+k;host.style.setProperty('--rc',`var(--r${k})`);
   host.innerHTML=`<div class="sp-rays ${rb?'rainbow':''}"></div><div class="sp-in">
-    <div class="sp-rar ${rb?'ur-text':''}" data-r="${k}">${k}</div><div class="sp-sub">${SPOT_SUB[k]||''}</div>
+    <div class="sp-rar ${k==='UR'?'ur-text':''}" data-r="${k}">${k}</div><div class="sp-sub">${SPOT_SUB[k]||''}</div>
     <div class="sp-card">${isNew?`<span class="gnew sp-new">${T('new_card')}</span>`:''}${bigCardHTML(c,isNew)}</div>
     <div class="sp-tap">${(SPOT_TAP[L]||SPOT_TAP.en)}</div></div>`;
   document.body.appendChild(host);setImg(host.querySelector('[data-art]'),c);
@@ -1298,7 +1323,7 @@ const RCOLS={C:'#cfc4ae',UC:'#c9d4e6',R:'#5fd18f',SR:'#5aa7ff',SSR:'#ff6b6b',UR:
 function loadImgX(src){return new Promise((ok,no)=>{const i=new Image();if(!src.startsWith('data:'))i.crossOrigin='anonymous';i.onload=()=>ok(i);i.onerror=no;i.src=src})}
 async function artImg(c){try{const u=await imgFor(c);if(!u)return null;return await loadImgX(u)}catch(e){return null}}
 function cover(x,img,X,Y,W,H){const s=Math.max(W/img.width,H/img.height),w=img.width*s,h=img.height*s;x.save();x.beginPath();x.rect(X,Y,W,H);x.clip();x.drawImage(img,X+(W-w)/2,Y+(H-h)/2,w,h);x.restore()}
-function sealFallback(x,c,X,Y,W,H){const ec={木:'#2e5a37',水:'#24486e',火:'#6e2a1f',金:'#5e5a4a',土:'#6a5226'}[c.e]||'#3a2f4d';const g=x.createLinearGradient(0,Y,0,Y+H);g.addColorStop(0,ec);g.addColorStop(1,'#0b0910');x.fillStyle=g;x.fillRect(X,Y,W,H);
+function sealFallback(x,c,X,Y,W,H){const ec={木:'#2e5a37',水:'#1c1f26',火:'#6e2a1f',金:'#5e5a4a',土:'#6a5226'}[c.e]||'#3a2f4d';const g=x.createLinearGradient(0,Y,0,Y+H);g.addColorStop(0,ec);g.addColorStop(1,'#0b0910');x.fillStyle=g;x.fillRect(X,Y,W,H);
   const s=Math.min(W,H)*.42;x.fillStyle='#b8322a';x.fillRect(X+W/2-s/2,Y+H/2-s/2,s,s);x.fillStyle='#fbe9d0';x.font=`900 ${s*.7}px "Noto Serif TC",serif`;x.textAlign='center';x.textBaseline='middle';x.fillText(glyph(c),X+W/2,Y+H/2+2);x.textAlign='left';x.textBaseline='alphabetic'}
 function wrapText(x,t,X,Y,maxW,lh,maxL){const out=[];let line='';for(const ch of [...t]){const tt=line+ch;if(x.measureText(tt).width>maxW&&line){out.push(line);line=ch;if(out.length>=maxL)break}else line=tt}if(out.length<maxL&&line)out.push(line);if(out.length===maxL&&line&&out[maxL-1]!==line)out[maxL-1]=out[maxL-1].replace(/.$/,'…');out.forEach((l,i)=>x.fillText(l,X,Y+i*lh))}
 async function frameBase(){const W=1200,H=630,cv=document.createElement('canvas');cv.width=W;cv.height=H;const x=cv.getContext('2d');x.fillStyle='#0b0910';x.fillRect(0,0,W,H);
@@ -1331,10 +1356,31 @@ async function shareBlob(blob,txt,fname){const file=blob&&new File([blob],fname,
   try{await navigator.clipboard.writeText(txt)}catch(e){}toast(NTT('copied'));return true}
 async function shareImgOr(text,mk,fname){let blob=null;try{blob=await mk()}catch(e){}if(!blob){shareText(text);return}if(await shareBlob(blob,text+'\n'+SITE_URL,fname)){S.mission.share=true;save()}}
 
+/* ================= pack prelude: story line, then "<RARITY> 確定" (Sean 2026-11-22, wikigacha has this) ================= */
+const PRE={zh_hant:{lines:['遺忘的名字，正在呼喚你。','卷軸展開，萬象歸位。','封印鬆動，神魔將現。','千年史冊，翻到了新的一頁。','星宿移位，有人應召而來。','墨跡未乾，傳說已醒。'],sure:'確定',tag:{C:'萬象之一，皆有其名。',UC:'史冊留痕。',R:'名動一方。',SR:'靈光乍現，英雄應召。',SSR:'神光照世，名將降臨。',UR:'金光萬丈，與傳奇相遇。',EXR:'天地為之變色。'}},
+zh_hans:{lines:['遗忘的名字，正在呼唤你。','卷轴展开，万象归位。','封印松动，神魔将现。','千年史册，翻到了新的一页。','星宿移位，有人应召而来。','墨迹未干，传说已醒。'],sure:'确定',tag:{C:'万象之一，皆有其名。',UC:'史册留痕。',R:'名动一方。',SR:'灵光乍现，英雄应召。',SSR:'神光照世，名将降临。',UR:'金光万丈，与传奇相遇。',EXR:'天地为之变色。'}},
+ja:{lines:['忘れられた名が、あなたを呼んでいる。','巻物が開き、万象が還る。','封印が緩み、神魔が現れる。','千年の史書に、新たな頁が。','星宿が動き、誰かが応えた。'],sure:'確定',tag:{C:'万象の一つ、名あるもの。',UC:'史書に残る名。',R:'その名は一方に轟く。',SR:'霊光一閃、英雄来たる。',SSR:'神光照らし、名将降臨。',UR:'金色の光、伝説との邂逅。',EXR:'天地が色を変える。'}},
+ko:{lines:['잊힌 이름이 당신을 부르고 있다.','두루마리가 펼쳐지고, 만상이 돌아온다.','봉인이 풀리고, 신마가 나타난다.','천년의 사서에 새 장이 열린다.'],sure:'확정',tag:{C:'만상의 하나, 이름이 있다.',UC:'사서에 남은 이름.',R:'이름을 떨치다.',SR:'영광이 번뜩이고, 영웅이 응한다.',SSR:'신광이 비추고, 명장이 강림한다.',UR:'금빛 만장, 전설과의 만남.',EXR:'천지가 빛을 바꾼다.'}},
+en:{lines:['A forgotten name is calling you.','The scroll unrolls. Ten thousand things return.','The seal weakens. Gods and demons stir.','A new page turns in a thousand-year chronicle.','The stars shift, and someone answers.'],sure:'CONFIRMED',tag:{C:'One of the myriad, each with a name.',UC:'A name in the chronicles.',R:'A name known far and wide.',SR:'A flash of spirit. A hero answers.',SSR:'Divine light. A great hero descends.',UR:'A blaze of gold. Meet a legend.',EXR:'Heaven and earth change color.'}}};
+const PR=()=>PRE[L]||PRE.en;
+function bestOf(res){return res.reduce((a,r)=>RAR.indexOf(r.c.y)>RAR.indexOf(a)?r.c.y:a,'C')}
+function prelude(res){return new Promise(done=>{if(S.fx===false)return done();
+  const best=bestOf(res),hi=RAR.indexOf(best)>=3,P=PR(),line=P.lines[Math.floor(Math.random()*P.lines.length)];
+  const host=document.createElement('div');host.className='pre pre-'+best;host.style.setProperty('--rc',`var(--r${best})`);
+  host.innerHTML=`<div class="pre-sky">${Array.from({length:40},()=>`<i style="left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${(Math.random()*3).toFixed(2)}s;--s:${(2+Math.random()*5).toFixed(1)}px"></i>`).join('')}</div>
+   <div class="pre-top">MYRIAD LEGENDS</div><div class="pre-line">${esc(line)}</div><div class="pre-rule"><i></i>✧<i></i></div>
+   ${hi?`<div class="pre-big"><div class="pre-rays"></div><div class="pre-ring"></div><div class="pre-rar ${best==='UR'?'ur-text':''}" data-r="${best}">${best}</div><div class="pre-sure">${P.sure}</div><div class="pre-tag">${P.tag[best]}</div></div>`:''}`;
+  document.body.appendChild(host);let out=false;
+  const fin=()=>{if(out)return;out=true;host.classList.add('out');setTimeout(()=>{host.remove();done()},350)};
+  host.onclick=fin;
+  setTimeout(()=>{if(out)return;if(hi){host.classList.add('big');if(typeof fx==='function')try{fx(best,host)}catch(e){};setTimeout(fin,2600)}else setTimeout(fin,500)},1700);
+})}
 async function showReveal({type,res}){
+  await prelude(res);const BEST=bestOf(res);
   const Lr=$('#layer');const flipped=res.map(()=>false);let busy=false;
   const pad=n=>String(n).padStart(2,'0');
   Lr.innerHTML=`<div class="ov gal-ov"><div class="gal-bg" style="background-image:url(hero/${['hero3','hero2','hero4','hero5'][Math.floor(Math.random()*4)]}.webp)"></div>${galDeco()}<div class="gal">
+    <div class="gal-best gb-${BEST}" style="--rc:var(--r${BEST})"><div class="gb-r ${BEST==='UR'?'ur-text':''}">${BEST}</div><div class="gb-t">${PR().tag[BEST]}</div><div class="pre-rule"><i></i>✧<i></i></div></div>
     <div class="gal-h"><span>${T('discovered')}</span> <b id="gcount">0</b></div>
     <div class="gal-hint" id="ghint">${T('tap_flip')}</div>
     <div class="gal-row">${res.map(({c,isNew},i)=>`<div class="gslot aura-${c.y}" style="--rc:var(--r${c.y});animation-delay:${i*110}ms" data-i="${i}">${c.y==='EXR'?'<i class="ghalo"></i><i class="ghalo g2"></i>':''}${isNew?`<span class="gnew">${T('new_card')}</span>`:''}
