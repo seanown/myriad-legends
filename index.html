@@ -616,6 +616,7 @@ a.tag{text-decoration:none}
 
 html,body{max-width:100%;overflow-x:hidden}
 .ptop{pointer-events:none}
+.ichip{display:inline-flex;align-items:center;gap:5px}.ichip svg,.ichip .rbadge{flex:none}.ichip .ci{font-size:15px;line-height:1}
 </style>
 
 <div id="intro" hidden>
@@ -1218,10 +1219,12 @@ function shareText(t){
 }
 
 /* ================= codex ================= */
-let cx={tab:'list',sort:'rarity',dir:-1,q:'',qc:'',page:1,fav:false,group:'all',theme:null,kind:'all',el:'all'};
-const FLT={zh_hant:['類別','屬性','全部','上一頁','下一頁'],zh_hans:['类别','属性','全部','上一页','下一页'],ja:['種類','属性','すべて','前へ','次へ'],ko:['종류','속성','전체','이전','다음'],en:['Type','Element','All','Prev','Next'],es:['Tipo','Elemento','Todo','Anterior','Siguiente'],fr:['Type','Élément','Tout','Préc.','Suiv.'],pt:['Tipo','Elemento','Tudo','Anterior','Próxima']};
+let cx={tab:'list',sort:'rarity',dir:-1,q:'',qc:'',page:1,fav:false,group:'all',theme:null,kind:'all',el:'all',race:'all'};
+const FLT={zh_hant:['類別','屬性','全部','上一頁','下一頁','種族'],zh_hans:['类别','属性','全部','上一页','下一页','种族'],ja:['種類','属性','すべて','前へ','次へ','種族'],ko:['종류','속성','전체','이전','다음','종족'],en:['Type','Element','All','Prev','Next','Race'],es:['Tipo','Elemento','Todo','Anterior','Siguiente','Raza'],fr:['Type','Élément','Tout','Préc.','Suiv.','Race'],pt:['Tipo','Elemento','Tudo','Anterior','Próxima','Raça']};
 const FT=i=>(FLT[L]||FLT.en)[i];
 const CX_KINDS=[['char',c=>c.k==='char'||c.k==='event'],['treasure',c=>c.k==='treasure'],['weapon',c=>c.k==='weapon'],['horse',c=>c.k==='horse'],['battle',c=>c.k==='battle'||c.k==='realm']];
+const CX_KI={char:'👤',treasure:'💎',weapon:'⚔️',horse:'🐎',battle:'🏯'};
+const CX_RACES=['人','仙','妖','鬼','龍','神','魔'];
 const CX_ELS=[['木',c=>c.e==='木'],['火',c=>c.e==='火'],['土',c=>c.e==='土'],['金',c=>c.e==='金'],['水',c=>c.e==='水'],['神',c=>c.r==='神'],['魔',c=>c.r==='魔']];
 function miniHTML(c,o={}){
   const lock=o.lock;
@@ -1314,14 +1317,16 @@ function cxList(){
   <div class="box" style="margin-top:14px"><b>${T('groups')}</b><div class="ctrl" style="margin-top:8px"><select class="chip" id="grp"><option value="all">${T('all')}</option>${groups.map(g=>`<option ${cx.group===g?'selected':''}>${esc(g)}</option>`).join('')}</select>
     <input class="chip" id="grpName" placeholder="+" style="width:120px"><button class="chip" id="grpNew">${T('create')}</button></div></div>
   <div class="box" style="margin-top:14px"><div class="ctrl"><span class="muted">${T('sort')}:</span>${sorts.map(s=>`<button class="chip" data-s="${s}" aria-pressed="${cx.sort===s}">${T('s_'+(s==='rarity'?'rarity':s))}${cx.sort===s?(cx.dir>0?' ▲':' ▼'):''}</button>`).join('')}<button class="chip" id="favOnly" aria-pressed="${cx.fav}">${T('s_fav')}</button></div>
-   <div class="ctrl" style="margin-top:8px"><span class="muted">${FT(0)}:</span><button class="chip" data-kf="all" aria-pressed="${cx.kind==='all'}">${FT(2)}</button>${CX_KINDS.map(([k])=>`<button class="chip" data-kf="${k}" aria-pressed="${cx.kind===k}">${kindName(k)}</button>`).join('')}</div>
-   <div class="ctrl" style="margin-top:8px"><span class="muted">${FT(1)}:</span><button class="chip" data-ef="all" aria-pressed="${cx.el==='all'}">${FT(2)}</button>${CX_ELS.map(([e])=>`<button class="chip" data-ef="${e}" aria-pressed="${cx.el===e}">${e==='神'||e==='魔'?raceName(e):elName(e)}</button>`).join('')}</div>
+   <div class="ctrl" style="margin-top:8px"><span class="muted">${FT(0)}:</span><button class="chip" data-kf="all" aria-pressed="${cx.kind==='all'}">${FT(2)}</button>${CX_KINDS.map(([k])=>`<button class="chip ichip" data-kf="${k}" aria-pressed="${cx.kind===k}"><span class="ci">${CX_KI[k]}</span>${kindName(k)}</button>`).join('')}</div>
+   <div class="ctrl" style="margin-top:8px"><span class="muted">${FT(5)}:</span><button class="chip" data-rf="all" aria-pressed="${cx.race==='all'}">${FT(2)}</button>${CX_RACES.map(r=>`<button class="chip ichip" data-rf="${r}" aria-pressed="${cx.race===r}">${raceBadge(r,20)}${raceName(r)}</button>`).join('')}</div>
+   <div class="ctrl" style="margin-top:8px"><span class="muted">${FT(1)}:</span><button class="chip" data-ef="all" aria-pressed="${cx.el==='all'}">${FT(2)}</button>${CX_ELS.map(([e])=>`<button class="chip ichip" data-ef="${e}" aria-pressed="${cx.el===e}">${e==='神'||e==='魔'?raceBadge(e,20)+raceName(e):orbSVG(e,20)+elName(e)}</button>`).join('')}</div>
    <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;margin-top:10px;align-items:start"><div style="display:grid;gap:8px"><input class="inp" id="qn" placeholder="${esc(T('search_name'))}" value="${esc(cx.q)}"><input class="inp" id="qc" placeholder="${esc(T('search_cat'))}" value="${esc(cx.qc)}"></div>
    <div class="pager" id="pager"></div></div></div>
   <div class="tblwrap"><table class="cards"><thead><tr><th>${T('col_rar')}</th><th>${T('col_fame')}</th><th></th><th>${T('col_title')}</th><th class="num">ATK</th><th class="num">DEF</th><th class="num">${T('col_count')}</th></tr></thead><tbody id="tb"></tbody></table></div><div class="pager" id="pager2" style="justify-content:center;margin:14px 0;flex-wrap:wrap"></div>`;
   document.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{if(cx.sort===b.dataset.s)cx.dir*=-1;else{cx.sort=b.dataset.s;cx.dir=['name','id','order'].includes(cx.sort)?1:-1}cx.page=1;cxList()});
   $('#favOnly').onclick=()=>{cx.fav=!cx.fav;cx.page=1;cxList()};
   document.querySelectorAll('[data-kf]').forEach(b=>b.onclick=()=>{cx.kind=b.dataset.kf;cx.page=1;cxList()});
+  document.querySelectorAll('[data-rf]').forEach(b=>b.onclick=()=>{cx.race=b.dataset.rf;cx.page=1;cxList()});
   document.querySelectorAll('[data-ef]').forEach(b=>b.onclick=()=>{cx.el=b.dataset.ef;cx.page=1;cxList()});
   $('#qn').oninput=e=>{cx.q=e.target.value;cx.page=1;cxRows()};$('#qc').oninput=e=>{cx.qc=e.target.value;cx.page=1;cxRows()};
   $('#grp').onchange=e=>{cx.group=e.target.value;cx.page=1;cxRows()};
@@ -1333,6 +1338,7 @@ function cxRows(){
   let list=Object.keys(S.owned).map(i=>BYID[i]).filter(Boolean);
   if(cx.fav)list=list.filter(c=>S.fav[c.i]);
   if(cx.kind!=='all'){const f=CX_KINDS.find(x=>x[0]===cx.kind);if(f)list=list.filter(f[1])}
+  if(cx.race!=='all')list=list.filter(c=>c.r===cx.race);
   if(cx.el!=='all'){const f=CX_ELS.find(x=>x[0]===cx.el);if(f)list=list.filter(f[1])}
   if(cx.group!=='all')list=list.filter(c=>(S.groups[cx.group]||[]).includes(c.i));
   const q=cx.q.trim().toLowerCase();if(q)list=list.filter(c=>Object.values(c.n).some(v=>v&&v.toLowerCase().includes(q)));
