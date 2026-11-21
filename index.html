@@ -602,6 +602,12 @@ a.tag{text-decoration:none}
 @keyframes merge{to{scale:.1;opacity:0;filter:drop-shadow(0 0 40px #fff) brightness(3)}}
 .cine .cb.spin{animation:cbspin 2.4s linear infinite!important;opacity:1}
 @keyframes cbspin{0%{opacity:1;transform:translateY(0) rotateY(0) scale(1.05)}100%{opacity:1;transform:translateY(0) rotateY(360deg) scale(1.05)}}
+
+.tcard.v4 .vart .gl.ph{position:absolute;inset:0;font-size:0;text-shadow:none;overflow:hidden;background:radial-gradient(120% 80% at 50% 0%,color-mix(in srgb,var(--ec) 28%,#14111b),#08070b 70%)}
+.vart .ph .phmoon{position:absolute;right:12%;top:10%;width:22%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 40% 40%,#fff8e6,color-mix(in srgb,var(--ec) 45%,#f3e6c4) 60%,transparent 72%);opacity:.75;filter:blur(.2cqw)}
+.vart .ph .phr{position:absolute;left:50%;top:44%;width:64%;transform:translate(-50%,-50%);opacity:.16;filter:grayscale(1) brightness(1.6) blur(.15cqw);mix-blend-mode:screen}
+.vart .ph .phm{position:absolute;left:0;right:0;bottom:0;width:100%;height:38%;fill:color-mix(in srgb,var(--ec) 40%,#050407)}
+.vart .ph .phs{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-3deg);font:900 22cqw/1 var(--f-disp);color:#f7ead0;background:linear-gradient(145deg,#b52a1f,#7d1710);padding:2.2cqw 3.2cqw 3cqw;border-radius:2cqw;box-shadow:0 0 0 .6cqw #f7ead0 inset,0 0 0 1.2cqw #9e2117 inset,0 1.5cqw 4cqw #000a;text-shadow:0 .3cqw 0 #5a0e08}
 </style>
 
 <div id="intro" hidden>
@@ -921,27 +927,27 @@ const wmHTML=(y,cls='')=>`<span class="wm wm-${y} ${cls}">${y}</span>`;
 const SKT={
  zh_hant:{ls:'隊長技',sk:'技能',sk2:'覺醒技',
   t:(a,p)=>`「${a}」角色的攻擊 +${p}%`, r:(a,p)=>`${a}的攻擊和防禦 +${p}%`, e:(a,p)=>`${a}屬性角色的攻擊 +${p}%`, er:(e,r,p)=>`${e}屬性和${r}的攻擊 +${p}%`,
-  eq:(a,p)=>`裝備者攻擊和防禦 +${p}%（${a}屬性角色再 ×1.5）`, fld:(a,p)=>`戰場效果：雙方${a}屬性角色攻擊 +${p}%`, spd:(a,p)=>`騎乘者先攻，攻擊 +${p}%`,
+  eq:()=>`把本卡 ATK／DEF 的 30% 加給裝備者（裝 2～3 件時各 20%）`, fld:(a,p)=>`戰場效果：雙方${a}屬性角色攻擊 +${p}%`, spd:(a,p)=>`騎乘者先攻，攻擊 +${p}%`,
   aoe:(p,e)=>`對敵人造成 ${p}% ${e}傷害`, one:(p,e,x)=>`對敵人造成 ${p}% ${e}傷害，${x}% 機率無視防禦`, pierce:(p,e,q,w)=>`造成 ${p}% ${e}傷害，對${w}屬性敵人提升至 ${q}%`,
   buf:p=>`自身攻擊提升 ${p}%（可累加）`, heal:p=>`回復 ${p}% 生命`, el:'屬性', none:'無屬性'},
  zh_hans:{ls:'队长技',sk:'技能',sk2:'觉醒技',
   t:(a,p)=>`「${a}」角色的攻击 +${p}%`, r:(a,p)=>`${a}的攻击和防御 +${p}%`, e:(a,p)=>`${a}属性角色的攻击 +${p}%`, er:(e,r,p)=>`${e}属性和${r}的攻击 +${p}%`,
-  eq:(a,p)=>`装备者攻击和防御 +${p}%（${a}属性角色再 ×1.5）`, fld:(a,p)=>`战场效果：双方${a}属性角色攻击 +${p}%`, spd:(a,p)=>`骑乘者先攻，攻击 +${p}%`,
+  eq:()=>`把本卡 ATK／DEF 的 30% 加给装备者（装 2～3 件时各 20%）`, fld:(a,p)=>`战场效果：双方${a}属性角色攻击 +${p}%`, spd:(a,p)=>`骑乘者先攻，攻击 +${p}%`,
   aoe:(p,e)=>`对敌人造成 ${p}% ${e}伤害`, one:(p,e,x)=>`对敌人造成 ${p}% ${e}伤害，${x}% 几率无视防御`, pierce:(p,e,q,w)=>`造成 ${p}% ${e}伤害，对${w}属性敌人提升至 ${q}%`,
   buf:p=>`自身攻击提升 ${p}%（可叠加）`, heal:p=>`回复 ${p}% 生命`, el:'属性', none:'无属性'},
  ja:{ls:'リーダースキル',sk:'スキル',sk2:'覚醒スキル',
   t:(a,p)=>`「${a}」キャラの攻撃 +${p}%`, r:(a,p)=>`${a}の攻撃と防御 +${p}%`, e:(a,p)=>`${a}属性キャラの攻撃 +${p}%`, er:(e,r,p)=>`${e}属性と${r}の攻撃 +${p}%`,
-  eq:(a,p)=>`装備者の攻撃と防御 +${p}%（${a}属性なら ×1.5）`, fld:(a,p)=>`戦場効果：両陣営の${a}属性の攻撃 +${p}%`, spd:(a,p)=>`騎乗者が先攻、攻撃 +${p}%`,
+  eq:()=>`このカードの ATK／DEF の 30% を装備者に加算（2～3 個装備時は各 20%）`, fld:(a,p)=>`戦場効果：両陣営の${a}属性の攻撃 +${p}%`, spd:(a,p)=>`騎乗者が先攻、攻撃 +${p}%`,
   aoe:(p,e)=>`敵に ${p}% の${e}ダメージ`, one:(p,e,x)=>`敵に ${p}% の${e}ダメージ、${x}% で防御無視`, pierce:(p,e,q,w)=>`${p}% の${e}ダメージ、${w}属性には ${q}%`,
   buf:p=>`自身の攻撃 ${p}% 上昇（累積可）`, heal:p=>`HP を ${p}% 回復`, el:'属性', none:'無属性'},
  ko:{ls:'리더 스킬',sk:'스킬',sk2:'각성 스킬',
   t:(a,p)=>`「${a}」 캐릭터 공격 +${p}%`, r:(a,p)=>`${a} 공격·방어 +${p}%`, e:(a,p)=>`${a} 속성 캐릭터 공격 +${p}%`, er:(e,r,p)=>`${e} 속성과 ${r} 공격 +${p}%`,
-  eq:(a,p)=>`장착자 공격·방어 +${p}% (${a} 속성이면 ×1.5)`, fld:(a,p)=>`전장 효과: 양측 ${a} 속성 공격 +${p}%`, spd:(a,p)=>`탑승자 선공, 공격 +${p}%`,
+  eq:()=>`이 카드 ATK/DEF의 30%를 장착자에게 추가 (2~3개 장착 시 각 20%)`, fld:(a,p)=>`전장 효과: 양측 ${a} 속성 공격 +${p}%`, spd:(a,p)=>`탑승자 선공, 공격 +${p}%`,
   aoe:(p,e)=>`적에게 ${p}% ${e} 피해`, one:(p,e,x)=>`적에게 ${p}% ${e} 피해, ${x}% 확률로 방어 무시`, pierce:(p,e,q,w)=>`${p}% ${e} 피해, ${w} 속성에는 ${q}%`,
   buf:p=>`자신의 공격 ${p}% 상승 (중첩)`, heal:p=>`체력 ${p}% 회복`, el:'속성', none:'무속성'},
  en:{ls:'Leader',sk:'Skill',sk2:'Awakening',
   t:(a,p)=>`${a} cards: ATK +${p}%`, r:(a,p)=>`${a}: ATK & DEF +${p}%`, e:(a,p)=>`${a} cards: ATK +${p}%`, er:(e,r,p)=>`${e} and ${r} cards: ATK +${p}%`,
-  eq:(a,p)=>`Wearer ATK & DEF +${p}% (×1.5 on ${a})`, fld:(a,p)=>`Field: ${a} cards on both sides ATK +${p}%`, spd:(a,p)=>`Rider strikes first, ATK +${p}%`,
+  eq:()=>`Adds 30% of this card's ATK/DEF to the wearer (20% each with 2–3 items)`, fld:(a,p)=>`Field: ${a} cards on both sides ATK +${p}%`, spd:(a,p)=>`Rider strikes first, ATK +${p}%`,
   aoe:(p,e)=>`Deals ${p}% ${e} damage`, one:(p,e,x)=>`Deals ${p}% ${e} damage, ${x}% chance to ignore DEF`, pierce:(p,e,q,w)=>`Deals ${p}% ${e} damage, ${q}% vs ${w}`,
   buf:p=>`Raises own ATK by ${p}% (stacks)`, heal:p=>`Restores ${p}% HP`, el:'Element', none:'None'}};
 const sT=()=>SKT[L]||SKT.en;
@@ -952,7 +958,7 @@ const hasLS=c=>!!(c&&c.ls&&LS_RAR.has(c.y));
 const lsLabel=c=>['eq','fld','spd'].includes(c.ls&&c.ls[0])?(T('effect')||'效果'):sT().ls;
 function lsText(c){const l=c.ls;if(!hasLS(c))return '';const t=sT(),P=x=>`<b>${x}</b>`;
   switch(l[0]){case 't':return t.t(esc(tagT(l[1])),P(l[2]));case 'r':return t.r(RI(l[1]),P(l[2]));case 'e':return t.e(EI(l[1]),P(l[2]));
-   case 'er':return t.er(EI(l[1][0]),RI(l[1][1]),P(l[2]));case 'eq':return l[1]?t.eq(EI(l[1]),P(l[2])):t.eq('',P(l[2])).replace(/\s*[（(].*?[）)]/,'');case 'fld':return t.fld(EI(l[1]),P(l[2]));case 'spd':return t.spd(l[1],P(l[2]))}return ''}
+   case 'er':return t.er(EI(l[1][0]),RI(l[1][1]),P(l[2]));case 'eq':return t.eq();case 'fld':return t.fld(EI(l[1]),P(l[2]));case 'spd':return t.spd(l[1],P(l[2]))}return ''}
 const SKILLS_ON=false; // Sean 2026-11-21: only the leader skill for now; card skills kept in data, off
 function skText(c){const k=c.sk;if(!k)return '';const t=sT(),P=x=>`<b>${x}</b>`,e=c.e?elName(c.e):'';
   switch(k[0]){case 'aoe':return t.aoe(P(k[1]),e);case 'one':return t.one(P(k[1]),e,P(k[2]));case 'pierce':return t.pierce(P(k[1]),e,P(k[2]),elName(KE5[c.e]));case 'buf':return t.buf(P(k[1]));case 'heal':return t.heal(P(k[1]))}return ''}
@@ -973,6 +979,12 @@ function ringSVG(big){
 }
 function galDeco(){let m='';for(let i=0;i<26;i++)m+=`<b style="left:${Math.random()*100}%;--dx:${(Math.random()-.5)*120}px;animation-duration:${7+Math.random()*9}s;animation-delay:${-Math.random()*14}s;width:${2+Math.random()*4}px;height:${2+Math.random()*4}px"></b>`;
   return ringSVG(true)+ringSVG(false)+`<div class="gal-motes">${m}</div><div class="gal-frame"><i></i><i></i><i></i><i></i></div>`}
+function phArt(c){
+  const ec={木:'#4f9a5c',水:'#3b7cc4',火:'#c8452f',金:'#cfc6a6',土:'#c99a3e'}[c.e]||(c.r==='魔'?'#7a3bb0':'#c9a24a');
+  const mt=`<svg class="phm" viewBox="0 0 100 40" preserveAspectRatio="none"><path d="M0 40V26l9-7 7 5 10-12 9 9 6-4 11 10 8-14 12 13 6-5 9 8 13-9v20z" opacity=".55"/><path d="M0 40V32l12-5 9 4 14-8 10 6 12-3 13 7 10-6 20 5v8z"/></svg>`;
+  const rb=c.k==='char'&&DIAIMG[c.r]?`<img class="phr" src="${DIAIMG[c.r]}" alt="">`:'';
+  return `<span class="gl ph" style="--ec:${ec}"><i class="phmoon"></i>${rb}${mt}<b class="phs">${glyph(c)}</b></span>`;
+}
 function bigCardHTML(c,isNew){
   const w=wikiLink(c);const t=sT();const lk=`onclick="event.stopPropagation();S.mission.wiki=true;save()"`;
   const ls=lsText(c),sk=SKILLS_ON?skText(c):'';const cred=c.m?(c.c||'Wikimedia Commons'):'';
@@ -983,7 +995,7 @@ function bigCardHTML(c,isNew){
   const tl=[...dx(c)].length+(ls?45:0),sz=tl<=70?' short':tl<=110?' mid':'';
   return `<div class="tcard v4${sz} r-${c.y}" style="--rc:var(--r${c.y})"><div class="in eb-${c.e||'none'}${rc}">
    <div class="vnb"><span class="vn">${esc(nm(c))}</span>${c.r?`<span class="vrc" title="${esc(raceName(c.r))}">${raceBadge(c.r,30)}</span>`:''}${orbSVG(orbKey(c),40)}</div>
-   <div class="art vart" data-art="${c.i}"><span class="gl">${glyph(c)}</span>${isNew?`<span class="newb">${T('new_card')}</span>`:''}<div class="holo"></div><div class="shine"></div><span class="idn">#${String(c.i).padStart(5,'0')}</span></div>
+   <div class="art vart" data-art="${c.i}">${phArt(c)}${isNew?`<span class="newb">${T('new_card')}</span>`:''}<div class="holo"></div><div class="shine"></div><span class="idn">#${String(c.i).padStart(5,'0')}</span></div>
    <div class="vtl"><span class="ty">${esc(ty)}</span>${setSym(c.y,30)}</div>
    <div class="vtx">${ls?`<p><span class="lb">${lsLabel(c)}</span>${ls}</p>`:''}${sk?`<p><span class="lb s2">${c.k==='treasure'?t.sk2:t.sk}</span>${sk}</p>`:''}<div class="vds">${esc(dx(c))}</div>${c.e?`<span class="vwm">${symSVG(c.e)}</span>`:''}</div>
    <div class="vpt"><span><i>ATK</i>${c.a.toLocaleString()}</span><em>/</em><span><i>DEF</i>${c.d.toLocaleString()}</span></div>
