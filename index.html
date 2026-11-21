@@ -760,8 +760,14 @@ function pickCard(rar){
   let pool=all.filter(c=>KIND_OF(c.k)===want);if(!pool.length)pool=all;
   if(bannerActive()){const th=pool.filter(c=>(c.t||[]).includes(BANNER.theme)); // Sean 22:37: theme cards ×30 weight
     if(th.length){const w=BANNER.boost*th.length;if(Math.random()*(w+pool.length-th.length)<w)return th[Math.floor(Math.random()*th.length)]}}
+  if(want==='char'){ // Sean 2026-11-21: country weights so minor Japanese C figures don't flood packs
+    const b=CBUCKET[rar]||(CBUCKET[rar]=bucketize(pool));const ks=Object.keys(COUNTRY_W).filter(k=>b[k]&&b[k].length);
+    let tot=ks.reduce((a,k)=>a+COUNTRY_W[k],0),y=Math.random()*tot;for(const k of ks){if(y<COUNTRY_W[k])return b[k][Math.floor(Math.random()*b[k].length)];y-=COUNTRY_W[k]}}
   return pool[Math.floor(Math.random()*pool.length)];
 }
+const COUNTRY_W={中國:55,日本:20,朝鮮:10,其他:15},CBUCKET={};
+function countryOf(c){const t=c.t||[];if(t.includes('中國')||t.includes('三國'))return '中國';if(t.includes('日本')||t.includes('戰國日本'))return '日本';if(t.includes('朝鮮')||t.includes('韓國'))return '朝鮮';return '其他'}
+function bucketize(pool){const b={};for(const c of pool)(b[countryOf(c)]=b[countryOf(c)]||[]).push(c);return b}
 // every 8h of the 48h banner: first card of the next pack = theme card SSR or better
 const guardReady=()=>bannerActive()&&Date.now()>=(S.banner.nextG||0);
 function pickGuard(){const tiers=RAR.slice(RAR.indexOf(BANNER.guardMin));
@@ -1596,7 +1602,7 @@ function showRules(){
   <h4>名望與稀有度</h4><p>「名望」是 0 到 100 的分數，依照該條目在多少種語言的維基百科中出現、以及近 30 天的瀏覽量計算。名望越高，稀有度越高。關羽、孫悟空、織田信長等人物有多個版本，從 C 到 EXR 各不相同，稀有度由我們指定。</p>
   <table><tr><th>稀有度</th><th>名望</th><th>出現機率</th><th>卡池數量</th></tr>${counts.map(([r,n])=>`<tr><td><b class="rb r-${r}">${r}</b></td><td>${{EXR:'100',UR:'90+',SSR:'80+',SR:'60+',R:'35+',UC:'20+',C:'< 20'}[r]}</td><td>${RATE[r]<1?RATE[r].toFixed(3):RATE[r]}%</td><td>${n.toLocaleString()}</td></tr>`).join('')}</table>
   <h4>ATK 與 DEF</h4><p>ATK（人氣）= 維基百科瀏覽量 × 稀有度倍率，上限 15,000。DEF（深度）= 條目內容長度 × 稀有度倍率，上限 15,000。寶物依博物館典藏的年代與重要性計算。</p>
-  <h4>卡包節奏</h4><ul><li>每張卡先決定類別：人物 60%、寶物／神兵 30%、戰場／界域／名馬 10%，再依稀有度抽出。</li><li>每包 6 張卡，每張各自抽稀有度，6 張全是 C 也有可能。每 1 分鐘恢復 1 包，最多存 10 包。</li><li>每 10 包有 1 個金卡包：保底 SR 以上。</li><li>每 100 包有 1 個彩虹卡包：保底 SSR 以上。每天第一包也是彩虹卡包。</li><li>每集滿 5 個登入章，當天會有 1 個黑卡包：保底 UR 以上。</li><li>每日任務每完成一項 +2 包。</li><li>限定召喚為期 ${BANNER.hours} 小時，主題卡出現機率提高為 ${BANNER.boost} 倍；每 ${BANNER.guardH} 小時一次，倒數結束後開的第一張必定是主題 SSR 以上（SSR／UR／EXR）；累計抽 ${BANNER.spark} 張必得限定卡。</li></ul>
+  <h4>卡包節奏</h4><ul><li>每張卡先決定類別：人物 60%、寶物／神兵 30%、戰場／界域／名馬 10%，再依稀有度抽出。人物再依地區加權：中國 55%、日本 20%、朝鮮半島 10%、東南亞與其他（含神話）15%。</li><li>每包 6 張卡，每張各自抽稀有度，6 張全是 C 也有可能。每 1 分鐘恢復 1 包，最多存 10 包。</li><li>每 10 包有 1 個金卡包：保底 SR 以上。</li><li>每 100 包有 1 個彩虹卡包：保底 SSR 以上。每天第一包也是彩虹卡包。</li><li>每集滿 5 個登入章，當天會有 1 個黑卡包：保底 UR 以上。</li><li>每日任務每完成一項 +2 包。</li><li>限定召喚為期 ${BANNER.hours} 小時，主題卡出現機率提高為 ${BANNER.boost} 倍；每 ${BANNER.guardH} 小時一次，倒數結束後開的第一張必定是主題 SSR 以上（SSR／UR／EXR）；累計抽 ${BANNER.spark} 張必得限定卡。</li></ul>
   ${anatomyHTML()}
   <h4>五行與種族</h4><p>每張卡有五行屬性：預設跟種族走（人族＝木、仙族＝水、妖族＝火、鬼族＝金、龍族＝土），部分名人和寶物有自己的屬性，全卡池五行各約 20%。神族、魔族沒有五行。</p><p>五行相剋：木剋土、土剋水、水剋火、火剋金、金剋木。剋制對手傷害 ×1.2，被剋 ×0.8。神魔互剋 ×1.5。</p><p>隊伍加成：同屬性 3 張 +6%、5 張 +15%；五行俱全 +12%；相鄰相生（木→火→土→金→水→木）+8%；同族 3 張 +5%、5 張 +10%；主題羈絆另計。隊伍第一張是隊長，只有隊長的隊長技會生效，對全隊有效。只有 SR 以上的卡有隊長技。</p>
   <h4>羈絆</h4><p>同族 3 人 +5%，同族 5 人 +10%。歷史羈絆：桃園 3 人 +10%、五虎 5 人 +20%、取經 4 人 +12%、四海龍王、八仙、七福神、四大天王、四凶、四象、梁山等。</p>
