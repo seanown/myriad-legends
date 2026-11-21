@@ -870,7 +870,7 @@ function vPull(){
    <div class="box missions"><b style="color:var(--gold)">${T('missions')}</b><ul style="list-style:none;padding:0;margin:8px 0 4px">
      ${missions.map(([k,ok])=>`<li><span>${T('m_'+k)}</span>${ok?(ms.claimed[k]?`<span class="ok">${T('done')}</span>`:`<button class="btn" style="padding:2px 10px;font-size:12px" data-claim="${k}">${T('claim')} +2</button>`):`<span class="muted">0/1</span>`}</li>`).join('')}
    </ul><div class="sub" style="text-align:left">${T('m_reward')}</div></div>
-   <div class="foot">${T('support')}<br>Wikipedia / Wikimedia Commons (CC BY-SA, PD) · Cleveland Museum of Art (CC0) · The Met (CC0)</div>
+   <div class="foot">${T('support')}<br>Wikipedia / Wikimedia Commons (CC BY-SA, PD) · 國立故宮博物院 National Palace Museum (CC BY 4.0) · Cleveland Museum of Art (CC0)</div>
   </div>`;
   if(ex){const b=$('#bimg');imgFor(ex).then(u=>{if(u)b.style.backgroundImage=`url(${u})`;else{const alt=CARDS.find(x=>x.i===463)||ex;imgFor(alt).then(v=>{if(v)b.style.backgroundImage=`url(${v})`;else b.innerHTML=`<span style="display:grid;place-items:center;height:100%;font:900 40px var(--f-disp);color:#ffe9a8;text-shadow:0 0 12px #ffd24a">${glyph(ex)}</span>`})}})}
   const p=$('#pack');p.onclick=doPull;p.onkeydown=e=>{if(e.key==='Enter')doPull()};
@@ -1569,11 +1569,18 @@ function showTrophies(){
 }
 
 /* ================= rules ================= */
+function srcRows(){
+  const S2=[['國立故宮博物院','國立故宮博物院（台北故宮）','https://digitalarchive.npm.gov.tw/','CC BY 4.0'],['Cleveland Museum of Art','克里夫蘭美術館 Cleveland Museum of Art','https://www.clevelandart.org/open-access','CC0'],['The Metropolitan Museum of Art','大都會藝術博物館 The Met','https://www.metmuseum.org/about-the-met/policies-and-documents/open-access','CC0']];
+  const n={};let wk=0;for(const c of CARDS){if(c.wk)wk++;else{const k=(c.c||'').split('·')[0].trim();n[k]=(n[k]||0)+1}}
+  const row=(name,url,lic,cnt)=>`<tr><td><a href="${url}" target="_blank" rel="noopener" style="color:var(--gold)">${name}</a></td><td>${lic}</td><td>${cnt?cnt.toLocaleString():'…'}</td></tr>`;
+  return row('維基百科／維基共享資源 Wikipedia / Wikimedia Commons','https://commons.wikimedia.org/','CC BY-SA 4.0／公有領域',wk)+S2.filter(x=>n[x[0]]||!CARDS.length).map(x=>row(x[1],x[2],x[3],n[x[0]])).join('');
+}
 function showRules(){
+  if(!CARDS.length&&window.DATAP)DATAP.then(()=>{const o=document.querySelector('.box.rules');if(o){o.closest('.ov').remove();showRules()}});
   const counts=RAR.map(r=>[r,(BYRAR[r]||[]).length]);
   const host=document.createElement('div');host.className='ov';host.style.zIndex=40;
   host.innerHTML=`<div class="box rules" style="max-width:820px"><div style="display:flex;justify-content:space-between;align-items:center"><h2 style="margin:0">${T('rules')}</h2><button class="btn ghost" data-x>${T('close')}</button></div>
-  <h4>卡牌</h4><p>每張卡牌是一位東方歷史人物、神佛、妖怪、神獸，或一件寶物、名馬、神兵、戰役與界域。資料來自維基百科，圖片使用維基共享資源的公有領域或自由授權圖片，以及克利夫蘭美術館、大都會藝術博物館的 CC0 開放典藏。每張卡都有編號、標題、維基百科條目連結、ATK 和 DEF。</p>
+  <h4>卡牌</h4><p>每張卡牌是一位東方歷史人物、神佛、妖怪、神獸，或一件寶物、名馬、神兵、戰役與界域。人物資料來自維基百科，人物圖片使用維基共享資源的公有領域或自由授權圖片；寶物來自各博物館的開放典藏（見下方「授權與出處」）。每張卡都有編號、標題、維基百科條目連結、ATK 和 DEF。</p>
   <h4>名望與稀有度</h4><p>「名望」是 0 到 100 的分數，依照該條目在多少種語言的維基百科中出現、以及近 30 天的瀏覽量計算。名望越高，稀有度越高。關羽、孫悟空、織田信長等人物有多個版本，從 C 到 EXR 各不相同，稀有度由我們指定。</p>
   <table><tr><th>稀有度</th><th>名望</th><th>出現機率</th><th>卡池數量</th></tr>${counts.map(([r,n])=>`<tr><td><b class="rb r-${r}">${r}</b></td><td>${{EXR:'100',UR:'90+',SSR:'80+',SR:'60+',R:'35+',UC:'20+',C:'< 20'}[r]}</td><td>${RATE[r]<1?RATE[r].toFixed(3):RATE[r]}%</td><td>${n.toLocaleString()}</td></tr>`).join('')}</table>
   <h4>ATK 與 DEF</h4><p>ATK（人氣）= 維基百科瀏覽量 × 稀有度倍率，上限 15,000。DEF（深度）= 條目內容長度 × 稀有度倍率，上限 15,000。寶物依博物館典藏的年代與重要性計算。</p>
@@ -1583,8 +1590,8 @@ function showRules(){
   <h4>羈絆</h4><p>同族 3 人 +5%，同族 5 人 +10%。歷史羈絆：桃園 3 人 +10%、五虎 5 人 +20%、取經 4 人 +12%、四海龍王、八仙、七福神、四大天王、四凶、四象、梁山等。</p>
   <h4>裝備與戰場</h4><p>每位角色可各裝備 1 件神兵、寶物、名馬，每件提供其 20% 的 ATK/DEF（只裝 1 件時 30%）。寶物、神兵、名馬沒有五行。團體戰可放 1 張戰場卡，效果對雙方都有效。</p>
   <h4>對戰</h4><ul><li>每日首領戰：每天 1 位強力首領，最多編入 50 張卡，每天 3 次。HP 保留到擊敗為止，擊敗獎勵 10 包。</li><li>單人隨機對戰：選 1 張卡，挑戰指定級別的隨機對手。</li><li>團體戰：5 張卡按出戰順序一對一，先取得 3 勝即結束（最多 5 戰）。</li><li>劇情遠征：贏得知識，強化 5 張卡，每 5 關提升一個級別。</li></ul>
-  <h4>${T('changelog')}</h4><ul><li>2026/11/21 v2：卡包改為撕開式；SSR／UR／EXR 專屬出卡特效；新增「特效強化」開關；新卡面（稀有度／名字／種族）；本機備份匯出與合併匯入；八種語言；博物館寶物卡；每日首領戰、團體戰、劇情遠征；獎盃。</li><li>2026/11/21 v1：第一版原型。</li></ul>
-  <h4>授權與出處</h4><p>卡片文字摘自維基百科，依 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener" style="color:var(--gold)">CC BY-SA 4.0</a> 授權使用並同樣以 CC BY-SA 4.0 分享。圖片來自維基共享資源（公有領域或各檔案標示之授權，見卡片詳情）、克里夫蘭美術館與大都會藝術博物館（CC0）。本遊戲為非官方作品，與維基百科及各博物館無關。</p>
+  <h4>${T('changelog')}</h4><ul><li>2026/11/21 v3：正式上線；沒有內建圖片的人物卡改為即時載入維基百科圖片；加入台北故宮 28,698 件寶物；出處表更新。</li><li>2026/11/21 v2：卡包改為撕開式；SSR／UR／EXR 專屬出卡特效；新增「特效強化」開關；新卡面（稀有度／名字／種族）；本機備份匯出與合併匯入；八種語言；博物館寶物卡；每日首領戰、團體戰、劇情遠征；獎盃。</li><li>2026/11/21 v1：第一版原型。</li></ul>
+  <h4>授權與出處</h4><p>卡片文字摘自維基百科，依 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener" style="color:var(--gold)">CC BY-SA 4.0</a> 授權使用並同樣以 CC BY-SA 4.0 分享。圖片與寶物資料來源：</p><table><tr><th>來源</th><th>授權</th><th>卡片數量</th></tr>${srcRows()}</table><p>人物圖片來自維基共享資源，每張卡的詳情都標示檔案名稱與連結。即將加入：日本 ColBase（國立文化財機構）、Japan Search、國立國會圖書館。本遊戲為非官方作品，與維基百科及各博物館無關。</p>
   <h4>資料</h4><p>資料快照：2026/11/21。此原型的進度只存在你的瀏覽器裡，請到圖鑑頁定期匯出備份。</p>
   <div style="display:flex;gap:8px;margin-top:14px"><button class="btn ghost" id="replay">${T('replay_intro')}</button><button class="btn ghost" id="reset">${T('reset')}</button></div></div>`;
   document.body.appendChild(host);host.onclick=e=>{if(e.target===host||e.target.closest('[data-x]'))host.remove()};
@@ -1618,5 +1625,5 @@ $('#lang').onchange=e=>{L=S.lang=e.target.value;save();chrome();render()};
 $('#btnTrophy').onclick=showTrophies;$('#btnRules').onclick=showRules;
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('.ov').forEach(o=>o.remove());$('#layer').innerHTML=''}});
 chrome();intro(false);
-loadData().then(()=>{if(S.banner.id!==BANNER.id){S.banner={id:BANNER.id,pulled:0,got:false,start:Date.now()};save()}go('pull')}).catch(e=>{$('#app').innerHTML='<p>Failed to load cards.json</p>'});
+(window.DATAP=loadData()).then(()=>{if(S.banner.id!==BANNER.id){S.banner={id:BANNER.id,pulled:0,got:false,start:Date.now()};save()}go('pull')}).catch(e=>{$('#app').innerHTML='<p>Failed to load cards.json</p>'});
 </script>
