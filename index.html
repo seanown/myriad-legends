@@ -616,6 +616,7 @@ a.tag{text-decoration:none}
 
 html,body{max-width:100%;overflow-x:hidden}
 .ptop{pointer-events:none}
+.cloudb{width:auto!important;padding:0 12px;gap:5px;display:inline-flex;align-items:center;border-color:var(--gold)!important;color:var(--gold)}.cloudb .ci{font-size:15px}.cloudb .cl{font-size:13px;font-weight:700}.cloudb.on{border-color:#3e8f6a!important;color:#7fe3b0}@media(max-width:480px){.cloudb{padding:0 8px}.cloudb .ci{display:none}.topin .tabs button{white-space:nowrap;padding-left:6px;padding-right:6px}.topin .lang{max-width:70px;padding:4px 4px}.topin .rt{gap:3px}.topin{gap:4px;padding-left:10px;padding-right:10px}.topin .rt .icon{width:30px;height:30px;font-size:15px}.cloudb .cl{font-size:12px}}.cloudb,.cloudb .cl{white-space:nowrap}
 .ichip{display:inline-flex;align-items:center;gap:5px}.ichip svg,.ichip .rbadge{flex:none}.ichip .ci{font-size:15px;line-height:1}
 </style>
 
@@ -630,7 +631,7 @@ html,body{max-width:100%;overflow-x:hidden}
   <nav class="tabs" role="tablist">
     <button role="tab" data-v="pull"></button><button role="tab" data-v="codex"></button><button role="tab" data-v="battle"></button>
   </nav>
-  <div class="rt"><button class="icon" id="btnTrophy" title="Trophies">🏆</button><button class="icon" id="btnRules" title="Rules">?</button></div>
+  <div class="rt"><button class="icon cloudb" id="btnCloud" title="Sign in"><span class="ci">👤</span><span class="cl"></span></button><button class="icon" id="btnTrophy" title="Trophies">🏆</button><button class="icon" id="btnRules" title="Rules">?</button></div>
 </div></header>
 <main id="app"><p class="muted" style="text-align:center">載入卡池中… Loading cards…</p></main>
 <div id="layer"></div>
@@ -1242,8 +1243,8 @@ function vCodex(){
    <div class="tiers">${['EXR','UR','SSR','SR','R'].map(tierBox).join('')}<div class="sep"></div>${['UC','C'].map(tierBox).join('')}</div></div>
   <div id="cxBody"></div>
   <div class="box" style="margin-top:14px"><b style="color:var(--gold)">${T('backup')}</b><div class="sub" style="text-align:left;margin:6px 0">${T('bk_note')}</div>
-   <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="bkExp">${T('bk_export')}</button><button class="btn ghost" id="bkImp">${T('bk_import')}</button><input type="file" id="bkFile" accept=".json,application/json" hidden></div></div>${cloudBox()}`;
-  bindBackup();bindCloud();
+   <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="bkExp">${T('bk_export')}</button><button class="btn ghost" id="bkImp">${T('bk_import')}</button><input type="file" id="bkFile" accept=".json,application/json" hidden></div></div><div class="box" style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between"><div><b style="color:var(--gold)">☁ ${CT('t')}</b><div class="sub" style="text-align:left">${S.cloud?(S.cloud.g?'✓ '+CT('gon'):CT('code')+'：'+esc(S.cloud.code)):CT('g')}</div></div><button class="btn" id="cxCloud">${S.cloud?CT('t'):CT('login')}</button></div>`;
+  bindBackup();$('#cxCloud').onclick=openCloud;
   document.querySelectorAll('.subtabs button').forEach(b=>b.onclick=()=>{cx.tab=b.dataset.t;cx.theme=null;vCodex()});
   cx.tab==='list'?cxList():cxThemes();
 }
@@ -1264,19 +1265,19 @@ const CLT={zh_hant:{t:'雲端存檔・引繼碼',n:'建立引繼碼後，進度�
  es:{t:'Guardado en la nube · código',n:'Crea un código de transferencia y tu progreso se guardará solo en nuestro servidor. Introduce el mismo código en el móvil u otro ordenador para jugar con las mismas cartas. Guárdalo en privado: quien lo tenga puede cargar esta partida.',make:'Crear código',code:'Tu código',sync:'Sincronizar',copy:'Copiar',enter:'Introduce un código (p. ej. ML-ABCDE-12345)',load:'Cargar',ok:'Sincronizado',bad:'No se encontró ese código',err:'Falló la sincronización, se reintentará',last:'Última sincronización',off:'El guardado en la nube no está disponible'},
  fr:{t:'Sauvegarde cloud · code de transfert',n:'Créez un code de transfert et votre progression sera enregistrée automatiquement sur notre serveur. Saisissez le même code sur votre téléphone ou un autre ordinateur pour jouer avec les mêmes cartes. Gardez-le secret : quiconque le possède peut charger cette sauvegarde.',make:'Créer un code',code:'Votre code',sync:'Synchroniser',copy:'Copier',enter:'Saisir un code (ex. ML-ABCDE-12345)',load:'Charger',ok:'Synchronisé',bad:'Code introuvable',err:'Échec de la synchronisation, nouvel essai plus tard',last:'Dernière synchro',off:'La sauvegarde cloud est indisponible'},
  pt:{t:'Salvamento na nuvem · código',n:'Crie um código de transferência e seu progresso será salvo automaticamente no nosso servidor. Digite o mesmo código no celular ou em outro computador para jogar com as mesmas cartas. Guarde o código: quem tiver ele pode carregar este save.',make:'Criar código',code:'Seu código',sync:'Sincronizar',copy:'Copiar',enter:'Digite um código (ex.: ML-ABCDE-12345)',load:'Carregar',ok:'Sincronizado',bad:'Código não encontrado',err:'Falha ao sincronizar, tentaremos depois',last:'Última sincronização',off:'O salvamento na nuvem não está disponível'}};
-const CLTG={zh_hant:{g:'用 Google 帳號同步（換裝置時登入同一個帳號即可）',gon:'已連結 Google 帳號',gerr:'Google 登入失敗'},
-zh_hans:{g:'用 Google 账号同步（换设备时登录同一个账号即可）',gon:'已连接 Google 账号',gerr:'Google 登录失败'},
-ja:{g:'Google アカウントで同期（別の端末でも同じアカウントでログイン）',gon:'Google アカウント連携済み',gerr:'Google ログインに失敗しました'},
-ko:{g:'Google 계정으로 동기화 (다른 기기에서도 같은 계정으로 로그인)',gon:'Google 계정 연결됨',gerr:'Google 로그인 실패'},
-en:{g:'Sync with your Google account (sign in with the same account on any device)',gon:'Linked to Google',gerr:'Google sign-in failed'},
-es:{g:'Sincroniza con tu cuenta de Google (inicia sesión con la misma cuenta en cualquier dispositivo)',gon:'Vinculado a Google',gerr:'Error al iniciar sesión con Google'},
-fr:{g:'Synchroniser avec votre compte Google (connectez-vous avec le même compte sur chaque appareil)',gon:'Lié à Google',gerr:'Échec de la connexion Google'},
-pt:{g:'Sincronize com sua conta Google (entre com a mesma conta em qualquer dispositivo)',gon:'Vinculado ao Google',gerr:'Falha no login com Google'}};
+const CLTG={zh_hant:{login:'登入',g:'用 Google 帳號同步（換裝置時登入同一個帳號即可）',gon:'已連結 Google 帳號',gerr:'Google 登入失敗'},
+zh_hans:{login:'登录',g:'用 Google 账号同步（换设备时登录同一个账号即可）',gon:'已连接 Google 账号',gerr:'Google 登录失败'},
+ja:{login:'ログイン',g:'Google アカウントで同期（別の端末でも同じアカウントでログイン）',gon:'Google アカウント連携済み',gerr:'Google ログインに失敗しました'},
+ko:{login:'로그인',g:'Google 계정으로 동기화 (다른 기기에서도 같은 계정으로 로그인)',gon:'Google 계정 연결됨',gerr:'Google 로그인 실패'},
+en:{login:'Sign in',g:'Sync with your Google account (sign in with the same account on any device)',gon:'Linked to Google',gerr:'Google sign-in failed'},
+es:{login:'Entrar',g:'Sincroniza con tu cuenta de Google (inicia sesión con la misma cuenta en cualquier dispositivo)',gon:'Vinculado a Google',gerr:'Error al iniciar sesión con Google'},
+fr:{login:'Connexion',g:'Synchroniser avec votre compte Google (connectez-vous avec le même compte sur chaque appareil)',gon:'Lié à Google',gerr:'Échec de la connexion Google'},
+pt:{login:'Entrar',g:'Sincronize com sua conta Google (entre com a mesma conta em qualquer dispositivo)',gon:'Vinculado ao Google',gerr:'Falha no login com Google'}};
 const CT=k=>(CLT[L]||CLT.en)[k]??(CLTG[L]||CLTG.en)[k];
 const GCFG={id:undefined,lib:null};
 function gInit(){if(GCFG.id!==undefined)return Promise.resolve(GCFG.id);return fetch('/api/save').then(r=>r.ok?r.json():{}).then(j=>GCFG.id=j.google||null).catch(()=>GCFG.id=null)}
 function gLib(){return GCFG.lib||(GCFG.lib=new Promise((ok,no)=>{const sc=document.createElement('script');sc.src='https://accounts.google.com/gsi/client';sc.async=true;sc.onload=ok;sc.onerror=no;document.head.appendChild(sc)}))}
-async function gSignedIn(resp){try{const j=await cloudCall({action:'google',credential:resp.credential,code:S.cloud&&S.cloud.code,data:cloudData()});if(!mergeSave(JSON.parse(j.data)))throw 0;S.cloud={code:j.code,at:j.updated,g:1};save();await cloudPush();toast(CT('ok'));render()}catch(e){toast(CT('gerr'))}}
+async function gSignedIn(resp){try{const j=await cloudCall({action:'google',credential:resp.credential,code:S.cloud&&S.cloud.code,data:cloudData()});if(!mergeSave(JSON.parse(j.data)))throw 0;S.cloud={code:j.code,at:j.updated,g:1};save();await cloudPush();toast(CT('ok'));render();cloudRefresh()}catch(e){toast(CT('gerr'))}}
 async function gButton(){const el=$('#gBtn');if(!el)return;const id=await gInit();if(!id){el.remove();return}
   try{await gLib();google.accounts.id.initialize({client_id:id,callback:gSignedIn});const box=$('#gBtn');if(!box)return;box.style.display='';google.accounts.id.renderButton(box.querySelector('.gb'),{theme:'filled_black',size:'large',shape:'pill',locale:({zh_hant:'zh-TW',zh_hans:'zh-CN'})[L]||L})}catch(e){const b=$('#gBtn');if(b)b.remove()}}
 const CLOUD={t:null,busy:false};
@@ -1288,16 +1289,21 @@ async function cloudSync(){if(!S.cloud)return false;const j=await cloudCall({act
 addEventListener('pagehide',()=>{if(S.cloud&&CLOUD.t){clearTimeout(CLOUD.t);CLOUD.t=null;cloudPush()}});
 function cloudBox(){const c=S.cloud;
   return `<div class="box" style="margin-top:14px"><b style="color:var(--gold)">☁ ${CT('t')}</b><div class="sub" style="text-align:left;margin:6px 0">${CT('n')}</div>
+   ${c&&c.g?`<div class="sub" style="text-align:left;margin-top:8px">✓ ${CT('gon')}</div>`:`<div id="gBtn" style="display:none;margin:10px 0 14px"><div class="sub" style="text-align:left;margin-bottom:6px">${CT('g')}</div><div class="gb"></div></div>`}
    ${c?`<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span>${CT('code')}：</span><b id="clCode" style="font:700 18px ui-monospace,monospace;letter-spacing:1px;color:var(--gold)">${esc(c.code)}</b><button class="btn ghost" id="clCopy">${CT('copy')}</button><button class="btn" id="clSync">${CT('sync')}</button></div><div class="sub" style="text-align:left;margin-top:6px">${CT('last')}：${c.at?new Date(c.at).toLocaleString():'—'}</div>`
      :`<button class="btn" id="clMake">${CT('make')}</button>`}
-   ${c&&c.g?`<div class="sub" style="text-align:left;margin-top:8px">✓ ${CT('gon')}</div>`:`<div id="gBtn" style="display:none;margin-top:12px"><div class="sub" style="text-align:left;margin-bottom:6px">${CT('g')}</div><div class="gb"></div></div>`}
    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><input class="inp" id="clIn" placeholder="${CT('enter')}" style="flex:1;min-width:200px" autocapitalize="characters"><button class="btn ghost" id="clLoad">${CT('load')}</button></div></div>`}
+function cloudBtn(){const b=$('#btnCloud');if(!b)return;const on=!!S.cloud;b.classList.toggle('on',on);b.querySelector('.cl').textContent=on?(S.cloud.g?'✓':'☁'):CT('login');b.title=CT('t')}
+function openCloud(){document.getElementById('cloudOv')?.remove();const host=document.createElement('div');host.className='ov';host.id='cloudOv';host.style.zIndex=40;
+  host.innerHTML=`<div class="box" style="max-width:560px;width:100%"><div style="display:flex;justify-content:flex-end"><button class="btn ghost" data-x>${T('close')}</button></div><div id="cloudIn"></div></div>`;
+  document.body.appendChild(host);host.querySelector('[data-x]').onclick=()=>host.remove();host.onclick=e=>{if(e.target===host)host.remove()};cloudRefresh()}
+function cloudRefresh(){cloudBtn();const el=$('#cloudIn');if(!el)return;el.innerHTML=cloudBox().replace('class="box" style="margin-top:14px"','style=""');bindCloud()}
 function bindCloud(){
   gButton();
-  const mk=$('#clMake');if(mk)mk.onclick=async()=>{mk.disabled=true;try{const j=await cloudCall({action:'create',data:cloudData()});S.cloud={code:j.code,at:j.updated};save();toast(CT('ok'));vCodex()}catch(e){mk.disabled=false;toast(CT('off'))}};
+  const mk=$('#clMake');if(mk)mk.onclick=async()=>{mk.disabled=true;try{const j=await cloudCall({action:'create',data:cloudData()});S.cloud={code:j.code,at:j.updated};save();toast(CT('ok'));cloudRefresh();render()}catch(e){mk.disabled=false;toast(CT('off'))}};
   const cp=$('#clCopy');if(cp)cp.onclick=()=>{try{navigator.clipboard.writeText(S.cloud.code);toast('✓')}catch(e){}};
-  const sy=$('#clSync');if(sy)sy.onclick=async()=>{sy.disabled=true;try{await cloudSync();toast(CT('ok'));render()}catch(e){toast(e.status===404?CT('bad'):CT('err'));sy.disabled=false}};
-  $('#clLoad').onclick=async()=>{const v=$('#clIn').value.trim();if(!v)return;try{const j=await cloudCall({action:'get',code:v});if(!mergeSave(JSON.parse(j.data)))throw 0;S.cloud={code:j.code,at:j.updated};save();await cloudPush();toast(CT('ok'));render()}catch(e){toast(e&&e.status===404||e&&e.status===400?CT('bad'):CT('off'))}};
+  const sy=$('#clSync');if(sy)sy.onclick=async()=>{sy.disabled=true;try{await cloudSync();toast(CT('ok'));render();cloudRefresh()}catch(e){toast(e.status===404?CT('bad'):CT('err'));sy.disabled=false}};
+  $('#clLoad').onclick=async()=>{const v=$('#clIn').value.trim();if(!v)return;try{const j=await cloudCall({action:'get',code:v});if(!mergeSave(JSON.parse(j.data)))throw 0;S.cloud={code:j.code,at:j.updated};save();await cloudPush();toast(CT('ok'));render();cloudRefresh()}catch(e){toast(e&&e.status===404||e&&e.status===400?CT('bad'):CT('off'))}};
 }
 function bindBackup(){
   $('#bkExp').onclick=async()=>{const txt=JSON.stringify({game:'wanxiang',v:2,at:new Date().toISOString(),save:S});const fn=`wanxiang-backup-${today()}.json`;
@@ -1722,8 +1728,8 @@ function intro(force){
 
 /* ================= boot ================= */
 document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>go(b.dataset.v));
-$('#lang').onchange=e=>{L=S.lang=e.target.value;save();chrome();render()};
-$('#btnTrophy').onclick=showTrophies;$('#btnRules').onclick=showRules;
+$('#lang').onchange=e=>{L=S.lang=e.target.value;save();chrome();render();cloudBtn()};
+$('#btnTrophy').onclick=showTrophies;$('#btnCloud').onclick=openCloud;cloudBtn();$('#btnRules').onclick=showRules;
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('.ov').forEach(o=>o.remove());$('#layer').innerHTML=''}});
 chrome();intro(false);
 (window.DATAP=loadData()).then(()=>{if(S.cloud)cloudSync().then(()=>render()).catch(()=>{});if(S.banner.id!==BANNER.id){S.banner={id:BANNER.id,pulled:0,got:false,start:Date.now()};save()}go('pull')}).catch(e=>{$('#app').innerHTML='<p>Failed to load cards.json</p>'});
