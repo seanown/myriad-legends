@@ -637,6 +637,22 @@ html,body{max-width:100%;overflow-x:hidden}
 @keyframes spCard{0%{opacity:0;transform:translateY(60px) scale(.6) rotateY(90deg)}100%{opacity:1;transform:none}}
 @keyframes spFade{from{opacity:0}to{opacity:.85}}@keyframes spPulse{50%{opacity:.35}}@keyframes spSheen{to{background-position:200% 0}}
 @media(max-height:700px){.sp-card{width:min(240px,60vw)}.sp-rar{font-size:72px}}
+
+.ntbar{margin:14px auto 0;display:block;background:#15121c;border:1px solid #3a2f4d;color:#e8e2d4;border-radius:10px;padding:8px 14px;font-size:13px;cursor:pointer}.ntbar u{color:#ff9ec7}
+.unoff{font-size:11px;color:#8a8473;text-align:center;margin-top:8px;padding:0 16px}
+.nt-ov{align-items:center;justify-content:center;padding:12px}
+.ntbox{width:min(880px,100%);max-height:calc(100vh - 24px);overflow:auto;background:#121117;border:1px solid #6b5420;border-radius:20px;box-shadow:0 20px 60px #000c}
+.nth{padding:22px 24px 16px;border-bottom:1px solid #2a2733;background:radial-gradient(ellipse at 30% 0,#5a46104d,transparent 60%),radial-gradient(ellipse at 90% 10%,#1d4a6a55,transparent 60%)}
+.nth h2{margin:0 0 6px;font-size:24px;color:#fff}.nth p{margin:0;color:#c9c2b0;font-size:14px}
+.ntb{display:grid;grid-template-columns:1fr 1fr;gap:18px;padding:20px 24px}
+.ntrules{display:grid;gap:12px;align-content:start}.ntr{background:#1b1a22;border:1px solid #2e2c38;border-radius:14px;padding:12px 16px}.ntr b{color:#ffd76a;font-size:14px}.ntr:nth-child(2) b{color:#ff9ec7}.ntr:nth-child(3) b{color:#fff}.ntr p{margin:6px 0 0;font-size:13px;color:#d9d2c0;line-height:1.6}
+.ntst{background:#1b1a22;border:1px solid #2e2c38;border-radius:16px;padding:14px}.ntst-h{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}.ntst-h small{display:block;color:#9a937f;font-size:12px}.ntst-h b{font-size:20px;color:#fff}
+.ntfb{border:1px solid #3a3746;border-radius:12px;padding:6px 12px;text-align:right}.ntfb b{font-size:14px;color:#ff9ec7}.ntfb b.bk{color:#ff6b5a}
+.stgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}.stc{position:relative;aspect-ratio:1;border:1px solid #34313f;border-radius:12px;display:grid;place-items:center;background:#121117;opacity:.55}.stc svg{width:62%;height:auto}
+.stc.on{opacity:1;border-color:#2fbf7a;box-shadow:0 0 0 1px #2fbf7a inset}.stc i{position:absolute;top:-6px;right:-6px;background:#2fbf7a;color:#fff;border-radius:50%;width:20px;height:20px;font:700 12px/20px sans-serif;text-align:center;font-style:normal}.stc.blk{border-color:#5a2a2a}
+.ntf{border-top:1px solid #2a2733;padding:14px 24px 18px;display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}.ntf label{font-size:14px;color:#e8e2d4;display:flex;gap:8px;align-items:center}
+.ntbtn{display:flex;gap:10px}.ntshare{border-color:#6b3a6a!important;background:#24162a!important}.ntnote{grid-column:1/-1;text-align:right;font-size:12px;color:#9ab8d8}
+@media(max-width:640px){.ntb{grid-template-columns:1fr;padding:14px}.nth{padding:16px}.nth h2{font-size:20px}.ntf{grid-template-columns:1fr;padding:12px 16px}.ntbtn{justify-content:flex-end}}
 .ichip{display:inline-flex;align-items:center;gap:5px}.ichip svg,.ichip .rbadge{flex:none}.ichip .ci{font-size:15px;line-height:1}
 </style>
 
@@ -902,7 +918,7 @@ function vPull(){
    <div class="sub">${S.packs>=PACK_MAX?T('packs_full'):`${T('next_pack')} <span id="cd">${nextS}</span>s`}<br>
      <span class="g">${type==='black'?T('black_ready'):type==='rainbow'?T('rainbow_ready'):type==='gold'?T('gold_ready'):T('gold_in')(goldIn)}</span><br>${T('rainbow_in')(rbIn)}</div>
    <div class="pack" id="pack" style="--glow:${{white:'#c9d4e6',gold:'#ffd24a',rainbow:'#ff9ec7',black:'#ff5a4a'}[type]}" role="button" tabindex="0" aria-label="${esc(T('tap_open'))}">${packHTML(type)}</div>
-   <div class="tapline">${T('tap_open')}</div>
+   <div class="tapline">${T('tap_open')}</div>${noticeBar()}
    ${DEV?`<button class="btn ghost" id="test10" style="font-size:12px">${T('test_add')}</button>`:''}
    <div class="banner"><div class="bimg" id="bimg"></div><div><b style="color:var(--rEXR)">${T('banner')} · ${esc(bannerTitle)}</b>
      <div class="sub" style="text-align:left">${esc(tagT(BANNER.theme))} ×${BANNER.boost} · ${T('banner_ends')} ${hh}h ${mm}m</div>
@@ -916,7 +932,7 @@ function vPull(){
   </div>`;
   if(ex){const b=$('#bimg');imgFor(ex).then(u=>{if(u)b.style.backgroundImage=`url(${u})`;else{const alt=CARDS.find(x=>x.i===463)||ex;imgFor(alt).then(v=>{if(v)b.style.backgroundImage=`url(${v})`;else b.innerHTML=`<span style="display:grid;place-items:center;height:100%;font:900 40px var(--f-disp);color:#ffe9a8;text-shadow:0 0 12px #ffd24a">${glyph(ex)}</span>`})}})}
   const p=$('#pack');p.onclick=doPull;p.onkeydown=e=>{if(e.key==='Enter')doPull()};
-  $('#fxt').onclick=()=>{S.fx=S.fx===false;save();vPull()};
+  {const nb=$('#ntBar');if(nb)nb.onclick=showNotice}$('#fxt').onclick=()=>{S.fx=S.fx===false;save();vPull()};
   if(DEV)$('#test10').onclick=()=>{S.packs+=10;save();vPull()};
   document.querySelectorAll('[data-claim]').forEach(b=>b.onclick=()=>{S.mission.claimed[b.dataset.claim]=true;S.packs+=2;save();vPull();toast('+2')});
   heroStart();clearInterval(tick);tick=setInterval(()=>{if(view!=='pull')return clearInterval(tick);const before=S.packs;refill();if(S.packs!==before)return vPull();const cd=$('#cd');if(cd)cd.textContent=Math.ceil((REFILL_MS-((Date.now()-S.lastRefill)%REFILL_MS))/1000);liveFetch();liveShow()},1000);liveFetch();
@@ -1212,6 +1228,68 @@ function spotlight(c,isNew){return new Promise(done=>{
   const end=e=>{if(e&&e.target.closest('a'))return;if(!ok)return;host.onclick=null;host.classList.add('out');setTimeout(()=>{host.remove();done()},300)};
   host.onclick=end;
 })}
+/* ================= launch campaign notice (Sean 2026-11-22: copy wikigacha's opening notice + share bonus) ================= */
+const NOTICE_ID='launch-s1';
+const NT={
+zh_hant:{t:'開服紀念活動進行中',s:'慶祝《萬象傳奇錄》上線，第一季「東方神魔錄」開放中。',r10:['每 10 包','每開 10 包，第 10 包是 SR 以上保底的金卡包。'],r100:['每 100 包','每開 100 包，就會出現 1 個 SSR 以上保底的彩虹卡包。'],rd:['每日首次','每天第一次開包都會變成 SSR 以上保底的彩虹卡包。'],r5:['每 5 個登入章','每集滿 5 個登入章，就送 1 個 UR 以上保底的黑卡包。'],st:'登入章',fb:'今日首次獎勵',rb:'彩虹卡包',bk:'黑卡包',done:'已領取',hide:'到明天前不再顯示',share:'分享活動',ok:'知道了',note:'分享後額外獲得 +1 彩虹卡包（每天限 1 次）',claimed:'今日的分享獎勵已領取。',got:'已獲得 +1 彩虹卡包！',copied:'活動圖片和文字已複製，貼到你要分享的 App 吧。',fail:'分享失敗',bar:'開服紀念活動進行中！',open:'打開活動詳情',unoff:'本遊戲為非官方作品，與維基百科及各博物館無關。',stxt:'我在玩《萬象傳奇錄》MYRIAD LEGENDS！免費的東方神魔卡牌收集遊戲，5 萬多張歷史人物與博物館寶物卡。開服紀念：每天首包彩虹卡包保底 SSR 以上！',img:['開服紀念','第一季 東方神魔錄','每日首包 SSR 以上保底','每 100 包 彩虹卡包 · 每 5 登入章 黑卡包']},
+zh_hans:{t:'开服纪念活动进行中',s:'庆祝《万象传奇录》上线，第一季「东方神魔录」开放中。',r10:['每 10 包','每开 10 包，第 10 包是 SR 以上保底的金卡包。'],r100:['每 100 包','每开 100 包，就会出现 1 个 SSR 以上保底的彩虹卡包。'],rd:['每日首次','每天第一次开包都会变成 SSR 以上保底的彩虹卡包。'],r5:['每 5 个登录章','每集满 5 个登录章，就送 1 个 UR 以上保底的黑卡包。'],st:'登录章',fb:'今日首次奖励',rb:'彩虹卡包',bk:'黑卡包',done:'已领取',hide:'到明天前不再显示',share:'分享活动',ok:'知道了',note:'分享后额外获得 +1 彩虹卡包（每天限 1 次）',claimed:'今日的分享奖励已领取。',got:'已获得 +1 彩虹卡包！',copied:'活动图片和文字已复制，粘贴到你要分享的 App 吧。',fail:'分享失败',bar:'开服纪念活动进行中！',open:'打开活动详情',unoff:'本游戏为非官方作品，与维基百科及各博物馆无关。',stxt:'我在玩《万象传奇录》MYRIAD LEGENDS！免费的东方神魔卡牌收集游戏，5 万多张历史人物与博物馆宝物卡。开服纪念：每天首包彩虹卡包保底 SSR 以上！',img:['开服纪念','第一季 东方神魔录','每日首包 SSR 以上保底','每 100 包 彩虹卡包 · 每 5 登录章 黑卡包']},
+ja:{t:'リリース記念キャンペーン開催中',s:'『萬象傳奇錄』リリース記念。第1シーズン「東方神魔録」開幕！',r10:['10パックごと','10パック目は SR 以上確定のゴールドパック。'],r100:['100パックごと','100パックごとに SSR 以上確定のレインボーパックが1つ。'],rd:['毎日最初','毎日最初の1パックは SSR 以上確定のレインボーパック。'],r5:['ログインスタンプ5個ごと','スタンプ5個で UR 以上確定のブラックパックを1つ。'],st:'ログインスタンプ',fb:'今日の初回ボーナス',rb:'レインボーパック',bk:'ブラックパック',done:'受取済み',hide:'明日まで表示しない',share:'シェアする',ok:'OK',note:'シェアでレインボーパック +1（1日1回）',claimed:'今日のシェアボーナスは受取済みです。',got:'レインボーパック +1 を獲得！',copied:'画像とテキストをコピーしました。シェアしたいアプリに貼り付けてください。',fail:'シェアに失敗しました',bar:'リリース記念キャンペーン開催中！',open:'詳細を見る',unoff:'本作は非公式で、Wikipedia および各博物館とは関係ありません。',stxt:'『萬象傳奇錄』MYRIAD LEGENDS で遊んでいます！無料の東洋神話カード収集ゲーム。毎日最初のパックは SSR 以上確定！',img:['リリース記念','第1シーズン 東方神魔録','毎日最初のパック SSR 以上確定','100パックごと レインボー · スタンプ5個で ブラック']},
+ko:{t:'오픈 기념 이벤트 진행 중',s:'《만상전기록》 오픈 기념, 시즌 1 「동방신마록」 오픈!',r10:['10팩마다','10번째 팩은 SR 이상 확정 골드 팩.'],r100:['100팩마다','100팩마다 SSR 이상 확정 레인보우 팩 1개.'],rd:['매일 첫 팩','매일 첫 팩은 SSR 이상 확정 레인보우 팩.'],r5:['로그인 도장 5개마다','도장 5개마다 UR 이상 확정 블랙 팩 1개.'],st:'로그인 도장',fb:'오늘 첫 보상',rb:'레인보우 팩',bk:'블랙 팩',done:'수령 완료',hide:'내일까지 보지 않기',share:'이벤트 공유',ok:'확인',note:'공유하면 레인보우 팩 +1 (하루 1회)',claimed:'오늘 공유 보상은 이미 받았습니다.',got:'레인보우 팩 +1 획득!',copied:'이미지와 문구를 복사했습니다. 공유할 앱에 붙여넣으세요.',fail:'공유 실패',bar:'오픈 기념 이벤트 진행 중!',open:'이벤트 자세히',unoff:'본 게임은 비공식이며 위키백과 및 박물관과 무관합니다.',stxt:'MYRIAD LEGENDS 《만상전기록》을 하고 있어요! 무료 동양 신화 카드 수집 게임. 매일 첫 팩 SSR 이상 확정!',img:['오픈 기념','시즌 1 동방신마록','매일 첫 팩 SSR 이상 확정','100팩마다 레인보우 · 도장 5개 블랙']},
+en:{t:'Launch Celebration Now Live',s:'MYRIAD LEGENDS is live! Season 1 "Eastern Gods & Demons" is open.',r10:['Every 10 packs','Every 10th pack is a Gold Pack with SR or better guaranteed.'],r100:['Every 100 packs','Every 100 packs you get a Rainbow Pack with SSR or better guaranteed.'],rd:['First pack each day','Your first pack every day becomes a Rainbow Pack (SSR+ guaranteed).'],r5:['Every 5 login stamps','Every 5 login stamps gives a Black Pack with UR or better guaranteed.'],st:'Login stamps',fb:"Today's first bonus",rb:'Rainbow Pack',bk:'Black Pack',done:'Claimed',hide:"Don't show again until tomorrow",share:'Share',ok:'Got it',note:'Share for +1 Rainbow Pack (once per day)',claimed:"Today's share bonus has already been claimed.",got:'+1 Rainbow Pack added!',copied:'Image and text copied. Paste them into your sharing app.',fail:'Sharing failed',bar:'Launch celebration is live!',open:'Open details',unoff:'Unofficial fan project, not affiliated with Wikipedia or any museum.',stxt:"I'm playing MYRIAD LEGENDS, a free card game of Eastern gods, heroes and museum treasures (50,000+ cards). Launch bonus: first pack every day is SSR+!",img:['LAUNCH CELEBRATION','Season 1 · Eastern Gods & Demons','First pack daily: SSR+ guaranteed','Rainbow every 100 packs · Black every 5 stamps']},
+es:{t:'Celebración de lanzamiento',s:'¡MYRIAD LEGENDS ya está aquí! Temporada 1 abierta.',r10:['Cada 10 sobres','El 10.º sobre es Dorado con SR o más garantizado.'],r100:['Cada 100 sobres','Cada 100 sobres recibes un sobre Arcoíris con SSR o más.'],rd:['Primer sobre del día','Tu primer sobre del día es Arcoíris (SSR+ garantizado).'],r5:['Cada 5 sellos','Cada 5 sellos de inicio de sesión: sobre Negro con UR o más.'],st:'Sellos',fb:'Bono de hoy',rb:'Sobre Arcoíris',bk:'Sobre Negro',done:'Recibido',hide:'No mostrar hasta mañana',share:'Compartir',ok:'Entendido',note:'Comparte y gana +1 sobre Arcoíris (1 vez al día)',claimed:'Ya recibiste el bono de hoy.',got:'¡+1 sobre Arcoíris!',copied:'Imagen y texto copiados.',fail:'Error al compartir',bar:'¡Celebración de lanzamiento!',open:'Ver detalles',unoff:'Proyecto no oficial, sin relación con Wikipedia ni museos.',stxt:'¡Estoy jugando MYRIAD LEGENDS, un juego gratis de cartas de mitos orientales! Primer sobre diario SSR+.',img:['LANZAMIENTO','Temporada 1','Primer sobre diario SSR+','Arcoíris cada 100 · Negro cada 5 sellos']},
+fr:{t:'Fête de lancement',s:'MYRIAD LEGENDS est lancé ! Saison 1 ouverte.',r10:['Tous les 10 paquets','Le 10e paquet est Doré avec SR ou mieux garanti.'],r100:['Tous les 100 paquets','Tous les 100 paquets, un paquet Arc-en-ciel avec SSR ou mieux.'],rd:['Premier paquet du jour','Votre premier paquet du jour est Arc-en-ciel (SSR+ garanti).'],r5:['Tous les 5 tampons','5 tampons de connexion = un paquet Noir avec UR ou mieux.'],st:'Tampons',fb:'Bonus du jour',rb:'Paquet Arc-en-ciel',bk:'Paquet Noir',done:'Reçu',hide:"Ne plus afficher jusqu'à demain",share:'Partager',ok:"D'accord",note:'Partagez pour +1 paquet Arc-en-ciel (1 fois/jour)',claimed:"Bonus de partage déjà reçu aujourd'hui.",got:'+1 paquet Arc-en-ciel !',copied:'Image et texte copiés.',fail:'Échec du partage',bar:'Fête de lancement en cours !',open:'Voir les détails',unoff:'Projet non officiel, sans lien avec Wikipédia ni les musées.',stxt:'Je joue à MYRIAD LEGENDS, un jeu de cartes gratuit sur les mythes orientaux ! Premier paquet du jour SSR+.',img:['LANCEMENT','Saison 1','Premier paquet du jour SSR+','Arc-en-ciel tous les 100 · Noir tous les 5 tampons']},
+pt:{t:'Celebração de lançamento',s:'MYRIAD LEGENDS chegou! Temporada 1 aberta.',r10:['A cada 10 pacotes','O 10º pacote é Dourado com SR ou melhor garantido.'],r100:['A cada 100 pacotes','A cada 100 pacotes, um pacote Arco-íris com SSR ou melhor.'],rd:['Primeiro pacote do dia','Seu primeiro pacote do dia é Arco-íris (SSR+ garantido).'],r5:['A cada 5 selos','5 selos de login = pacote Preto com UR ou melhor.'],st:'Selos',fb:'Bônus de hoje',rb:'Pacote Arco-íris',bk:'Pacote Preto',done:'Recebido',hide:'Não mostrar até amanhã',share:'Compartilhar',ok:'Entendi',note:'Compartilhe e ganhe +1 pacote Arco-íris (1x por dia)',claimed:'Bônus de hoje já recebido.',got:'+1 pacote Arco-íris!',copied:'Imagem e texto copiados.',fail:'Falha ao compartilhar',bar:'Celebração de lançamento!',open:'Ver detalhes',unoff:'Projeto não oficial, sem relação com a Wikipédia ou museus.',stxt:'Estou jogando MYRIAD LEGENDS, um jogo grátis de cartas de mitos orientais! Primeiro pacote do dia SSR+.',img:['LANÇAMENTO','Temporada 1','Primeiro pacote diário SSR+','Arco-íris a cada 100 · Preto a cada 5 selos']}};
+const NTT=k=>(NT[L]||NT.en)[k];
+const SITE_URL='https://mylegends.org';
+function noticeBar(){return `<button class="ntbar" id="ntBar">📜 ${NTT('bar')} <u>${NTT('open')}</u></button><div class="unoff">${NTT('unoff')}</div>`}
+function stampGrid(){const n=S.stamps||0,cyc=Math.floor(Math.max(0,n-1)/25)*25;let h='';
+  for(let i=1;i<=25;i++){const k=cyc+i,blk=k%5===0,on=k<=n;h+=`<div class="stc ${on?'on':''} ${blk?'blk':''}" title="${k}">${packSVG(blk?'black':'rainbow')}${on?'<i>✓</i>':''}</div>`}return h}
+function showNotice(){
+  document.getElementById('ntOv')?.remove();
+  const firstDone=S.firstPackDay===today(),black=S.pendingBlack>0,shared=S.shareDay===today();
+  const box=([a,b])=>`<div class="ntr"><b>${a}</b><p>${b}</p></div>`;
+  const host=document.createElement('div');host.className='ov nt-ov';host.id='ntOv';host.style.zIndex=42;
+  host.innerHTML=`<div class="ntbox"><div class="nth"><h2>${NTT('t')}</h2><p>${NTT('s')}</p></div>
+   <div class="ntb"><div class="ntrules">${box(NTT('r100'))}${box(NTT('rd'))}${box(NTT('r5'))}${box(NTT('r10'))}</div>
+    <div class="ntst"><div class="ntst-h"><div><small>${NTT('st')}</small><b>${S.stamps||0}</b></div><div class="ntfb"><small>${NTT('fb')}</small><b class="${black?'bk':''}">${firstDone?NTT('done'):black?NTT('bk'):NTT('rb')}</b></div></div><div class="stgrid">${stampGrid()}</div></div></div>
+   <div class="ntf"><label><input type="checkbox" id="ntHide" ${S.noticeHide===today()?'checked':''}> ${NTT('hide')}</label>
+    <div class="ntbtn"><button class="btn ghost ntshare" id="ntShare">${NTT('share')}</button><button class="btn" id="ntOk">${NTT('ok')}</button></div>
+    <div class="ntnote" id="ntNote">${shared?NTT('claimed'):NTT('note')}</div></div></div>`;
+  document.body.appendChild(host);
+  const close=()=>{S.noticeHide=$('#ntHide').checked?today():null;save();host.remove()};
+  $('#ntOk').onclick=close;host.onclick=e=>{if(e.target===host)close()};
+  $('#ntShare').onclick=async()=>{const b=$('#ntShare');b.disabled=true;try{const ok=await shareCampaign();if(ok)grantShare()}catch(e){toast(NTT('fail'))}finally{b.disabled=false}};
+}
+function grantShare(){S.mission.share=true;if(S.shareDay===today()){toast(NTT('claimed'));save();return}
+  S.shareDay=today();S.pendingRainbow=(S.pendingRainbow||0)+1;save();toast(NTT('got'));const n=$('#ntNote');if(n)n.textContent=NTT('claimed');if(view==='pull')render()}
+function loadImg(src){return new Promise((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=no;i.src=src})}
+async function campaignPNG(){const W=1200,H=630,cv=document.createElement('canvas');cv.width=W;cv.height=H;const x=cv.getContext('2d');
+  x.fillStyle='#0b0910';x.fillRect(0,0,W,H);
+  try{const bg=await loadImg('hero/hero5.webp');const s=Math.max(W/bg.width,H/bg.height);x.globalAlpha=.75;x.drawImage(bg,(W-bg.width*s)/2,(H-bg.height*s)/2,bg.width*s,bg.height*s);x.globalAlpha=1}catch(e){}
+  const g=x.createLinearGradient(0,0,W,0);g.addColorStop(0,'rgba(8,6,12,.92)');g.addColorStop(.62,'rgba(8,6,12,.55)');g.addColorStop(1,'rgba(8,6,12,.1)');x.fillStyle=g;x.fillRect(0,0,W,H);
+  x.strokeStyle='#c9a24a';x.lineWidth=3;x.strokeRect(18,18,W-36,H-36);x.lineWidth=1;x.strokeRect(28,28,W-56,H-56);
+  const im=NTT('img'),serif='"Noto Serif TC","Songti TC",serif';
+  const gold=x.createLinearGradient(0,90,0,200);gold.addColorStop(0,'#fff1c1');gold.addColorStop(1,'#d9a640');
+  x.fillStyle=gold;x.font=`900 92px ${serif}`;x.fillText('MYRIAD',70,150);x.fillText('LEGENDS',70,240);
+  x.fillStyle='#f3e6c4';x.font=`700 34px ${serif}`;x.fillText('萬象傳奇錄',74,292);
+  x.fillStyle='#ff9ec7';x.font=`900 46px ${serif}`;x.fillText(im[0],70,378);
+  x.fillStyle='#fff';x.font=`700 30px ${serif}`;x.fillText(im[1],70,428);
+  x.fillStyle='#ffd24a';x.font=`700 28px ${serif}`;x.fillText('★ '+im[2],70,480);
+  x.fillStyle='#e8e2d4';x.font=`500 24px ${serif}`;x.fillText(im[3],70,522);
+  x.fillStyle='#c9a24a';x.font=`700 30px ui-monospace,monospace`;x.fillText('mylegends.org',70,584);
+  // packs on the right
+  try{const svgs=['white','gold','rainbow','black'];for(let i=0;i<4;i++){const src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(packSVG(svgs[i]).replace('<svg ','<svg xmlns="http://www.w3.org/2000/svg" '));const p=await loadImg(src);const w=150,h=w*(p.height/p.width||1.6);x.save();x.translate(760+i*95,150+(i%2)*40);x.rotate((i-1.5)*.08);x.shadowColor='rgba(0,0,0,.6)';x.shadowBlur=24;x.drawImage(p,0,0,w,h);x.restore()}}catch(e){}
+  return new Promise(r=>cv.toBlob(r,'image/png'))}
+async function shareCampaign(){const txt=NTT('stxt')+'\n'+SITE_URL;let blob=null;try{blob=await campaignPNG()}catch(e){}
+  const file=blob&&new File([blob],'myriad-legends-launch.png',{type:'image/png'});
+  if(file&&navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],text:txt,title:'MYRIAD LEGENDS'});return true}catch(e){if(e&&e.name==='AbortError')return false}}
+  if(navigator.share&&!file){try{await navigator.share({text:txt,url:SITE_URL,title:'MYRIAD LEGENDS'});return true}catch(e){if(e&&e.name==='AbortError')return false}}
+  try{if(file&&window.ClipboardItem){await navigator.clipboard.write([new ClipboardItem({'image/png':blob})]);try{await navigator.clipboard.writeText(txt)}catch(e){}toast(NTT('copied'));return true}}catch(e){}
+  try{await navigator.clipboard.writeText(txt)}catch(e){prompt('',txt)}
+  if(blob){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='myriad-legends-launch.png';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}
+  toast(NTT('copied'));return true}
+function maybeNotice(){if(S.noticeHide===today())return;showNotice()}
+
 async function showReveal({type,res}){
   const Lr=$('#layer');const flipped=res.map(()=>false);let busy=false;
   const pad=n=>String(n).padStart(2,'0');
@@ -1759,7 +1837,7 @@ function intro(force){
       ctx.fillStyle=p.warm?'#e9d3a3':'#d9c9b6';ctx.fillRect(-w/2,-h/2,w,h);ctx.strokeStyle='#8a2a1a';ctx.lineWidth=1*dpr;ctx.strokeRect(-w/2+2*dpr,-h/2+2*dpr,w-4*dpr,h-4*dpr);
       ctx.fillStyle='#8a2a1a';ctx.font=`${14*p.z*dpr}px "LXGW WenKai TC",serif`;ctx.textAlign='center';ctx.fillText(p.g,0,4*dpr);ctx.restore()}
     raf=requestAnimationFrame(draw)};draw();
-  const end=()=>{cancelAnimationFrame(raf);el.hidden=true;S.introSeen=true;save();removeEventListener('resize',rs)};
+  const end=()=>{if(el.hidden)return;cancelAnimationFrame(raf);el.hidden=true;S.introSeen=true;save();removeEventListener('resize',rs);setTimeout(()=>{if(window.__ready)maybeNotice();else window.__noticeWait=1},200)};
   addEventListener('resize',rs);$('#introSkip').onclick=end;setTimeout(()=>{if(!el.hidden)end()},6500);
 }
 
@@ -1769,5 +1847,5 @@ $('#lang').onchange=e=>{L=S.lang=e.target.value;save();chrome();render();cloudBt
 $('#btnTrophy').onclick=showTrophies;$('#btnCloud').onclick=openCloud;cloudBtn();$('#btnRules').onclick=showRules;
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('.ov').forEach(o=>o.remove());$('#layer').innerHTML=''}});
 chrome();intro(false);
-(window.DATAP=loadData()).then(()=>{if(S.cloud)cloudSync().then(()=>render()).catch(()=>{});if(S.banner.id!==BANNER.id){S.banner={id:BANNER.id,pulled:0,got:false,start:Date.now()};save()}go('pull')}).catch(e=>{$('#app').innerHTML='<p>Failed to load cards.json</p>'});
+(window.DATAP=loadData()).then(()=>{if(S.cloud)cloudSync().then(()=>render()).catch(()=>{});if(S.banner.id!==BANNER.id){S.banner={id:BANNER.id,pulled:0,got:false,start:Date.now()};save()}go('pull');window.__ready=1;if($('#intro').hidden)setTimeout(maybeNotice,300)}).catch(e=>{$('#app').innerHTML='<p>Failed to load cards.json</p>'});
 </script>
