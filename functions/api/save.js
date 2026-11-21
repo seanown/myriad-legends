@@ -2,6 +2,8 @@
 // POST {action:'create', data} -> {code, updated}
 // POST {action:'put', code, data} -> {updated}
 // POST {action:'get', code} -> {data, updated}
+// POST {action:'google', credential, code?, data?} -> {code, data, updated}  (needs env GOOGLE_CLIENT_ID)
+// GET -> {google: client id or null}
 const H = { 'content-type': 'application/json', 'cache-control': 'no-store' };
 const json = (o, s = 200) => new Response(JSON.stringify(o), { status: s, headers: H });
 const ABC = '23456789ABCDEFGHJKMNPQRSTUVWXYZ';
@@ -19,6 +21,23 @@ const norm = c => {
 };
 async function ensure(db) {
   await db.prepare('CREATE TABLE IF NOT EXISTS saves (code TEXT PRIMARY KEY, data TEXT NOT NULL, created INTEGER NOT NULL, updated INTEGER NOT NULL)').run();
+  await db.prepare('CREATE TABLE IF NOT EXISTS gusers (sub TEXT PRIMARY KEY, code TEXT NOT NULL, created INTEGER NOT NULL)').run();
+}
+// Verify a Google ID token with Google's tokeninfo endpoint. Only the stable account id (sub) is kept, never the email.
+async function googleSub(env, cred) {
+  if (!env.GOOGLE_CLIENT_ID || !cred) return null;
+  const r = await fetch('https://oauth2.googleapis.com/tokeninfo?id_token=' + encodeURIComponent(cred));
+  if (!r.ok) return null;
+  const t = await r.json();
+  if (t.aud !== env.GOOGLE_CLIENT_ID) return null;
+  if (t.iss !== 'accounts.google.com' && t.iss !== 'https://accounts.google.com') return null;
+  if (Number(t.exp) * 1000 < Date.now()) return null;
+  return t.sub ? 'g:' + t.sub : null;
+}
+const goodData = d => { try { const o = JSON.parse(d); return !!o && typeof o.owned === 'object'; } catch (e) { return false; } };
+
+export async function onRequestGet({ env }) {
+  return json({ google: env.GOOGLE_CLIENT_ID || null });
 }
 
 export async function onRequestPost({ env, request }) {
@@ -45,6 +64,33 @@ export async function onRequestPost({ env, request }) {
       const r = await db.prepare('UPDATE saves SET data = ?, updated = ? WHERE code = ?').bind(data, now, code).run();
       if (!r.meta || !r.meta.changes) return json({ error: 'not found' }, 404);
       return json({ updated: now });
+    }
+    if (body.action === 'google') {
+      const sub = await googleSub(env, body.credential);
+      if (!sub) return json({ error: 'google sign-in failed' }, 401);
+      const link = await db.prepare('SELECT code FROM gusers WHERE sub = ?').bind(sub).first();
+      let code = link && link.code;
+      if (!code) {
+        // First Google sign-in: attach this device's existing code, or make a new save from this device's data.
+        const mine = norm(body.code);
+        if (mine && await db.prepare('SELECT 1 FROM saves WHERE code = ?').bind(mine).first()) code = mine;
+        else {
+          const data = typeof body.data === 'string' ? body.data : JSON.stringify(body.data || null);
+          if (!data || data.length > MAX || !goodData(data)) return json({ error: 'bad save' }, 400);
+          for (let i = 0; i < 5 && !code; i++) {
+            const c = newCode();
+            const r = await db.prepare('INSERT OR IGNORE INTO saves (code, data, created, updated) VALUES (?, ?, ?, ?)').bind(c, data, now, now).run();
+            if (r.meta && r.meta.changes) code = c;
+          }
+          if (!code) return json({ error: 'try again' }, 500);
+        }
+        await db.prepare('INSERT OR IGNORE INTO gusers (sub, code, created) VALUES (?, ?, ?)').bind(sub, code, now).run();
+        const again = await db.prepare('SELECT code FROM gusers WHERE sub = ?').bind(sub).first();
+        code = again.code;
+      }
+      const row = await db.prepare('SELECT data, updated FROM saves WHERE code = ?').bind(code).first();
+      if (!row) return json({ error: 'not found' }, 404);
+      return json({ code, data: row.data, updated: row.updated });
     }
     if (body.action === 'get') {
       const code = norm(body.code);
