@@ -152,7 +152,7 @@ async function gRender(host){const el=host.querySelector('[data-obg]');if(!el)re
     google.accounts.id.initialize({client_id:id,callback:gSignedIn});
     google.accounts.id.renderButton(el,{theme:'filled_black',size:'large',shape:'pill',width:300,text:'signin_with',locale:({zh_hant:'zh-TW',zh_hans:'zh-CN'})[L]||L})}catch(e){el.remove()}}
 function bindSign(host,close){
-  const c=host.querySelector('[data-obcode]');if(c)c.onclick=()=>{openCloud()};
+  const c=host.querySelector('[data-obcode]');if(c)c.onclick=()=>{if(host.id==='obNudge')host.remove();openCloud()}; // the nudge sits above the cloud panel
   const l=host.querySelector('[data-oblater]');if(l)l.onclick=close;
   gRender(host);
 }

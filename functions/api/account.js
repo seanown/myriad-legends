@@ -209,20 +209,27 @@ async function reply(db, uid, extra = {}) {
   const l = await links(db, uid);
   return json(Object.assign({ uid, g: l.g, code: l.code, data: JSON.stringify(cur.save), updated: cur.acc.updated }, extra));
 }
-// Merge account `from` (usually this device's guest account) into account `into` and retire `from`.
+// Merge guest account `from` (this device's unprotected guest) into account `into` and retire it.
+// Cards are ADDED (two different accounts earned them separately); this runs once per guest because the
+// inventory copy and the retirement happen in one transaction guarded by merged_into IS NULL.
+// A protected account (has Google or a code) is never merged or retired: the device just switches.
 async function mergeInto(db, from, into, now) {
-  if (from === into) return;
+  if (from === into) return false;
+  const l = await links(db, from);
+  if (l.g || l.code) return false;
   const cur = await loadSave(db, from);
-  if (cur) {
-    const p = parseSave(cur.save);
-    if (p) await applySave(db, into, p, now, { import: 'merge:' + from });
-  }
+  if (!cur || cur.acc.merged_into) return false;
+  const p = parseSave(cur.save);
+  if (p) { p.owned = new Map(); await applySave(db, into, p, now, { import: 'merge:' + from }); }
   await db.batch([
-    db.prepare('UPDATE accounts SET merged_into = ? WHERE uid = ?').bind(into, from),
+    db.prepare(`INSERT INTO inventory (uid, card, n, first) SELECT ?, card, n, first FROM inventory
+       WHERE uid = ? AND (SELECT merged_into FROM accounts WHERE uid = ?) IS NULL
+       ON CONFLICT(uid, card) DO UPDATE SET n = n + excluded.n, first = MIN(first, excluded.first)`).bind(into, from, from),
+    db.prepare('UPDATE accounts SET merged_into = ? WHERE uid = ? AND merged_into IS NULL').bind(into, from),
     db.prepare('UPDATE sessions SET uid = ? WHERE uid = ?').bind(into, from),
-    // identities of the retired guest move along unless the target already has that provider
-    db.prepare('UPDATE OR IGNORE identities SET uid = ? WHERE uid = ?').bind(into, from),
+    db.prepare(`UPDATE accounts SET cards = (SELECT COALESCE(SUM(n),0) FROM inventory WHERE uid = ?), kinds = (SELECT COUNT(*) FROM inventory WHERE uid = ?), updated = ? WHERE uid = ?`).bind(into, into, now, into),
   ]);
+  return true;
 }
 // Legacy /api/save data (transfer codes made before accounts existed).
 async function legacyCode(db, code) {
@@ -298,6 +305,9 @@ export async function onRequestPost({ env, request }) {
       if (p) await applySave(db, uid, p, now, { import: 'google-device' });
       if (target && target !== uid) { await mergeInto(db, uid, target, now); uid = target; }
       await db.prepare('INSERT OR IGNORE INTO identities (provider, subject, uid, created) VALUES (?,?,?,?)').bind('google', sub, uid, now).run();
+      // Another device may have linked this Google user at the same moment: the stored owner wins.
+      owner = await db.prepare("SELECT uid FROM identities WHERE provider = 'google' AND subject = ?").bind(sub).first();
+      if (owner.uid !== uid) { await mergeInto(db, uid, owner.uid, now); uid = owner.uid; }
       const tok = await newSession(db, uid, now);
       return reply(db, uid, { tok });
     }

@@ -64,6 +64,21 @@ assert.equal(d.uid, 100003);
 const g2 = await call({ action: 'google', credential: 'ok-111', save: sv({ 99: 1 }) }, d.tok);
 assert.equal(g2.uid, 100001); assert.equal(owned(g2)[99], 1, 'new device cards are not lost');
 assert.equal((await call({ action: 'google', credential: 'bad' }, d.tok)).status, 401);
+// 6b. different accounts' duplicates add up when a guest merges in
+const h = await call({ action: 'hello', save: sv({ 5: 2 }) });
+const before = owned(await call({ action: 'hello' }, a.tok))[5];
+const hm = await call({ action: 'google', credential: 'ok-111', save: sv({ 5: 2 }) }, h.tok);
+assert.equal(owned(hm)[5], before + 2);
+const hm2 = await call({ action: 'google', credential: 'ok-111', save: sv({ 5: 2 }) }, h.tok);
+assert.equal(owned(hm2)[5], before + 2, 'merge happens once');
+// 6c. a protected account signing into another account is not merged or retired
+const x = await call({ action: 'hello', save: sv({ 777: 1 }) });
+const xc = await call({ action: 'create' }, x.tok);
+const xs = await call({ action: 'google', credential: 'ok-111', save: sv({ 777: 1 }) }, x.tok);
+assert.equal(xs.uid, 100001); assert.equal(owned(xs)[777], undefined, 'protected account cards stay with it');
+const xback = await call({ action: 'get', code: xc.code });
+assert.equal(xback.uid, x.uid); assert.equal(owned(xback)[777], 1);
+assert.equal((await call({ action: 'hello' }, x.tok)).uid, x.uid, "the other account's old session is not moved");
 // 7. legacy /api/save codes and Google links migrate on first use
 sql.exec("CREATE TABLE IF NOT EXISTS saves (code TEXT PRIMARY KEY, data TEXT NOT NULL, created INTEGER NOT NULL, updated INTEGER NOT NULL)");
 sql.exec("CREATE TABLE IF NOT EXISTS gusers (sub TEXT PRIMARY KEY, code TEXT NOT NULL, created INTEGER NOT NULL)");

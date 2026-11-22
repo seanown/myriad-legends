@@ -1594,7 +1594,10 @@ async function gButton(){const el=$('#gBtn');if(!el)return;const id=await gInit(
 const CLOUD={t:null,busy:false};
 function cloudData(){const o=Object.assign({},S);delete o.cloud;delete o.acct;delete o.lang;return JSON.stringify(o)}
 /* ===== accounts (Sean 2026-11-22): every player gets a # user ID on first open; Google / 引繼碼 lock it. Server: functions/api/account.js ===== */
-function acctApply(j){if(!j||!j.uid)throw 0;S.acct=Object.assign({},S.acct,{uid:j.uid},j.tok?{tok:j.tok}:{});S.uid=j.uid;
+function acctApply(j){if(!j||!j.uid)throw 0;
+  // Switched to a different account (Google / code login): take that account's save as-is, so two accounts never mix on one device.
+  if(j.data&&S.acct&&S.acct.uid&&S.acct.uid!==j.uid){const keep={lang:S.lang,introSeen:true,onboarded:S.onboarded,noticeHide:S.noticeHide,fx:S.fx};S=Object.assign(FRESH(),JSON.parse(j.data),keep);S.acct={uid:j.uid,tok:j.tok};S.uid=j.uid;S.cloud=(j.g||j.code)?{code:j.code||null,g:j.g?1:0,at:j.updated}:null;save();return j}
+  S.acct=Object.assign({},S.acct,{uid:j.uid},j.tok?{tok:j.tok}:{});S.uid=j.uid;
   S.cloud=(j.g||j.code)?{code:j.code||null,g:j.g?1:0,at:j.updated}:null;if(j.data)mergeSave(JSON.parse(j.data));save();return j}
 let ACCT_P=null;
 function acctReady(){if(S.acct&&S.acct.tok)return Promise.resolve(S.acct);if(ACCT_P)return ACCT_P;
@@ -1634,7 +1637,10 @@ const MT=k=>(MTX[L]||MTX.en)[k];
 function footLinks(){return `<div class="foot"><a href="#" id="ftRules">${MT('rules')}</a> · <a href="/privacy.html" target="_blank" rel="noopener">${MT('priv')}</a> · <a href="/terms.html" target="_blank" rel="noopener">${MT('terms')}</a> · <a href="/contact.html?lang=${L}" target="_blank" rel="noopener">${MT('contact')}</a></div>`}
 try{const bc=new BroadcastChannel('ml-tabs');bc.onmessage=e=>{if(e.data==='hello')bc.postMessage('here');else if(e.data==='here'&&!window.__tabWarned){window.__tabWarned=1;const d=document.createElement('div');d.className='tabwarn';d.textContent=MT('tabs');d.onclick=()=>d.remove();document.body.appendChild(d)}};bc.postMessage('hello')}catch(e){}
 function bindBackup(){
-  const dl=$('#bkDel');if(dl)dl.onclick=()=>{if(!confirm(MT('c1'))||!confirm(MT('c2')))return;const keep={lang:S.lang,introSeen:true,noticeHide:S.noticeHide,onboarded:S.onboarded,acct:S.acct,uid:S.uid,cloud:S.cloud,profile:S.profile};S=Object.assign(FRESH(),keep);save();if(S.acct&&S.acct.tok)cloudCall({action:'wipe'}).catch(()=>{});toast(MT('done'));cloudBtn();render()};
+  const dl=$('#bkDel');if(dl)dl.onclick=()=>{if(!confirm(MT('c1'))||!confirm(MT('c2')))return;const keep={lang:S.lang,introSeen:true,noticeHide:S.noticeHide,onboarded:S.onboarded,acct:S.acct,uid:S.uid,cloud:S.cloud,profile:S.profile};
+    // the server copy must be wiped first, or the next sync would bring the cards back
+    const go=()=>{S=Object.assign(FRESH(),keep);save();toast(MT('done'));cloudBtn();render()};
+    if(!(S.acct&&S.acct.tok))return go();dl.disabled=true;cloudCall({action:'wipe'}).then(go,()=>toast(CT('err'))).finally(()=>{dl.disabled=false})};
   $('#bkExp').onclick=async()=>{const txt=JSON.stringify({game:'wanxiang',v:2,at:new Date().toISOString(),save:S});const fn=`wanxiang-backup-${today()}.json`;
     try{const dl=window.claude&&await window.claude.use('downloads');
       if(dl){await dl.save({filename:fn,data:new Blob([txt],{type:'application/json'})})}
