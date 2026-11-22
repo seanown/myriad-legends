@@ -724,6 +724,17 @@ html,body{max-width:100%;overflow-x:hidden}
 .obo .sp-rays{position:absolute;inset:-30%;z-index:1}
 @keyframes oboPop{0%{transform:scale(.55) translateY(30px);opacity:0}100%{transform:none;opacity:1}}
 @media(max-width:520px){.obo-th{width:40px;height:56px}.obo-strip{gap:5px}}
+.obo-strip.many{gap:4px;max-width:min(560px,96vw);margin:0 auto}.obo-strip.many .obo-th{width:34px;height:46px}.obo-strip.many .obo-thf b{font-size:11px}.obo-strip.many .obo-thf span{display:none}.obo-strip.many .obo-th.cur{transform:translateY(-4px) scale(1.12)}
+/* 5-pack button + 30-card summary grid (Sean 2026-11-22) */
+.multi5{margin:6px auto 2px;display:block;min-width:min(260px,80vw);padding:11px 18px;font-size:16px;letter-spacing:.08em;background:linear-gradient(180deg,#ffe08a,#d9a43a);color:#2a1a00;border:1px solid #fff3c4;box-shadow:0 0 18px #ffcf6a66}
+.multi5:disabled{opacity:.45;filter:grayscale(.6);box-shadow:none;cursor:not-allowed}
+.gal-mn{font-size:13px;color:var(--muted);letter-spacing:.06em}
+.gal-row.gal-multi{grid-template-columns:repeat(6,minmax(0,1fr))!important;max-width:min(1180px,100%)!important;gap:14px 12px!important}
+.gal-row.gal-multi .face.front .tcard .ds,.gal-row.gal-multi .face.front .tcard .tags{display:none}
+.gal-row.gal-multi .face.front .tcard .hdr .tt{font-size:12px}
+@media (max-width:900px){.gal-row.gal-multi{grid-template-columns:repeat(5,minmax(0,1fr))!important}}
+@media (max-width:640px){.gal-row.gal-multi{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:10px 8px!important}}
+
 .vart .ph .phs{left:6%!important;top:7%!important;transform:rotate(-4deg)!important;font-size:7cqw!important;padding:1cqw 1.4cqw 1.3cqw!important;border-radius:1cqw!important;box-shadow:0 0 0 .35cqw #f7ead0 inset,0 0 0 .7cqw #9e2117 inset,0 .8cqw 2cqw #000a!important}
 .vart .ph .phn{position:absolute;left:6%;right:6%;top:46%;transform:translateY(-50%);text-align:center;font-family:var(--f-disp);font-weight:700;line-height:1.15;color:#f7ead0;text-shadow:0 .4cqw 1.6cqw #000,0 0 3cqw color-mix(in srgb,var(--ec) 60%,transparent);word-break:break-word;letter-spacing:.04em}
 .vart .ph .phl{position:absolute;left:50%;bottom:7%;transform:translateX(-50%);font-size:3.6cqw;color:#f7ead0;background:#0009;border:1px solid #f7ead055;border-radius:999px;padding:.6cqw 2.4cqw;text-decoration:none;white-space:nowrap;z-index:2}
@@ -761,6 +772,7 @@ const KE={鬼:'人',人:'龍',龍:'仙',仙:'妖',妖:'鬼'};       // A 克 B  
 const SHENG={人:'妖',妖:'龍',龍:'鬼',鬼:'仙',仙:'人'};    // 木生火 火生土 土生金 金生水 水生木
 const PACK_MAX=10, REFILL_MS=60000;
 const PACK_N=6;
+const MULTI_N=5; // Sean 2026-11-22: one button opens 5 packs at once (change this number to change the batch size)
 const BANNER={id:'sg2026',theme:'三國',title:{zh_hant:'三國英雄祭',zh_hans:'三国英雄祭',ja:'三国英雄祭',ko:'삼국 영웅제',en:'Three Kingdoms Festival'},boost:30,guardH:8,guardMin:'SSR',spark:500,hours:48,exclusive:'關聖帝君'};
 const THEME_BONDS={'桃園':{need:3,atk:.10},'五虎':{need:5,atk:.20},'取經':{need:4,atk:.12},'四海龍王':{need:4,atk:.12},'八仙':{need:5,atk:.15},'七福神':{need:5,atk:.15},'四大天王':{need:4,atk:.12},'四凶':{need:4,atk:.15},'四象':{need:4,atk:.15},'梁山':{need:3,atk:.08}};
 
@@ -932,6 +944,20 @@ function openPack(){
   save();return {type,res};
 }
 
+// Sean 2026-11-22: open several packs in one go. Each pack still goes through openPack(), so gold / rainbow / black guarantees apply per pack.
+const MT5={zh_hant:[n=>`一次開 ${n} 包`,(p,c)=>`${p} 包 · ${c} 張`],zh_hans:[n=>`一次开 ${n} 包`,(p,c)=>`${p} 包 · ${c} 张`],ja:[n=>`${n}パック一括開封`,(p,c)=>`${p}パック · ${c}枚`],ko:[n=>`${n}팩 한 번에 열기`,(p,c)=>`${p}팩 · ${c}장`],en:[n=>`Open ${n} packs`,(p,c)=>`${p} packs · ${c} cards`],es:[n=>`Abrir ${n} sobres`,(p,c)=>`${p} sobres · ${c} cartas`],fr:[n=>`Ouvrir ${n} paquets`,(p,c)=>`${p} paquets · ${c} cartes`],pt:[n=>`Abrir ${n} pacotes`,(p,c)=>`${p} pacotes · ${c} cartas`]};
+const M5=i=>(MT5[L]||MT5.en)[i];
+const PT_RANK={white:0,gold:1,rainbow:2,black:3};
+function openPacks(n){
+  refill();if(S.packs<=0){showNoPacks();return null}
+  n=Math.min(n,S.packs);const packs=[];
+  for(let k=0;k<n;k++){const o=openPack();if(!o)break;packs.push(o)}
+  if(!packs.length)return null;
+  return {type:packs.reduce((a,p)=>PT_RANK[p.type]>PT_RANK[a]?p.type:a,'white'),res:packs.flatMap(p=>p.res),multi:packs.length};
+}
+// rarest first (stable: same rarity keeps pull order)
+const byRarity=res=>res.map((r,i)=>[r,i]).sort((a,b)=>RAR.indexOf(b[0].c.y)-RAR.indexOf(a[0].c.y)||a[1]-b[1]).map(x=>x[0]);
+
 /* ================= router ================= */
 let view='pull';
 function go(v){view=v;document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.v===v));render();window.scrollTo(0,0)}
@@ -1006,7 +1032,8 @@ function vPull(){
    <div class="sub">${S.packs>=PACK_MAX?T('packs_full'):`${T('next_pack')} <span id="cd">${nextS}</span>s`}<br>
      <span class="g">${type==='black'?T('black_ready'):type==='rainbow'?T('rainbow_ready'):type==='gold'?T('gold_ready'):T('gold_in')(goldIn)}</span><br>${T('rainbow_in')(rbIn)}</div>
    <div class="pack" id="pack" style="--glow:${{white:'#c9d4e6',gold:'#ffd24a',rainbow:'#ff9ec7',black:'#ff5a4a'}[type]}" role="button" tabindex="0" aria-label="${esc(T('tap_open'))}">${packHTML(type)}</div>
-   <div class="tapline">${T('tap_open')}</div>${noticeBar()}
+   <div class="tapline">${T('tap_open')}</div>
+   <button class="btn multi5" id="pullN" ${S.packs<2?'disabled':''}>📦×${Math.min(MULTI_N,Math.max(2,S.packs))} ${M5(0)(Math.min(MULTI_N,Math.max(2,S.packs)))}</button>${noticeBar()}
    ${DEV?`<button class="btn ghost" id="test10" style="font-size:12px">${T('test_add')}</button>`:''}
    <div class="banner"><div class="bimg" id="bimg"></div><div><b style="color:var(--rEXR)">${T('banner')} · ${esc(bannerTitle)}</b>
      <div class="sub" style="text-align:left">${esc(tagT(BANNER.theme))} ×${BANNER.boost} · ${T('banner_ends')} ${hh}h ${mm}m</div>
@@ -1019,7 +1046,7 @@ function vPull(){
    <div class="foot">${T('support')}<br>Wikipedia / Wikimedia Commons (CC BY-SA, PD) · 國立故宮博物院 National Palace Museum (CC BY 4.0) · Cleveland Museum of Art (CC0)</div>
   </div>`;
   if(ex){const b=$('#bimg');imgFor(ex).then(u=>{if(u)b.style.backgroundImage=`url(${u})`;else{const alt=CARDS.find(x=>x.i===463)||ex;imgFor(alt).then(v=>{if(v)b.style.backgroundImage=`url(${v})`;else b.innerHTML=`<span style="display:grid;place-items:center;height:100%;font:900 40px var(--f-disp);color:#ffe9a8;text-shadow:0 0 12px #ffd24a">${glyph(ex)}</span>`})}})}
-  const p=$('#pack');p.onclick=doPull;p.onkeydown=e=>{if(e.key==='Enter')doPull()};
+  const p=$('#pack');p.onclick=()=>doPull();p.onkeydown=e=>{if(e.key==='Enter')doPull()};$('#pullN').onclick=()=>doPull(MULTI_N);
   {const nb=$('#ntBar');if(nb)nb.onclick=showNotice;const fr=$('#ftRules');if(fr)fr.onclick=e=>{e.preventDefault();showRules()};const sy=$('#syCard');if(sy)sy.onclick=openCloud}$('#fxt').onclick=()=>{S.fx=S.fx===false;save();vPull()};
   if(DEV)$('#test10').onclick=()=>{S.packs+=10;save();vPull()};
   document.querySelectorAll('[data-claim]').forEach(b=>b.onclick=()=>{S.mission.claimed[b.dataset.claim]=true;S.packs+=2;save();vPull();toast('+2')});
@@ -1040,9 +1067,9 @@ function sealSVG(color){
   <polygon points="100,20 169,140 31,140"/><polygon points="100,180 31,60 169,60"/></g>
   ${'乾坤震巽坎離艮兌'.split('').map((ch,i)=>{const a=i/8*Math.PI*2-Math.PI/2;return `<text x="${100+88*Math.cos(a)}" y="${104+88*Math.sin(a)}" text-anchor="middle" font-size="12" fill="${color}" font-family="serif">${ch}</text>`}).join('')}</svg>`;
 }
-async function doPull(){
+async function doPull(n){
   const p=$('#pack');if(!p||p.dataset.busy)return;p.dataset.busy=1;
-  const out=openPack();if(!out){delete p.dataset.busy;return}
+  const out=n>1?openPacks(n):openPack();if(!out){delete p.dataset.busy;return}
   const top=RAR.indexOf(out.res.reduce((m,x)=>RAR.indexOf(x.c.y)>RAR.indexOf(m)?x.c.y:m,'C'));
   const glowC=`var(--r${RAR[Math.max(top,1)]})`;
   p.style.setProperty('--glow',glowC);
@@ -1324,10 +1351,10 @@ const OBO_T={zh_hant:['獲得','跳過'],zh_hans:['获得','跳过'],ja:['獲得
 const OBO_SUB={C:'COMMON',UC:'UNCOMMON',R:'RARE',SR:'SUPER RARE',SSR:'SPECIAL SUPER RARE',UR:'ULTRA RARE',EXR:'EXTRA LEGEND RARE'};
 function oneByOne(res){return new Promise(async done=>{
   const t=OBO_T[L]||OBO_T.en,n=res.length;let i=0,skip=false,wait=null;
-  const host=document.createElement('div');host.className='obo';
+  const host=document.createElement('div');host.className='obo';const many=n>8;
   host.innerHTML=`<div class="obo-top">${t[0]} <b id="oboN">1</b> / ${n}</div><button class="obo-skip" id="oboSkip">${t[1]} »</button>
    <div class="obo-stage" id="oboSt"></div>
-   <div class="obo-strip">${res.map(({c},k)=>`<div class="obo-th" data-k="${k}" style="--rc:var(--r${c.y})"><div class="obo-thb">${cardBackSVG().replace('<svg ','<svg preserveAspectRatio="none" ')}</div></div>`).join('')}</div>`;
+   <div class="obo-strip ${many?'many':''}">${res.map(({c},k)=>`<div class="obo-th" data-k="${k}" style="--rc:var(--r${c.y})"><div class="obo-thb">${cardBackSVG().replace('<svg ','<svg preserveAspectRatio="none" ')}</div></div>`).join('')}</div>`;
   document.body.appendChild(host);
   host.querySelector('#oboSkip').onclick=e=>{e.stopPropagation();skip=true;if(wait)wait()};
   const tapWait=ms=>new Promise(r=>{let ok=false;const tm=setTimeout(()=>{ok=true;host.classList.add('ready')},ms);
@@ -1467,15 +1494,16 @@ function prelude(res){return new Promise(done=>{if(S.fx===false)return done();
   host.onclick=fin;
   setTimeout(()=>{if(out)return;if(hi){host.classList.add('big');if(typeof fx==='function')try{fx(best,host)}catch(e){};setTimeout(fin,2600)}else setTimeout(fin,500)},1700);
 })}
-async function showReveal({type,res}){
+async function showReveal({type,res,multi}){
+  if(multi)res=byRarity(res);
   await prelude(res);const BEST=bestOf(res);
   const Lr=$('#layer');const flipped=res.map(()=>false);let busy=false;
   const pad=n=>String(n).padStart(2,'0');
   Lr.innerHTML=`<div class="ov gal-ov"><div class="gal-bg" style="background-image:url(hero/${['hero3','hero2','hero4','hero5'][Math.floor(Math.random()*4)]}.webp)"></div>${galDeco()}<div class="gal">
     <div class="gal-best gb-${BEST}" style="--rc:var(--r${BEST})"><div class="gb-r ${BEST==='UR'?'ur-text':''}">${BEST}</div><div class="gb-t">${PR().tag[BEST]}</div><div class="pre-rule"><i></i>✧<i></i></div></div>
-    <div class="gal-h"><span>${T('discovered')}</span> <b id="gcount">0</b></div>
+    <div class="gal-h"><span>${T('discovered')}</span> <b id="gcount">0</b>${multi?` <span class="gal-mn">/ ${res.length} · ${M5(1)(multi,res.length)}</span>`:''}</div>
     <div class="gal-hint" id="ghint">${T('tap_flip')}</div>
-    <div class="gal-row">${res.map(({c,isNew},i)=>`<div class="gslot aura-${c.y}" style="--rc:var(--r${c.y});animation-delay:${i*110}ms" data-i="${i}">${c.y==='EXR'?'<i class="ghalo"></i><i class="ghalo g2"></i>':''}${isNew?`<span class="gnew">${T('new_card')}</span>`:''}
+    <div class="gal-row ${multi?'gal-multi':''}">${res.map(({c,isNew},i)=>`<div class="gslot aura-${c.y}" style="--rc:var(--r${c.y});animation-delay:${i*110}ms" data-i="${i}">${c.y==='EXR'?'<i class="ghalo"></i><i class="ghalo g2"></i>':''}${isNew?`<span class="gnew">${T('new_card')}</span>`:''}
       <div class="glab"><span>${pad(i+1)}</span><i></i><span class="gy">${c.y}</span></div><button class="gstar ${S.fav[c.i]?'on':''}" data-gstar="${i}" title="${T('fav')}">${S.fav[c.i]?'★':'☆'}</button>
       <div class="flip"><div class="face back">${cardBackSVG().replace('<svg ','<svg preserveAspectRatio="none" ')}</div><div class="face front">${bigCardHTML(c,isNew)}</div></div></div>`).join('')}</div>
     <div class="gal-act" id="gPre"><button class="btn gal-flip" id="gAll">${T('flip_all')}</button></div>
@@ -1511,7 +1539,8 @@ async function showReveal({type,res}){
   $('#gShare').onclick=()=>shareImgOr(txt(),()=>resultPNG(res),'myriad-legends-result.png');
   const close=()=>{Lr.innerHTML='';render()};
   $('#gBack').onclick=close;
-  $('#gAgain').onclick=()=>{close();setTimeout(doPull,50)};
+  if(multi)$('#gAgain').textContent=M5(0)(MULTI_N);
+  $('#gAgain').onclick=()=>{close();setTimeout(()=>doPull(multi?MULTI_N:1),50)};
 }
 function shareText(t){
   const done=()=>{S.mission.share=true;save();toast(T('copied'))};
