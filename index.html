@@ -618,6 +618,53 @@ html,body{max-width:100%;overflow-x:hidden}
 .ptop{pointer-events:none}
 .cloudb{width:auto!important;padding:0 12px;gap:5px;display:inline-flex;align-items:center;border-color:var(--gold)!important;color:var(--gold)}.cloudb .ci{font-size:15px}.cloudb .cl{font-size:13px;font-weight:700}.cloudb.on{border-color:#3e8f6a!important;color:#7fe3b0}@media(max-width:480px){.cloudb{padding:0 8px}.cloudb .ci{display:none}.topin .tabs button{white-space:nowrap;padding-left:6px;padding-right:6px}.topin .lang{max-width:70px;padding:4px 4px}.topin .rt{gap:3px}.topin{gap:4px;padding-left:10px;padding-right:10px}.topin .rt .icon{width:30px;height:30px;font-size:15px}.cloudb .cl{font-size:12px}}.cloudb,.cloudb .cl{white-space:nowrap}
 
+/* profile */
+.pfb{padding:0!important;overflow:hidden;border-color:var(--gold)!important;box-shadow:0 0 8px #e3b86655}
+.av{--rc:var(--gold);display:inline-block;width:52px;height:52px;border-radius:50%;padding:2px;background:radial-gradient(circle at 30% 25%,#fff6d8,var(--rc) 45%,#5a4214);flex:none}
+.av .avi{display:grid;place-items:center;width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 50% 35%,#2a2140,#0b0a12) center 18%/cover;overflow:hidden;font-family:var(--f-disp);color:var(--gold2);font-size:22px;font-weight:900;line-height:1}
+.av .avi[data-avc]{background-color:#14111f;background-size:cover;background-position:center 18%}
+@media(max-width:480px){.topin{grid-template-columns:auto 1fr auto}.topin .tabs{justify-self:center;gap:6px}}
+@media(max-width:380px){.topin .tabs button{font-size:15px;padding-left:3px;padding-right:3px}.topin .lang{max-width:58px}}
+.topin.two{grid-template-columns:auto 1fr;grid-template-areas:"lang rt" "tabs tabs";row-gap:4px}.topin.two .lang{grid-area:lang}.topin.two .rt{grid-area:rt}.topin.two .tabs{grid-area:tabs;justify-self:center;gap:14px}
+.av .avr img{width:92%!important;height:92%!important}
+.av .ave svg{width:96%;height:96%}
+.av .avz{background:radial-gradient(circle at 50% 35%,#7d1d14,#3a0b07);color:#f7e2a8;text-shadow:0 1px 0 #000}
+.av.sm{width:100%;height:100%;padding:1.5px}.av.sm .avi{font-size:15px}
+.av.lg{width:132px;height:132px;padding:4px;box-shadow:0 0 0 3px #0008,0 0 34px color-mix(in srgb,var(--rc) 70%,transparent)}.av.lg .avi{font-size:56px}
+.prof{background:radial-gradient(1200px 600px at 50% -10%,#1d1838 0%,#07060c 60%),#07060c}
+.pfwrap{width:100%;max-width:560px;display:flex;flex-direction:column;align-items:center;gap:14px;padding-bottom:30px}
+.pfhd{width:100%;display:grid;grid-template-columns:40px 1fr 40px;align-items:center;text-align:center;font-size:19px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+.pfback{width:40px;height:40px;border-radius:50%;border:1px solid var(--line2);background:var(--panel);color:var(--ink);font-size:26px;line-height:1;cursor:pointer}
+.pfbig{margin-top:6px}.pfnm{font-size:22px;font-weight:700;color:var(--gold2)}
+.pfname{width:100%;position:relative}
+.pfname input{width:100%;padding:14px 16px;border-radius:14px;border:1px solid #3a3570;background:#16143a;color:var(--ink);font-size:18px;text-align:center;outline:none}
+.pfname input:focus{border-color:var(--gold)}
+.pfname small{display:block;text-align:right;color:var(--muted);margin-top:4px;padding-right:6px}
+.pfsec{width:100%;background:linear-gradient(180deg,#191640,#100e26);border:1px solid #2e2a5c;border-radius:16px;padding:14px}
+.pfrow{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:8px}.pfrow b{font-size:17px}
+.pfcats{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.pfcats button{padding:6px 12px;border-radius:999px;border:1px solid var(--line2);background:#0e0c20;color:var(--muted);font-size:13px;cursor:pointer}
+.pfcats button.on{border-color:var(--gold);color:#1a1205;background:var(--gold);font-weight:700}
+.pfsearch{width:100%;padding:9px 12px;border-radius:10px;border:1px solid var(--line2);background:#0e0c20;color:var(--ink);margin-bottom:10px}
+.pfstrip{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 2px 8px;scrollbar-width:none}.pfstrip::-webkit-scrollbar{display:none}
+.pfopt{flex:none;scroll-snap-align:start;width:68px;display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:0;color:var(--muted);cursor:pointer;padding:0}
+.pfopt .av{width:60px;height:60px;--rc:#4a4560;background:#2a2640}
+.pfopt.on .av{background:radial-gradient(circle at 30% 25%,#fff6d8,var(--gold) 45%,#7a5a12);box-shadow:0 0 16px #e3b866aa}
+.pfopt small{font-size:11px;max-width:68px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pfopt.on small{color:var(--gold2)}
+.pfmore{flex:none;align-self:center;color:var(--muted);font-size:12px;max-width:110px}
+.pfnone{padding:10px 0}
+.pfdots{display:flex;justify-content:center;gap:5px;min-height:6px}.pfdots i{width:6px;height:6px;border-radius:3px;background:#4a4560}.pfdots i.on{width:22px;background:var(--gold)}
+.pfsave{width:100%;padding:15px;border-radius:14px;border:0;background:linear-gradient(180deg,#f5d995,#e3b866 55%,#b98a2e);color:#1a1205;font-size:18px;font-weight:800;letter-spacing:.06em;cursor:pointer;box-shadow:0 4px 18px #e3b86644}
+.pfpub{display:block;color:var(--gold2);opacity:.8;font-size:12px;margin:-4px 0 10px}
+.pfslots{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.pfslot{position:relative;aspect-ratio:5/7;border-radius:12px;border:1.5px dashed #4a4580;background:#121032;color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;min-width:0}
+.pfslot b{font-size:30px;font-weight:300}.pfslot small{font-size:12px}
+.pfslot.full{border:0;background:none;aspect-ratio:auto;display:block}
+.pfrm{position:absolute;top:-6px;right:-6px;width:24px;height:24px;border-radius:50%;border:1px solid var(--line2);background:#000c;color:var(--ink);font-size:12px;z-index:5;cursor:pointer}
+.pfst{display:grid;grid-template-columns:28px 1fr auto;align-items:center;padding:8px 2px;border-top:1px solid #ffffff10;font-size:15px}.pfst:first-of-type{border-top:0}
+.pfst b{color:var(--gold2)}.pfst b small{color:var(--muted);font-weight:400}
+.pffr{display:flex;align-items:center;gap:8px;margin-bottom:6px}.pffr .av{width:34px;height:34px}
+
 .spot{position:fixed;inset:0;z-index:46;display:grid;place-items:center;background:radial-gradient(circle at 50% 45%,color-mix(in srgb,var(--rc) 35%,#000) 0%,#05030a 70%);overflow:hidden;cursor:pointer;animation:spIn .35s ease-out}
 .spot.out{animation:spOut .3s forwards}
 .sp-rays{position:absolute;inset:-50%;background:repeating-conic-gradient(from 0deg,color-mix(in srgb,var(--rc) 40%,transparent) 0 6deg,transparent 6deg 18deg);animation:cinespin 30s linear infinite;opacity:.55;mask:radial-gradient(circle,#000 10%,transparent 60%);-webkit-mask:radial-gradient(circle,#000 10%,transparent 60%)}
@@ -744,7 +791,7 @@ html,body{max-width:100%;overflow-x:hidden}
   <nav class="tabs" role="tablist">
     <button role="tab" data-v="pull"></button><button role="tab" data-v="codex"></button><button role="tab" data-v="battle"></button>
   </nav>
-  <div class="rt"><button class="icon cloudb" id="btnCloud" title="Sign in"><span class="ci">👤</span><span class="cl"></span></button><button class="icon" id="btnTrophy" title="Trophies">🏆</button><button class="icon" id="btnRules" title="Rules">?</button></div>
+  <div class="rt"><button class="icon pfb" id="btnProfile" aria-label="Profile"></button><button class="icon cloudb" id="btnCloud" title="Sign in"><span class="ci">👤</span><span class="cl"></span></button><button class="icon" id="btnTrophy" title="Trophies">🏆</button><button class="icon" id="btnRules" title="Rules">?</button></div>
 </div></header>
 <main id="app"><p class="muted" style="text-align:center">載入卡池中… Loading cards…</p></main>
 <div id="layer"></div>
@@ -851,7 +898,7 @@ function refill(){
 }
 function daily(){
   const d=today();
-  if(S.lastLogin!==d){S.lastLogin=d;S.stamps++;if(S.stamps%5===0)S.pendingBlack++;save()}
+  if(S.lastLogin!==d){const y=new Date(Date.now()-864e5),yd=y.getFullYear()+'-'+(y.getMonth()+1)+'-'+y.getDate();S.streak=S.lastLogin===yd?(S.streak||1)+1:1;S.bestStreak=Math.max(S.bestStreak||0,S.streak);S.lastLogin=d;S.stamps++;if(S.stamps%5===0)S.pendingBlack++;save()}
   if(S.mission.date!==d){S.mission={date:d,open:0,sr:false,wiki:false,share:false,show:false,claimed:{}};save()}
   if(S.boss.date!==d){S.boss.date=d;S.boss.tries=3;if(S.boss.dmg>=bossHP())S.boss.dmg=0;save()}
 }
@@ -1565,7 +1612,8 @@ function mergeSave(sv){if(!sv||typeof sv.owned!=='object')return false;
   S.pulls=Math.max(S.pulls,sv.pulls||0);S.packsOpened=Math.max(S.packsOpened,sv.packsOpened||0);S.stamps=Math.max(S.stamps||0,sv.stamps||0);
   Object.assign(S.trophies,sv.trophies||{});if(sv.story&&((sv.story.arch||0)>(S.story.arch||0)||((sv.story.arch||0)===(S.story.arch||0)&&(sv.story.stage||0)>(S.story.stage||0))))S.story=sv.story;if(sv.coins){S.coins=S.coins||{};Object.assign(S.coins,sv.coins)}
   if(sv.boss&&(sv.boss.kills||0)>(S.boss.kills||0))S.boss.kills=sv.boss.kills;
-  if(Array.isArray(sv.showcase)&&!S.showcase.length)S.showcase=sv.showcase;return true}
+  if(Array.isArray(sv.showcase)&&!S.showcase.length)S.showcase=sv.showcase;
+  S.bestStreak=Math.max(S.bestStreak||0,sv.bestStreak||0);if(sv.profile&&typeof sv.profile==='object'&&(sv.profile.at||0)>((S.profile&&S.profile.at)||0))S.profile=sv.profile;return true}
 /* ===== cloud save by transfer code (Pages Function /api/save + D1) ===== */
 const CLT={zh_hant:{t:'雲端存檔・引繼碼',n:'建立引繼碼後，進度會自動存到伺服器。在手機或其他電腦輸入同一組引繼碼，就能玩同一份卡牌。請保管好引繼碼，知道它的人就能讀取這份存檔。',make:'建立引繼碼',code:'你的引繼碼',sync:'立即同步',copy:'複製',enter:'輸入引繼碼（例：ML-ABCDE-12345）',load:'載入',ok:'已同步',bad:'找不到這組引繼碼',err:'同步失敗，稍後會再試',last:'上次同步',off:'雲端存檔暫時無法使用'},
  zh_hans:{t:'云端存档・引继码',n:'建立引继码后，进度会自动存到服务器。在手机或其他电脑输入同一组引继码，就能玩同一份卡牌。请保管好引继码，知道它的人就能读取这份存档。',make:'建立引继码',code:'你的引继码',sync:'立即同步',copy:'复制',enter:'输入引继码（例：ML-ABCDE-12345）',load:'载入',ok:'已同步',bad:'找不到这组引继码',err:'同步失败，稍后会再试',last:'上次同步',off:'云端存档暂时无法使用'},
@@ -1603,7 +1651,7 @@ function cloudBox(){const c=S.cloud;
    ${c?`<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span>${CT('code')}：</span><b id="clCode" style="font:700 18px ui-monospace,monospace;letter-spacing:1px;color:var(--gold)">${esc(c.code)}</b><button class="btn ghost" id="clCopy">${CT('copy')}</button><button class="btn" id="clSync">${CT('sync')}</button></div><div class="sub" style="text-align:left;margin-top:6px">${CT('last')}：${c.at?new Date(c.at).toLocaleString():'—'}</div>`
      :`<button class="btn" id="clMake">${CT('make')}</button>`}
    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><input class="inp" id="clIn" placeholder="${CT('enter')}" style="flex:1;min-width:200px" autocapitalize="characters"><button class="btn ghost" id="clLoad">${CT('load')}</button></div></div>`}
-function cloudBtn(){const b=$('#btnCloud');if(!b)return;const on=!!S.cloud;b.classList.toggle('on',on);b.querySelector('.cl').textContent=on?(S.cloud.g?'✓':'☁'):CT('login');b.title=CT('t')}
+function cloudBtn(){const b=$('#btnCloud');if(!b)return;const on=!!S.cloud;b.classList.toggle('on',on);b.querySelector('.cl').textContent=on?(S.cloud.g?'✓':'☁'):CT('login');b.title=CT('t');if(window.__ready)profBtn()}
 function openCloud(){document.getElementById('cloudOv')?.remove();const host=document.createElement('div');host.className='ov';host.id='cloudOv';host.style.zIndex=40;
   host.innerHTML=`<div class="box" style="max-width:560px;width:100%"><div style="display:flex;justify-content:flex-end"><button class="btn ghost" data-x>${T('close')}</button></div><div id="cloudIn"></div></div>`;
   document.body.appendChild(host);host.querySelector('[data-x]').onclick=()=>host.remove();host.onclick=e=>{if(e.target===host)host.remove()};cloudRefresh()}
@@ -1911,11 +1959,11 @@ fr:{h:'Combat entre amis (code d\'équipe)',d:'Envoyez votre code d\'équipe à 
 pt:{h:'Batalha com amigos (código de equipe)',d:'Envie seu código de equipe a um amigo para ele enfrentar sua equipe, ou cole o código de um amigo para desafiá-lo.',ex:'Copiar meu código',in:'Cole o código do adversário',use:'Enfrentar esta equipe',clr:'Voltar a adversários aleatórios',vs:'Adversário: equipe de amigo',bad:'Código inválido',need:'Preencha as 5 vagas',ok:'Equipe adversária carregada',res:'Copiar resultado',friend:'Amigo'}};
 const TC=k=>(TCT[L]||TCT.en)[k];
 const b64u={enc:s=>btoa(unescape(encodeURIComponent(s))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''),dec:s=>decodeURIComponent(escape(atob(s.replace(/-/g,'+').replace(/_/g,'/'))))};
-function teamCode(st){const o={c:st.cards.slice(0,5),e:(st.eq||[]).slice(0,5).map(x=>x||{}),f:st.field??null};return 'MLT1-'+b64u.enc(JSON.stringify(o))}
+function teamCode(st){const o={c:st.cards.slice(0,5),e:(st.eq||[]).slice(0,5).map(x=>x||{}),f:st.field??null,p:profPub()};return 'MLT1-'+b64u.enc(JSON.stringify(o))}
 function parseTeamCode(code){try{const m=String(code).trim().match(/MLT1-([A-Za-z0-9_-]+)/);if(!m)return null;const o=JSON.parse(b64u.dec(m[1]));
   const cards=(o.c||[]).slice(0,5).map(i=>BYID[i]&&(BYID[i].k==='char'||BYID[i].k==='event')?i:null);if(cards.filter(x=>x!=null).length<1)return null;
   const eq=(o.e||[]).slice(0,5).map(x=>{const r={};for(const[k]of EQK){const v=x&&x[k];if(v!=null&&BYID[v]&&BYID[v].k===k)r[k]=v}return r});while(eq.length<5)eq.push({});
-  const f=o.f!=null&&BYID[o.f]&&(BYID[o.f].k==='battle'||BYID[o.f].k==='realm')?o.f:null;return {cards,eq,field:f}}catch(e){return null}}
+  const f=o.f!=null&&BYID[o.f]&&(BYID[o.f].k==='battle'||BYID[o.f].k==='realm')?o.f:null;return {cards,eq,field:f,p:cleanPub(o.p)}}catch(e){return null}}
 function bTeam(){
   let level='C',enemy=null;
   const st=S.team;
@@ -1925,8 +1973,8 @@ function bTeam(){
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><input class="inp" id="tcIn" placeholder="${TC('in')}" style="flex:1;min-width:200px"><button class="btn" id="tcUse">${TC('use')}</button></div>
     <div id="tcVs" class="sub" style="text-align:left;margin-top:8px"></div></div>`;
   const showVs=()=>{const el=$('#tcVs');if(!el)return;if(!enemy){el.innerHTML='';const lv=$('#lvs');if(lv)lv.style.opacity=1;return}
-    el.innerHTML=`<b style="color:#7fe3d0">${TC('vs')}</b>：${enemy.cards.filter(x=>x!=null).map(i=>`<span class="rb r-${BYID[i].y}">${BYID[i].y}</span> ${esc(nm(BYID[i]))}`).join('、')} <button class="chip" id="tcClr">${TC('clr')}</button>`;
-    const lv=$('#lvs');if(lv)lv.style.opacity=.35;$('#tcClr').onclick=()=>{enemy=null;showVs()}};
+    el.innerHTML=(enemy.p?`<div class="pffr">${avHTML(enemy.p.a,'sm')}<b>${esc(enemy.p.n||PT('anon'))}</b><button class="chip" id="tcPf">${PT('vbtn')}</button></div>`:'')+`<b style="color:#7fe3d0">${TC('vs')}</b>：${enemy.cards.filter(x=>x!=null).map(i=>`<span class="rb r-${BYID[i].y}">${BYID[i].y}</span> ${esc(nm(BYID[i]))}`).join('、')} <button class="chip" id="tcClr">${TC('clr')}</button>`;
+    avHydrate(el);const pb=$('#tcPf');if(pb)pb.onclick=()=>showFriendProfile(enemy.p);const lv=$('#lvs');if(lv)lv.style.opacity=.35;$('#tcClr').onclick=()=>{enemy=null;showVs()}};
   const bindCode=()=>{document.querySelectorAll('#lvs [data-lv]').forEach(b=>{b.setAttribute('aria-pressed',b.dataset.lv===level);b.onclick=()=>{level=b.dataset.lv;document.querySelectorAll('#lvs [data-lv]').forEach(x=>x.setAttribute('aria-pressed',x===b))}});const ex=$('#tcEx');if(!ex)return;
     ex.onclick=()=>{if(st.cards.filter(x=>x!=null).length<5){toast(TC('need'));return}const code=teamCode(st);try{navigator.clipboard.writeText(code).then(()=>toast(T('copied')),()=>prompt('',code))}catch(e){prompt('',code)}};
     $('#tcUse').onclick=()=>{const t=parseTeamCode($('#tcIn').value);if(!t){toast(TC('bad'));return}enemy=t;toast(TC('ok'));showVs()};showVs()};
@@ -2117,11 +2165,115 @@ function intro(force){
   addEventListener('resize',rs);$('#introSkip').onclick=end;setTimeout(()=>{if(!el.hidden)end()},6500);
 }
 
+/* ===== player profile: name, avatar (own card / race / 五行 / 生肖), 3-card showcase ===== */
+const PFT={zh_hant:{stats:'我的戰績',s_packs:'開包數',s_pulls:'抽到卡牌',s_kinds:'已收集種類',s_high:'SSR 以上',s_wins:'對戰勝場',s_boss:'討伐首領',s_story:'修行關卡',s_tr:'獎杯',s_days:'登入天數',s_streak:'最長連續登入',days:n=>`${n} 天`,pub:'用隊伍碼對戰的好友可以看到這 3 張卡',fview:'好友檔案',vbtn:'查看檔案',t:'個人檔案',ph:'輸入你的名號',choose:'選擇頭像',swipe:'滑動查看更多 →',card:'我的卡牌',race:'種族',el:'五行',zod:'生肖',save:'儲存檔案',saved:'已儲存',show:'展示櫃',add:'加入卡牌',pick:'選擇展示卡牌',search:'搜尋卡牌名稱',none:'還沒有角色卡，先去召喚吧！',anon:'無名修士',got:'已收集',packs:'開包數',trophies:'獎杯',more:n=>`還有 ${n} 張，請用搜尋`,rm:'移除',me:'個人檔案'},
+zh_hans:{stats:'我的战绩',s_packs:'开包数',s_pulls:'抽到卡牌',s_kinds:'已收集种类',s_high:'SSR 以上',s_wins:'对战胜场',s_boss:'讨伐首领',s_story:'修行关卡',s_tr:'奖杯',s_days:'登录天数',s_streak:'最长连续登录',days:n=>`${n} 天`,pub:'用队伍码对战的好友可以看到这 3 张卡',fview:'好友档案',vbtn:'查看档案',t:'个人档案',ph:'输入你的名号',choose:'选择头像',swipe:'滑动查看更多 →',card:'我的卡牌',race:'种族',el:'五行',zod:'生肖',save:'保存档案',saved:'已保存',show:'展示柜',add:'加入卡牌',pick:'选择展示卡牌',search:'搜索卡牌名称',none:'还没有角色卡，先去召唤吧！',anon:'无名修士',got:'已收集',packs:'开包数',trophies:'奖杯',more:n=>`还有 ${n} 张，请用搜索`,rm:'移除',me:'个人档案'},
+ja:{stats:'戦績',s_packs:'開封パック',s_pulls:'獲得カード',s_kinds:'収集種類',s_high:'SSR 以上',s_wins:'対戦勝利',s_boss:'ボス討伐',s_story:'修行ステージ',s_tr:'トロフィー',s_days:'ログイン日数',s_streak:'最長連続ログイン',days:n=>`${n} 日`,pub:'チームコードで対戦したフレンドはこの 3 枚を見られます',fview:'フレンドのプロフィール',vbtn:'プロフィールを見る',t:'プロフィール',ph:'名前を入力',choose:'アイコンを選ぶ',swipe:'スワイプでもっと見る →',card:'マイカード',race:'種族',el:'五行',zod:'干支',save:'プロフィールを保存',saved:'保存しました',show:'ショーケース',add:'カードを追加',pick:'飾るカードを選ぶ',search:'カード名で検索',none:'キャラクターカードがまだありません。まずは召喚しよう！',anon:'名もなき修行者',got:'収集',packs:'開封数',trophies:'トロフィー',more:n=>`ほか ${n} 枚、検索してください`,rm:'外す',me:'プロフィール'},
+ko:{stats:'내 기록',s_packs:'개봉한 팩',s_pulls:'획득 카드',s_kinds:'수집 종류',s_high:'SSR 이상',s_wins:'대전 승리',s_boss:'보스 토벌',s_story:'수행 스테이지',s_tr:'트로피',s_days:'접속 일수',s_streak:'최장 연속 접속',days:n=>`${n}일`,pub:'팀 코드로 대전한 친구는 이 3장을 볼 수 있습니다',fview:'친구 프로필',vbtn:'프로필 보기',t:'프로필',ph:'이름을 입력하세요',choose:'아바타 선택',swipe:'밀어서 더 보기 →',card:'내 카드',race:'종족',el:'오행',zod:'띠',save:'프로필 저장',saved:'저장됨',show:'쇼케이스',add:'카드 추가',pick:'전시할 카드 선택',search:'카드 이름 검색',none:'아직 캐릭터 카드가 없습니다. 먼저 소환해 보세요!',anon:'이름 없는 수행자',got:'수집',packs:'개봉 수',trophies:'트로피',more:n=>`${n}장 더 있음, 검색하세요`,rm:'빼기',me:'프로필'},
+en:{stats:'Your Stats',s_packs:'Packs opened',s_pulls:'Cards pulled',s_kinds:'Cards collected',s_high:'SSR or higher',s_wins:'Battles won',s_boss:'Bosses defeated',s_story:'Training stage',s_tr:'Trophies',s_days:'Days logged in',s_streak:'Longest streak',days:n=>`${n} day${n===1?'':'s'}`,pub:'Friends who use your team code can see these 3 cards',fview:'Friend profile',vbtn:'View profile',t:'Your Profile',ph:'Enter your name',choose:'Choose your avatar',swipe:'Swipe for more →',card:'My cards',race:'Races',el:'Elements',zod:'Zodiac',save:'Save Profile',saved:'Profile saved',show:'Showcase',add:'Add card',pick:'Pick a card to show',search:'Search card names',none:'No character cards yet. Go summon some!',anon:'Nameless Wanderer',got:'Collected',packs:'Packs',trophies:'Trophies',more:n=>`${n} more, use search`,rm:'Remove',me:'Profile'},
+es:{stats:'Tus estadísticas',s_packs:'Sobres abiertos',s_pulls:'Cartas obtenidas',s_kinds:'Cartas coleccionadas',s_high:'SSR o superior',s_wins:'Batallas ganadas',s_boss:'Jefes derrotados',s_story:'Etapa de entrenamiento',s_tr:'Trofeos',s_days:'Días conectado',s_streak:'Racha más larga',days:n=>`${n} día${n===1?'':'s'}`,pub:'Los amigos que usen tu código de equipo pueden ver estas 3 cartas',fview:'Perfil del amigo',vbtn:'Ver perfil',t:'Tu perfil',ph:'Escribe tu nombre',choose:'Elige tu avatar',swipe:'Desliza para ver más →',card:'Mis cartas',race:'Razas',el:'Elementos',zod:'Zodiaco',save:'Guardar perfil',saved:'Perfil guardado',show:'Vitrina',add:'Añadir carta',pick:'Elige una carta para mostrar',search:'Buscar cartas',none:'Aún no tienes cartas de personaje. ¡Invoca algunas!',anon:'Errante sin nombre',got:'Colección',packs:'Sobres',trophies:'Trofeos',more:n=>`${n} más, usa la búsqueda`,rm:'Quitar',me:'Perfil'},
+fr:{stats:'Vos statistiques',s_packs:'Paquets ouverts',s_pulls:'Cartes obtenues',s_kinds:'Cartes collectionnées',s_high:'SSR ou plus',s_wins:'Combats gagnés',s_boss:'Boss vaincus',s_story:'Étape d’entraînement',s_tr:'Trophées',s_days:'Jours de connexion',s_streak:'Plus longue série',days:n=>`${n} jour${n>1?'s':''}`,pub:'Les amis qui utilisent votre code d’équipe voient ces 3 cartes',fview:'Profil de l’ami',vbtn:'Voir le profil',t:'Votre profil',ph:'Entrez votre nom',choose:'Choisissez votre avatar',swipe:'Glissez pour voir plus →',card:'Mes cartes',race:'Races',el:'Éléments',zod:'Zodiaque',save:'Enregistrer le profil',saved:'Profil enregistré',show:'Vitrine',add:'Ajouter une carte',pick:'Choisissez une carte à exposer',search:'Rechercher une carte',none:'Pas encore de carte personnage. Allez invoquer !',anon:'Vagabond sans nom',got:'Collection',packs:'Paquets',trophies:'Trophées',more:n=>`${n} de plus, utilisez la recherche`,rm:'Retirer',me:'Profil'},
+pt:{stats:'Suas estatísticas',s_packs:'Pacotes abertos',s_pulls:'Cartas obtidas',s_kinds:'Cartas colecionadas',s_high:'SSR ou mais',s_wins:'Batalhas vencidas',s_boss:'Chefes derrotados',s_story:'Etapa de treino',s_tr:'Troféus',s_days:'Dias conectado',s_streak:'Maior sequência',days:n=>`${n} dia${n===1?'':'s'}`,pub:'Amigos que usarem seu código de equipe veem estas 3 cartas',fview:'Perfil do amigo',vbtn:'Ver perfil',t:'Seu perfil',ph:'Digite seu nome',choose:'Escolha seu avatar',swipe:'Deslize para ver mais →',card:'Minhas cartas',race:'Raças',el:'Elementos',zod:'Zodíaco',save:'Salvar perfil',saved:'Perfil salvo',show:'Vitrine',add:'Adicionar carta',pick:'Escolha uma carta para exibir',search:'Buscar cartas',none:'Ainda não há cartas de personagem. Vá invocar!',anon:'Andarilho sem nome',got:'Coleção',packs:'Pacotes',trophies:'Troféus',more:n=>`mais ${n}, use a busca`,rm:'Remover',me:'Perfil'}};
+const PT=k=>(PFT[L]||PFT.en)[k];
+const ZOD='鼠牛虎兔龍蛇馬羊猴雞狗豬';
+const PROF=()=>S.profile||(S.profile={name:'',av:'',show:[],at:0});
+/* avatar markup; card art is filled in later by avHydrate() */
+function avHTML(av,cls=''){
+  const [k,v]=String(av||'').split(':');
+  if(k==='c'&&BYID[v]){const c=BYID[v];return `<span class="av ${cls}" style="--rc:var(--r${c.y})"><span class="avi" data-avc="${c.i}">${glyph(c)}</span></span>`}
+  if(k==='r'&&DIAIMG[v])return `<span class="av ${cls}" style="--rc:${RCOL[v]}"><span class="avi avr">${diaSVG(v)}</span></span>`;
+  if(k==='e'&&ORBP[v])return `<span class="av ${cls}" style="--rc:${ORBC[v][1]}"><span class="avi ave">${orbSVG(v,100)}</span></span>`;
+  if(k==='z'&&ZOD[v])return `<span class="av ${cls}"><span class="avi avz">${ZOD[v]}</span></span>`;
+  return `<span class="av ${cls}"><span class="avi avz">萬</span></span>`;
+}
+function avHydrate(root){root.querySelectorAll('[data-avc]').forEach(el=>setImg(el,BYID[el.dataset.avc]))}
+function topFit(){const t=$('.topin');if(!t)return;t.classList.remove('two');const r=$('#btnRules').getBoundingClientRect().right;if(r>t.getBoundingClientRect().right+1||t.scrollWidth>t.clientWidth+1)t.classList.add('two')}
+addEventListener('resize',topFit);
+function profBtn(){const b=$('#btnProfile');if(!b)return;const p=PROF();b.innerHTML=avHTML(p.av,'sm');b.title=PT('me')+(p.name?' · '+p.name:'');avHydrate(b);topFit()}
+function showProfile(){
+  document.getElementById('profOv')?.remove();
+  const p=PROF();const d={name:p.name||'',av:p.av||'',show:(p.show||[]).filter(i=>S.owned[i]).slice(0,3)};
+  let cat=Object.keys(S.owned).some(i=>BYID[i]&&BYID[i].k==='char')?'card':'race',q='';
+  const host=document.createElement('div');host.className='ov prof';host.id='profOv';host.style.zIndex=40;
+  const ownedChars=()=>Object.keys(S.owned).map(i=>BYID[i]).filter(c=>c&&c.k==='char').sort((a,b)=>RAR.indexOf(b.y)-RAR.indexOf(a.y)||(b.f||0)-(a.f||0)||a.i-b.i);
+  const opts=()=>{
+    if(cat==='race')return ['人','仙','妖','鬼','龍','神','魔'].map(r=>['r:'+r,raceName(r)]);
+    if(cat==='el')return ['木','火','土','金','水'].map(e=>['e:'+e,elName(e)]);
+    if(cat==='zod')return [...ZOD].map((z,i)=>['z:'+i,z]);
+    const s=q.trim().toLowerCase();let l=ownedChars();if(s)l=l.filter(c=>Object.values(c.n).some(n=>String(n).toLowerCase().includes(s)));
+    return l.map(c=>['c:'+c.i,nm(c)]);
+  };
+  const LIM=60;
+  const strip=()=>{const all=opts(),o=all.slice(0,LIM);
+    if(!o.length)return `<p class="muted pfnone">${cat==='card'&&q?'—':PT('none')}</p>`;
+    return o.map(([v,t])=>`<button class="pfopt ${d.av===v?'on':''}" data-av="${v}" title="${esc(t)}">${avHTML(v)}<small>${esc(t)}</small></button>`).join('')+(all.length>LIM?`<span class="pfmore">${PT('more')(all.length-LIM)}</span>`:'')};
+  const dots=()=>{const s=$('.pfstrip',host);const dt=$('.pfdots',host);if(!s||!dt)return;const n=Math.max(1,Math.ceil(s.scrollWidth/Math.max(1,s.clientWidth)));const k=Math.min(n-1,Math.round(s.scrollLeft/Math.max(1,s.clientWidth)));dt.innerHTML=n>1?Array.from({length:Math.min(n,12)},(_,i)=>`<i class="${i===Math.min(k,11)?'on':''}"></i>`).join(''):''};
+  const bindStrip=()=>{const s=$('.pfstrip',host);s.innerHTML=strip();avHydrate(s);
+    s.querySelectorAll('.pfopt').forEach(b=>b.onclick=()=>{d.av=b.dataset.av;s.querySelectorAll('.pfopt').forEach(x=>x.classList.toggle('on',x===b));const big=$('.pfbig',host);big.innerHTML=avHTML(d.av,'lg');avHydrate(big)});
+    s.onscroll=dots;s.scrollLeft=0;requestAnimationFrame(dots)};
+  const slots=()=>[0,1,2].map(k=>{const c=BYID[d.show[k]];return c?`<div class="pfslot full" data-k="${k}">${bigCardHTML(c,false).replace('class="tcard','style="width:100%" class="tcard')}<button class="pfrm" data-rm="${k}" aria-label="${esc(PT('rm'))}">✕</button></div>`:`<button class="pfslot" data-k="${k}"><b>＋</b><small>${PT('add')}</small></button>`}).join('');
+  const bindSlots=()=>{const g=$('.pfslots',host);g.innerHTML=slots();$('.pfcnt',host).textContent=`${d.show.length}/3`;g.querySelectorAll('[data-art]').forEach(el=>setImg(el,BYID[el.dataset.art]));
+    g.querySelectorAll('[data-rm]').forEach(b=>b.onclick=e=>{e.stopPropagation();d.show.splice(+b.dataset.rm,1);bindSlots()});
+    g.querySelectorAll('.pfslot').forEach(s=>s.onclick=()=>pickCard(+s.dataset.k))};
+  const pickCard=k=>{
+    const ov=document.createElement('div');ov.className='ov';ov.style.zIndex=45;let s='';
+    const all=Object.keys(S.owned).map(i=>BYID[i]).filter(Boolean).sort((a,b)=>RAR.indexOf(b.y)-RAR.indexOf(a.y)||(b.f||0)-(a.f||0)||a.i-b.i);
+    const draw=()=>{const t=s.trim().toLowerCase();const l=t?all.filter(c=>Object.values(c.n).some(n=>String(n).toLowerCase().includes(t))):all;
+      const g=$('.grid',ov);g.innerHTML=l.slice(0,200).map(c=>miniHTML(c,{sel:d.show.includes(c.i)})).join('')||`<p class="muted">${all.length?'—':PT('none')}</p>`;
+      $('.pfmore2',ov).textContent=l.length>200?PT('more')(l.length-200):'';hydrateMinis(g);
+      g.querySelectorAll('.mini').forEach(m=>m.onclick=()=>{const i=+m.dataset.id;const j=d.show.indexOf(i);if(j>=0)d.show.splice(j,1);if(k<d.show.length)d.show[k]=i;else d.show.push(i);d.show=d.show.slice(0,3);ov.remove();bindSlots()})};
+    ov.innerHTML=`<div class="stage" style="justify-content:flex-start;max-width:900px;width:100%"><div class="pfhd"><button class="pfback" data-x aria-label="${esc(T('close'))}">‹</button><b>${PT('pick')}</b><span></span></div>
+      <input class="pfsearch" type="search" placeholder="${esc(PT('search'))}"><div class="grid" style="width:100%;margin-top:10px"></div><p class="muted pfmore2" style="text-align:center"></p></div>`;
+    document.body.appendChild(ov);$('[data-x]',ov).onclick=()=>ov.remove();$('.pfsearch',ov).oninput=e=>{s=e.target.value;draw()};draw()};
+  const commit=()=>{const n=d.name.trim().slice(0,20);const o=PROF();const ch=n!==(o.name||'')||d.av!==(o.av||'')||JSON.stringify(d.show)!==JSON.stringify(o.show||[]);
+    if(ch){S.profile={name:n,av:d.av,show:d.show.slice(0,3),at:Date.now()};save();profBtn()}return ch};
+  host.innerHTML=`<div class="pfwrap">
+   <div class="pfhd"><button class="pfback" data-back aria-label="${esc(T('close'))}">‹</button><b>${PT('t')}</b><span></span></div>
+   <div class="pfbig">${avHTML(d.av,'lg')}</div>
+   <div class="pfname"><input id="pfName" maxlength="20" placeholder="${esc(PT('ph'))}" value="${esc(d.name)}" autocomplete="off"><small id="pfLen">${[...d.name].length}/20</small></div>
+   <div class="pfsec"><div class="pfrow"><b>${PT('choose')}</b><small class="muted">${PT('swipe')}</small></div>
+    <div class="pfcats">${['card','race','el','zod'].map(c=>`<button data-cat="${c}" class="${c===cat?'on':''}">${PT(c)}</button>`).join('')}</div>
+    <input class="pfsearch pfq" type="search" placeholder="${esc(PT('search'))}" ${cat==='card'?'':'hidden'}>
+    <div class="pfstrip"></div><div class="pfdots"></div></div>
+   <button class="pfsave" id="pfSave">${PT('save')}</button>
+   <div class="pfsec pfshow"><div class="pfrow"><b>★ ${PT('show')}</b><span class="pfcnt"></span></div><small class="pfpub">${PT('pub')}</small><div class="pfslots"></div></div>
+   ${statsHTML()}
+  </div>`;
+  document.body.appendChild(host);
+  const big=$('.pfbig',host);avHydrate(big);
+  $('#pfName').oninput=e=>{let v=e.target.value;if([...v].length>20){v=[...v].slice(0,20).join('');e.target.value=v}d.name=v;$('#pfLen').textContent=[...v].length+'/20'};
+  host.querySelectorAll('.pfcats button').forEach(b=>b.onclick=()=>{cat=b.dataset.cat;host.querySelectorAll('.pfcats button').forEach(x=>x.classList.toggle('on',x===b));$('.pfq',host).hidden=cat!=='card';bindStrip()});
+  $('.pfq',host).oninput=e=>{q=e.target.value;bindStrip()};
+  $('#pfSave').onclick=()=>{commit();toast(PT('saved'));host.remove()};
+  $('[data-back]',host).onclick=()=>{if(commit())toast(PT('saved'));host.remove()};
+  bindStrip();bindSlots();addEventListener('resize',dots);
+}
+
+function statsHTML(){
+  const ids=Object.keys(S.owned).filter(i=>BYID[i]);const kinds=ids.length,tot=POOL.length||1;
+  const hi=ids.filter(i=>RAR.indexOf(BYID[i].y)>=4).length;const tr=TROPHIES.filter(t=>S.trophies[t[0]]).length;
+  const f=n=>Number(n||0).toLocaleString();
+  const rows=[['📦','s_packs',f(S.packsOpened)],['🎴','s_pulls',f(S.pulls)],['📚','s_kinds',`${f(kinds)} <small>/ ${f(tot)} · ${(kinds/tot*100).toFixed(kinds/tot<.1?2:1)}%</small>`],['✨','s_high',f(hi)],
+    ['⚔️','s_wins',f(S.trophies._wins||S.records.filter(r=>r.res==='win').length)],['🐉','s_boss',f(S.boss&&S.boss.kills)],['⛰️','s_story',f(S.story&&S.story.stage||1)],
+    ['🏆','s_tr',`${tr} <small>/ ${TROPHIES.length}</small>`],['📅','s_days',PT('days')(S.stamps||0)],['🔥','s_streak',PT('days')(Math.max(S.bestStreak||0,S.streak||0,S.stamps?1:0))]];
+  return `<div class="pfsec pfstat"><div class="pfrow"><b>${PT('stats')}</b></div>${rows.map(([i,k,v])=>`<div class="pfst"><span>${i}</span><span>${PT(k)}</span><b>${v}</b></div>`).join('')}</div>`;
+}
+/* public part of the profile, carried inside the team code so friends can see it */
+function profPub(){const p=PROF();return {n:(p.name||'').slice(0,20),a:p.av||'',s:(p.show||[]).filter(i=>S.owned[i]).slice(0,3)}}
+function cleanPub(o){if(!o||typeof o!=='object')return null;const a=/^(c:\d+|r:[人仙妖鬼龍神魔]|e:[木火土金水]|z:\d{1,2})$/.test(o.a||'')?o.a:'';
+  return {n:String(o.n||'').slice(0,20),a,s:(Array.isArray(o.s)?o.s:[]).filter(i=>BYID[i]).slice(0,3)}}
+function showFriendProfile(p){
+  const ov=document.createElement('div');ov.className='ov prof';ov.style.zIndex=45;
+  ov.innerHTML=`<div class="pfwrap"><div class="pfhd"><button class="pfback" data-x aria-label="${esc(T('close'))}">‹</button><b>${PT('fview')}</b><span></span></div>
+   <div class="pfbig">${avHTML(p.a,'lg')}</div><div class="pfnm">${esc(p.n||PT('anon'))}</div>
+   <div class="pfsec pfshow"><div class="pfrow"><b>★ ${PT('show')}</b><span>${p.s.length}/3</span></div><div class="pfslots">${p.s.map(i=>`<div class="pfslot full">${bigCardHTML(BYID[i],false).replace('class="tcard','style="width:100%" class="tcard')}</div>`).join('')||'<p class="muted">—</p>'}</div></div></div>`;
+  document.body.appendChild(ov);avHydrate(ov);ov.querySelectorAll('[data-art]').forEach(el=>setImg(el,BYID[el.dataset.art]));$('[data-x]',ov).onclick=()=>ov.remove()}
+
 /* ================= boot ================= */
 document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>go(b.dataset.v));
-$('#lang').onchange=e=>{L=S.lang=e.target.value;save();chrome();render();cloudBtn()};
-$('#btnTrophy').onclick=showTrophies;$('#btnCloud').onclick=openCloud;cloudBtn();$('#btnRules').onclick=showRules;
+$('#lang').onchange=e=>{L=S.lang=e.target.value;save();chrome();render();cloudBtn();const po=$('#profOv');if(po){po.remove();showProfile()}};
+$('#btnTrophy').onclick=showTrophies;$('#btnCloud').onclick=openCloud;$('#btnProfile').onclick=()=>window.DATAP.then(showProfile);cloudBtn();$('#btnRules').onclick=showRules;
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('.ov').forEach(o=>o.remove());$('#layer').innerHTML=''}});
-chrome();intro(false);
-(window.DATAP=loadData()).then(()=>{if(S.cloud)cloudSync().then(()=>render()).catch(()=>{});if(S.banner.id!==BANNER.id){S.banner={id:BANNER.id,pulled:0,got:false,start:Date.now()};save()}go('pull');window.__ready=1;if($('#intro').hidden)setTimeout(maybeNotice,300)}).catch(e=>{$('#app').innerHTML='<p>Failed to load cards.json</p>'});
+chrome();topFit();intro(false);
+(window.DATAP=loadData()).then(()=>{if(S.cloud)cloudSync().then(()=>render()).catch(()=>{});if(S.banner.id!==BANNER.id){S.banner={id:BANNER.id,pulled:0,got:false,start:Date.now()};save()}go('pull');profBtn();window.__ready=1;if($('#intro').hidden)setTimeout(maybeNotice,300)}).catch(e=>{$('#app').innerHTML='<p>Failed to load cards.json</p>'});
 </script>
