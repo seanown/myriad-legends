@@ -32,6 +32,7 @@ a{color:var(--gold)}
 .lang{justify-self:start;background:var(--panel);border:1px solid var(--line2);border-radius:999px;padding:5px 10px;font-size:13px;font-weight:700}
 .tabs{display:flex;gap:18px}
 .tabs button{background:none;border:0;font-size:19px;font-weight:900;color:var(--muted);padding:4px 2px;border-bottom:2px solid transparent}
+.acid{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid rgba(227,184,102,.25)}.acid span{color:var(--muted);font-size:13px}.acid b{font:800 22px ui-monospace,monospace;color:var(--gold2);letter-spacing:1px}.acid i{font-style:normal;font-size:12px}.acid .ok{color:var(--jade)}.acid .no{color:#e9a08f}
 .tabs button[aria-selected=true]{color:var(--gold);border-bottom-color:var(--gold)}
 .rt{justify-self:end;display:flex;gap:8px}
 .icon{width:36px;height:36px;border-radius:50%;border:1px solid var(--line2);background:var(--panel);display:grid;place-items:center;font-size:17px}
@@ -1408,7 +1409,7 @@ async function shareCampaign(){const txt=NTT('stxt')+'\n'+SITE_URL;let blob=null
   try{await navigator.clipboard.writeText(txt)}catch(e){prompt('',txt)}
   if(blob){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='myriad-legends-launch.png';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}
   toast(NTT('copied'));return true}
-function maybeNotice(){if(S.noticeHide===today())return;showNotice()}
+function maybeNotice(){if(!S.onboarded&&typeof obShow==='function')return obShow(()=>{if(S.noticeHide!==today())showNotice()});if(S.noticeHide===today())return;showNotice()}
 
 /* ================= share images for results and cards (wikigacha parity) ================= */
 const RCOLS={C:'#cfc4ae',UC:'#c9d4e6',R:'#5fd18f',SR:'#5aa7ff',SSR:'#ff6b6b',UR:'#ffd24a',EXR:'#c58cff'};
@@ -1484,7 +1485,7 @@ async function showReveal({type,res}){
     <button class="btn ghost gal-back" id="gBack">${T('back_packs')} →</button></div></div>`;
   const slots=[...Lr.querySelectorAll('.gslot')];
   slots.forEach((el,i)=>setImg($('[data-art]',el),res[i].c));
-  const update=()=>{const n=flipped.filter(Boolean).length;$('#gcount').textContent=n;if(n===res.length){$('#ghint').textContent=T('tap_explore');$('#gPre').hidden=true;$('#gPost').hidden=false}};
+  const update=()=>{const n=flipped.filter(Boolean).length;$('#gcount').textContent=n;if(n===res.length){$('#ghint').textContent=T('tap_explore');$('#gPre').hidden=true;$('#gPost').hidden=false;if(typeof obNudge==='function')setTimeout(()=>obNudge(res),700)}};
   const flip=async(i,quick)=>{
     if(flipped[i])return;flipped[i]=true;const {c}=res[i];
     if(!quick&&RAR.indexOf(c.y)>=3){await entrance(c);await spotlight(c,res[i].isNew)}
@@ -1575,45 +1576,51 @@ const CLT={zh_hant:{t:'雲端存檔・引繼碼',n:'建立引繼碼後，進度�
  es:{t:'Guardado en la nube · código',n:'Crea un código de transferencia y tu progreso se guardará solo en nuestro servidor. Introduce el mismo código en el móvil u otro ordenador para jugar con las mismas cartas. Guárdalo en privado: quien lo tenga puede cargar esta partida.',make:'Crear código',code:'Tu código',sync:'Sincronizar',copy:'Copiar',enter:'Introduce un código (p. ej. ML-ABCDE-12345)',load:'Cargar',ok:'Sincronizado',bad:'No se encontró ese código',err:'Falló la sincronización, se reintentará',last:'Última sincronización',off:'El guardado en la nube no está disponible'},
  fr:{t:'Sauvegarde cloud · code de transfert',n:'Créez un code de transfert et votre progression sera enregistrée automatiquement sur notre serveur. Saisissez le même code sur votre téléphone ou un autre ordinateur pour jouer avec les mêmes cartes. Gardez-le secret : quiconque le possède peut charger cette sauvegarde.',make:'Créer un code',code:'Votre code',sync:'Synchroniser',copy:'Copier',enter:'Saisir un code (ex. ML-ABCDE-12345)',load:'Charger',ok:'Synchronisé',bad:'Code introuvable',err:'Échec de la synchronisation, nouvel essai plus tard',last:'Dernière synchro',off:'La sauvegarde cloud est indisponible'},
  pt:{t:'Salvamento na nuvem · código',n:'Crie um código de transferência e seu progresso será salvo automaticamente no nosso servidor. Digite o mesmo código no celular ou em outro computador para jogar com as mesmas cartas. Guarde o código: quem tiver ele pode carregar este save.',make:'Criar código',code:'Seu código',sync:'Sincronizar',copy:'Copiar',enter:'Digite um código (ex.: ML-ABCDE-12345)',load:'Carregar',ok:'Sincronizado',bad:'Código não encontrado',err:'Falha ao sincronizar, tentaremos depois',last:'Última sincronização',off:'O salvamento na nuvem não está disponível'}};
-const CLTG={zh_hant:{login:'登入',g:'用 Google 帳號同步（換裝置時登入同一個帳號即可）',gon:'已連結 Google 帳號',gerr:'Google 登入失敗'},
-zh_hans:{login:'登录',g:'用 Google 账号同步（换设备时登录同一个账号即可）',gon:'已连接 Google 账号',gerr:'Google 登录失败'},
-ja:{login:'ログイン',g:'Google アカウントで同期（別の端末でも同じアカウントでログイン）',gon:'Google アカウント連携済み',gerr:'Google ログインに失敗しました'},
-ko:{login:'로그인',g:'Google 계정으로 동기화 (다른 기기에서도 같은 계정으로 로그인)',gon:'Google 계정 연결됨',gerr:'Google 로그인 실패'},
-en:{login:'Sign in',g:'Sync with your Google account (sign in with the same account on any device)',gon:'Linked to Google',gerr:'Google sign-in failed'},
-es:{login:'Entrar',g:'Sincroniza con tu cuenta de Google (inicia sesión con la misma cuenta en cualquier dispositivo)',gon:'Vinculado a Google',gerr:'Error al iniciar sesión con Google'},
-fr:{login:'Connexion',g:'Synchroniser avec votre compte Google (connectez-vous avec le même compte sur chaque appareil)',gon:'Lié à Google',gerr:'Échec de la connexion Google'},
-pt:{login:'Entrar',g:'Sincronize com sua conta Google (entre com a mesma conta em qualquer dispositivo)',gon:'Vinculado ao Google',gerr:'Falha no login com Google'}};
+const CLTG={zh_hant:{uid:'玩家編號',safe:'已受保護',guest:'訪客帳號：尚未登入，清除瀏覽器資料就會消失',risk:'引繼碼要自己保管好：弄丟就找不回帳號，別人拿到也能登入。建議用 Google 登入。',login:'登入',g:'用 Google 帳號同步（換裝置時登入同一個帳號即可）',gon:'已連結 Google 帳號',gerr:'Google 登入失敗'},
+zh_hans:{uid:'玩家编号',safe:'已受保护',guest:'访客账号：尚未登录，清除浏览器数据就会消失',risk:'引继码要自己保管好：弄丢就找不回账号，别人拿到也能登录。建议用 Google 登录。',login:'登录',g:'用 Google 账号同步（换设备时登录同一个账号即可）',gon:'已连接 Google 账号',gerr:'Google 登录失败'},
+ja:{uid:'プレイヤー番号',safe:'保護済み',guest:'ゲストアカウント：未ログインのため、ブラウザのデータ削除で消えます',risk:'引き継ぎコードは自分で大切に保管してください。なくすとアカウントは戻せず、他人に知られるとログインされます。Google ログインがおすすめです。',login:'ログイン',g:'Google アカウントで同期（別の端末でも同じアカウントでログイン）',gon:'Google アカウント連携済み',gerr:'Google ログインに失敗しました'},
+ko:{uid:'플레이어 번호',safe:'보호됨',guest:'게스트 계정: 로그인하지 않아 브라우저 데이터를 지우면 사라집니다',risk:'인계 코드는 직접 잘 보관하세요. 잃어버리면 계정을 되찾을 수 없고, 다른 사람이 알면 로그인할 수 있습니다. Google 로그인을 권장합니다.',login:'로그인',g:'Google 계정으로 동기화 (다른 기기에서도 같은 계정으로 로그인)',gon:'Google 계정 연결됨',gerr:'Google 로그인 실패'},
+en:{uid:'Player ID',safe:'Protected',guest:'Guest account: not signed in, clearing browser data will erase it',risk:'Keep your transfer code safe: lose it and the account cannot be recovered, and anyone who has it can log in. Google sign-in is recommended.',login:'Sign in',g:'Sync with your Google account (sign in with the same account on any device)',gon:'Linked to Google',gerr:'Google sign-in failed'},
+es:{uid:'ID de jugador',safe:'Protegida',guest:'Cuenta de invitado: sin sesión, se borra si limpias los datos del navegador',risk:'Guarda bien tu código: si lo pierdes no se puede recuperar la cuenta, y quien lo tenga puede entrar. Recomendamos entrar con Google.',login:'Entrar',g:'Sincroniza con tu cuenta de Google (inicia sesión con la misma cuenta en cualquier dispositivo)',gon:'Vinculado a Google',gerr:'Error al iniciar sesión con Google'},
+fr:{uid:'ID joueur',safe:'Protégé',guest:'Compte invité : non connecté, effacer les données du navigateur le supprime',risk:'Gardez votre code précieusement : perdu, le compte est irrécupérable, et quiconque le possède peut se connecter. La connexion Google est recommandée.',login:'Connexion',g:'Synchroniser avec votre compte Google (connectez-vous avec le même compte sur chaque appareil)',gon:'Lié à Google',gerr:'Échec de la connexion Google'},
+pt:{uid:'ID do jogador',safe:'Protegida',guest:'Conta de convidado: sem login, limpar os dados do navegador apaga tudo',risk:'Guarde bem seu código: se perder, a conta não pode ser recuperada, e quem tiver o código pode entrar. Recomendamos entrar com o Google.',login:'Entrar',g:'Sincronize com sua conta Google (entre com a mesma conta em qualquer dispositivo)',gon:'Vinculado ao Google',gerr:'Falha no login com Google'}};
 const CT=k=>(CLT[L]||CLT.en)[k]??(CLTG[L]||CLTG.en)[k];
 const GCFG={id:undefined,lib:null};
-function gInit(){if(GCFG.id!==undefined)return Promise.resolve(GCFG.id);return fetch('/api/save').then(r=>r.ok?r.json():{}).then(j=>GCFG.id=j.google||null).catch(()=>GCFG.id=null)}
+function gInit(){if(GCFG.id!==undefined)return Promise.resolve(GCFG.id);return fetch('/api/account').then(r=>r.ok?r.json():{}).then(j=>GCFG.id=j.google||null).catch(()=>GCFG.id=null)}
 function gLib(){return GCFG.lib||(GCFG.lib=new Promise((ok,no)=>{const sc=document.createElement('script');sc.src='https://accounts.google.com/gsi/client';sc.async=true;sc.onload=ok;sc.onerror=no;document.head.appendChild(sc)}))}
-async function gSignedIn(resp){try{const j=await cloudCall({action:'google',credential:resp.credential,code:S.cloud&&S.cloud.code,data:cloudData()});if(!mergeSave(JSON.parse(j.data)))throw 0;S.cloud={code:j.code,at:j.updated,g:1};save();await cloudPush();toast(CT('ok'));render();cloudRefresh()}catch(e){toast(CT('gerr'))}}
+async function gSignedIn(resp){try{await acctReady().catch(()=>{});acctApply(await cloudCall({action:'google',credential:resp.credential,save:cloudData()}));toast(CT('ok'));render();cloudRefresh()}catch(e){toast(CT('gerr'))}}
 async function gButton(){const el=$('#gBtn');if(!el)return;const id=await gInit();if(!id){el.remove();return}
   try{await gLib();google.accounts.id.initialize({client_id:id,callback:gSignedIn});const box=$('#gBtn');if(!box)return;box.style.display='';google.accounts.id.renderButton(box.querySelector('.gb'),{theme:'filled_black',size:'large',shape:'pill',locale:({zh_hant:'zh-TW',zh_hans:'zh-CN'})[L]||L})}catch(e){const b=$('#gBtn');if(b)b.remove()}}
 const CLOUD={t:null,busy:false};
-function cloudData(){const o=Object.assign({},S);delete o.cloud;delete o.lang;return JSON.stringify(o)}
-async function cloudCall(body){const r=await fetch('/api/save',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body),keepalive:body.action==='put'});const j=await r.json().catch(()=>({}));if(!r.ok)throw Object.assign(new Error(j.error||r.status),{status:r.status});return j}
-async function cloudPush(){if(!S.cloud||CLOUD.busy)return;CLOUD.busy=true;try{const j=await cloudCall({action:'put',code:S.cloud.code,data:cloudData()});S.cloud.at=j.updated;save()}catch(e){}finally{CLOUD.busy=false}}
-function cloudSoon(){if(S.cloud&&!CLOUD.t)CLOUD.t=setTimeout(()=>{CLOUD.t=null;cloudPush()},30000)}
-async function cloudSync(){if(!S.cloud)return false;const j=await cloudCall({action:'get',code:S.cloud.code});mergeSave(JSON.parse(j.data));save();await cloudPush();return true}
-addEventListener('pagehide',()=>{if(S.cloud&&CLOUD.t){clearTimeout(CLOUD.t);CLOUD.t=null;cloudPush()}});
+function cloudData(){const o=Object.assign({},S);delete o.cloud;delete o.acct;delete o.lang;return JSON.stringify(o)}
+/* ===== accounts (Sean 2026-11-22): every player gets a # user ID on first open; Google / 引繼碼 lock it. Server: functions/api/account.js ===== */
+function acctApply(j){if(!j||!j.uid)throw 0;S.acct=Object.assign({},S.acct,{uid:j.uid},j.tok?{tok:j.tok}:{});S.uid=j.uid;
+  S.cloud=(j.g||j.code)?{code:j.code||null,g:j.g?1:0,at:j.updated}:null;if(j.data)mergeSave(JSON.parse(j.data));save();return j}
+let ACCT_P=null;
+function acctReady(){if(S.acct&&S.acct.tok)return Promise.resolve(S.acct);if(ACCT_P)return ACCT_P;
+  ACCT_P=cloudCall({action:'hello',save:cloudData(),code:S.cloud&&S.cloud.code}).then(j=>{acctApply(j);cloudBtn();return S.acct}).finally(()=>{ACCT_P=null});return ACCT_P}
+async function cloudCall(body){const h={'content-type':'application/json'};if(S.acct&&S.acct.tok)h.authorization='Bearer '+S.acct.tok;const r=await fetch('/api/account',{method:'POST',headers:h,body:JSON.stringify(body),keepalive:body.action==='put'});if(r.status===401&&body.action!=='google'&&S.acct){delete S.acct.tok}const j=await r.json().catch(()=>({}));if(!r.ok)throw Object.assign(new Error(j.error||r.status),{status:r.status});return j}
+async function cloudPush(){if(!(S.acct&&S.acct.tok)||CLOUD.busy)return;CLOUD.busy=true;try{const j=await cloudCall({action:'put',save:cloudData()});if(S.cloud)S.cloud.at=j.updated;try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}catch(e){}finally{CLOUD.busy=false}}
+function cloudSoon(){if(S.acct&&S.acct.tok&&!CLOUD.t)CLOUD.t=setTimeout(()=>{CLOUD.t=null;cloudPush()},30000)}
+async function cloudSync(){await acctReady();acctApply(await cloudCall({action:'sync',save:cloudData()}));return true}
+addEventListener('pagehide',()=>{if(S.acct&&CLOUD.t){clearTimeout(CLOUD.t);CLOUD.t=null;cloudPush()}});
 function cloudBox(){const c=S.cloud;
-  return `<div class="box" style="margin-top:14px"><b style="color:var(--gold)">☁ ${CT('t')}</b><div class="sub" style="text-align:left;margin:6px 0">${CT('n')}</div>
+  return `<div class="box" style="margin-top:14px">${S.uid?`<div class="acid"><span>${CT('uid')}</span><b>#${S.uid}</b>${c?`<i class="ok">🔒 ${CT('safe')}</i>`:`<i class="no">⚠ ${CT('guest')}</i>`}</div>`:''}<b style="color:var(--gold)">☁ ${CT('t')}</b><div class="sub" style="text-align:left;margin:6px 0">${CT('n')}</div>
    ${c&&c.g?`<div class="sub" style="text-align:left;margin-top:8px">✓ ${CT('gon')}</div>`:`<div id="gBtn" style="display:none;margin:10px 0 14px"><div class="sub" style="text-align:left;margin-bottom:6px">${CT('g')}</div><div class="gb"></div></div>`}
-   ${c?`<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span>${CT('code')}：</span><b id="clCode" style="font:700 18px ui-monospace,monospace;letter-spacing:1px;color:var(--gold)">${esc(c.code)}</b><button class="btn ghost" id="clCopy">${CT('copy')}</button><button class="btn" id="clSync">${CT('sync')}</button></div><div class="sub" style="text-align:left;margin-top:6px">${CT('last')}：${c.at?new Date(c.at).toLocaleString():'—'}</div>`
-     :`<button class="btn" id="clMake">${CT('make')}</button>`}
+   ${c&&c.code?`<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span>${CT('code')}：</span><b id="clCode" style="font:700 18px ui-monospace,monospace;letter-spacing:1px;color:var(--gold)">${esc(c.code)}</b><button class="btn ghost" id="clCopy">${CT('copy')}</button><button class="btn" id="clSync">${CT('sync')}</button></div><div class="sub" style="text-align:left;margin-top:6px">${CT('last')}：${c.at?new Date(c.at).toLocaleString():'—'}</div>`
+     :`<button class="btn" id="clMake">${CT('make')}</button>`}<div class="sub" style="text-align:left;margin-top:8px;color:#e9a08f">⚠ ${CT('risk')}</div>
    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><input class="inp" id="clIn" placeholder="${CT('enter')}" style="flex:1;min-width:200px" autocapitalize="characters"><button class="btn ghost" id="clLoad">${CT('load')}</button></div></div>`}
 function cloudBtn(){const b=$('#btnCloud');if(!b)return;const on=!!S.cloud;b.classList.toggle('on',on);b.querySelector('.cl').textContent=on?(S.cloud.g?'✓':'☁'):CT('login');b.title=CT('t')}
 function openCloud(){document.getElementById('cloudOv')?.remove();const host=document.createElement('div');host.className='ov';host.id='cloudOv';host.style.zIndex=40;
   host.innerHTML=`<div class="box" style="max-width:560px;width:100%"><div style="display:flex;justify-content:flex-end"><button class="btn ghost" data-x>${T('close')}</button></div><div id="cloudIn"></div></div>`;
   document.body.appendChild(host);host.querySelector('[data-x]').onclick=()=>host.remove();host.onclick=e=>{if(e.target===host)host.remove()};cloudRefresh()}
-function cloudRefresh(){cloudBtn();if(view==='pull'&&$('#syCard')){const o=$('#syCard');o.outerHTML=syncCard();$('#syCard').onclick=openCloud}const el=$('#cloudIn');if(!el)return;el.innerHTML=cloudBox().replace('class="box" style="margin-top:14px"','style=""');bindCloud()}
+function cloudRefresh(){cloudBtn();if(typeof obSigned==='function')obSigned();if(view==='pull'&&$('#syCard')){const o=$('#syCard');o.outerHTML=syncCard();$('#syCard').onclick=openCloud}const el=$('#cloudIn');if(!el)return;el.innerHTML=cloudBox().replace('class="box" style="margin-top:14px"','style=""');bindCloud()}
 function bindCloud(){
   gButton();
-  const mk=$('#clMake');if(mk)mk.onclick=async()=>{mk.disabled=true;try{const j=await cloudCall({action:'create',data:cloudData()});S.cloud={code:j.code,at:j.updated};save();toast(CT('ok'));cloudRefresh();render()}catch(e){mk.disabled=false;toast(CT('off'))}};
-  const cp=$('#clCopy');if(cp)cp.onclick=()=>{try{navigator.clipboard.writeText(S.cloud.code);toast('✓')}catch(e){}};
+  const mk=$('#clMake');if(mk)mk.onclick=async()=>{mk.disabled=true;try{await acctReady();acctApply(await cloudCall({action:'create'}));toast(CT('ok'));cloudRefresh();render()}catch(e){mk.disabled=false;toast(CT('off'))}};
+  const cp=$('#clCopy');if(cp)cp.onclick=()=>{try{navigator.clipboard.writeText(S.cloud.code||'');toast('✓')}catch(e){}};
   const sy=$('#clSync');if(sy)sy.onclick=async()=>{sy.disabled=true;try{await cloudSync();toast(CT('ok'));render();cloudRefresh()}catch(e){toast(e.status===404?CT('bad'):CT('err'));sy.disabled=false}};
-  $('#clLoad').onclick=async()=>{const v=$('#clIn').value.trim();if(!v)return;try{const j=await cloudCall({action:'get',code:v});if(!mergeSave(JSON.parse(j.data)))throw 0;S.cloud={code:j.code,at:j.updated};save();await cloudPush();toast(CT('ok'));render();cloudRefresh()}catch(e){toast(e&&e.status===404||e&&e.status===400?CT('bad'):CT('off'))}};
+  $('#clLoad').onclick=async()=>{const v=$('#clIn').value.trim();if(!v)return;try{await acctReady().catch(()=>{});acctApply(await cloudCall({action:'get',code:v,save:cloudData()}));toast(CT('ok'));render();cloudRefresh()}catch(e){toast(e&&e.status===404||e&&e.status===400?CT('bad'):CT('off'))}};
 }
 const MTX={zh_hant:{del:'清空收藏',c1:'確定要清空這個裝置上的全部收藏與進度嗎？此動作無法復原。建議先匯出備份。',c2:'最後確認：真的要清空嗎？',done:'已清空',tabs:'另一個分頁也開著《萬象傳奇錄》。請關閉其他分頁，以免存檔互相覆蓋。',rules:'規則',priv:'隱私權',terms:'使用條款',contact:'聯絡我們'},
 zh_hans:{del:'清空收藏',c1:'确定要清空这个设备上的全部收藏与进度吗？此操作无法复原。建议先导出备份。',c2:'最后确认：真的要清空吗？',done:'已清空',tabs:'另一个标签页也开着《万象传奇录》。请关闭其他标签页，以免存档互相覆盖。',rules:'规则',priv:'隐私',terms:'使用条款',contact:'联系我们'},
@@ -1627,7 +1634,7 @@ const MT=k=>(MTX[L]||MTX.en)[k];
 function footLinks(){return `<div class="foot"><a href="#" id="ftRules">${MT('rules')}</a> · <a href="/privacy.html" target="_blank" rel="noopener">${MT('priv')}</a> · <a href="/terms.html" target="_blank" rel="noopener">${MT('terms')}</a> · <a href="/contact.html?lang=${L}" target="_blank" rel="noopener">${MT('contact')}</a></div>`}
 try{const bc=new BroadcastChannel('ml-tabs');bc.onmessage=e=>{if(e.data==='hello')bc.postMessage('here');else if(e.data==='here'&&!window.__tabWarned){window.__tabWarned=1;const d=document.createElement('div');d.className='tabwarn';d.textContent=MT('tabs');d.onclick=()=>d.remove();document.body.appendChild(d)}};bc.postMessage('hello')}catch(e){}
 function bindBackup(){
-  const dl=$('#bkDel');if(dl)dl.onclick=()=>{if(!confirm(MT('c1'))||!confirm(MT('c2')))return;const keep={lang:S.lang,introSeen:true,noticeHide:S.noticeHide};S=Object.assign(FRESH(),keep);save();toast(MT('done'));cloudBtn();render()};
+  const dl=$('#bkDel');if(dl)dl.onclick=()=>{if(!confirm(MT('c1'))||!confirm(MT('c2')))return;const keep={lang:S.lang,introSeen:true,noticeHide:S.noticeHide,onboarded:S.onboarded,acct:S.acct,uid:S.uid,cloud:S.cloud,profile:S.profile};S=Object.assign(FRESH(),keep);save();if(S.acct&&S.acct.tok)cloudCall({action:'wipe'}).catch(()=>{});toast(MT('done'));cloudBtn();render()};
   $('#bkExp').onclick=async()=>{const txt=JSON.stringify({game:'wanxiang',v:2,at:new Date().toISOString(),save:S});const fn=`wanxiang-backup-${today()}.json`;
     try{const dl=window.claude&&await window.claude.use('downloads');
       if(dl){await dl.save({filename:fn,data:new Blob([txt],{type:'application/json'})})}
@@ -2123,5 +2130,6 @@ $('#lang').onchange=e=>{L=S.lang=e.target.value;save();chrome();render();cloudBt
 $('#btnTrophy').onclick=showTrophies;$('#btnCloud').onclick=openCloud;cloudBtn();$('#btnRules').onclick=showRules;
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('.ov').forEach(o=>o.remove());$('#layer').innerHTML=''}});
 chrome();intro(false);
-(window.DATAP=loadData()).then(()=>{if(S.cloud)cloudSync().then(()=>render()).catch(()=>{});if(S.banner.id!==BANNER.id){S.banner={id:BANNER.id,pulled:0,got:false,start:Date.now()};save()}go('pull');window.__ready=1;if($('#intro').hidden)setTimeout(maybeNotice,300)}).catch(e=>{$('#app').innerHTML='<p>Failed to load cards.json</p>'});
+(window.DATAP=loadData()).then(()=>{cloudSync().then(()=>{render();cloudRefresh()}).catch(()=>{});if(S.banner.id!==BANNER.id){S.banner={id:BANNER.id,pulled:0,got:false,start:Date.now()};save()}go('pull');window.__ready=1;if($('#intro').hidden)setTimeout(maybeNotice,300)}).catch(e=>{$('#app').innerHTML='<p>Failed to load cards.json</p>'});
 </script>
+<script src="onboard.js" charset="utf-8"></script>
