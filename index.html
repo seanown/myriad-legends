@@ -1624,7 +1624,7 @@ es:{del:'Borrar colección',c1:'¿Borrar todas las cartas y el progreso de este 
 fr:{del:'Supprimer la collection',c1:'Supprimer toutes les cartes et la progression de cet appareil ? Action irréversible.',c2:'Dernière confirmation : tout supprimer ?',done:'Supprimé',tabs:'Le jeu est ouvert dans un autre onglet. Fermez-le pour éviter d\'écraser votre sauvegarde.',rules:'Règles',priv:'Confidentialité',terms:'Conditions',contact:'Contact'},
 pt:{del:'Apagar coleção',c1:'Apagar todas as cartas e o progresso deste dispositivo? Não pode ser desfeito.',c2:'Confirmação final: apagar tudo?',done:'Apagado',tabs:'O jogo está aberto em outra aba. Feche-a para não sobrescrever seu progresso.',rules:'Regras',priv:'Privacidade',terms:'Termos',contact:'Contato'}};
 const MT=k=>(MTX[L]||MTX.en)[k];
-function footLinks(){return `<div class="foot"><a href="#" id="ftRules">${MT('rules')}</a> · <a href="/privacy.html" target="_blank" rel="noopener">${MT('priv')}</a> · <a href="/terms.html" target="_blank" rel="noopener">${MT('terms')}</a> · <a href="https://github.com/seanown/myriad-legends/issues" target="_blank" rel="noopener">${MT('contact')}</a></div>`}
+function footLinks(){return `<div class="foot"><a href="#" id="ftRules">${MT('rules')}</a> · <a href="/privacy.html" target="_blank" rel="noopener">${MT('priv')}</a> · <a href="/terms.html" target="_blank" rel="noopener">${MT('terms')}</a> · <a href="/contact.html?lang=${L}" target="_blank" rel="noopener">${MT('contact')}</a></div>`}
 try{const bc=new BroadcastChannel('ml-tabs');bc.onmessage=e=>{if(e.data==='hello')bc.postMessage('here');else if(e.data==='here'&&!window.__tabWarned){window.__tabWarned=1;const d=document.createElement('div');d.className='tabwarn';d.textContent=MT('tabs');d.onclick=()=>d.remove();document.body.appendChild(d)}};bc.postMessage('hello')}catch(e){}
 function bindBackup(){
   const dl=$('#bkDel');if(dl)dl.onclick=()=>{if(!confirm(MT('c1'))||!confirm(MT('c2')))return;const keep={lang:S.lang,introSeen:true,noticeHide:S.noticeHide};S=Object.assign(FRESH(),keep);save();toast(MT('done'));cloudBtn();render()};
@@ -2091,7 +2091,7 @@ function showRules(){
   const body=RL.body.replace('{RARTABLE}',rar).replace('{SRCTABLE}',src).replace('{ANAT}',anatomyHTML(RL)).replace('{CHANGELOG}',T('changelog')).replace('{BH}',BANNER.hours).replace('{BB}',BANNER.boost).replace('{BG}',BANNER.guardH).replace('{BS}',BANNER.spark);
   host.innerHTML=`<div class="box rules" style="max-width:820px"><div style="display:flex;justify-content:space-between;align-items:center"><h2 style="margin:0">${T('rules')}</h2><button class="btn ghost" data-x>${T('close')}</button></div>
   ${body}
-  <div style="display:flex;gap:8px;margin-top:14px"><button class="btn ghost" id="replay">${T('replay_intro')}</button><button class="btn ghost" id="reset">${T('reset')}</button></div></div>`;
+  <div style="display:flex;gap:8px;margin-top:14px"><button class="btn ghost" id="replay">${T('replay_intro')}</button><button class="btn ghost" id="reset">${T('reset')}</button><a class="btn ghost" href="/contact.html?lang=${L}" target="_blank" rel="noopener" style="text-decoration:none">✉ ${MT('contact')}</a></div></div>`;
   document.body.appendChild(host);host.onclick=e=>{if(e.target===host||e.target.closest('[data-x]'))host.remove()};
   $('#replay',host).onclick=()=>{host.remove();intro(true)};
   $('#reset',host).onclick=e=>{const b=e.target;if(b.dataset.c){const lang=S.lang;S=FRESH();S.lang=lang;S.introSeen=true;save();host.remove();render()}else{b.dataset.c=1;b.textContent=T('reset_confirm')}};
