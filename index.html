@@ -950,6 +950,7 @@ const M5=i=>(MT5[L]||MT5.en)[i];
 const PT_RANK={white:0,gold:1,rainbow:2,black:3};
 function openPacks(n){
   refill();if(S.packs<=0){showNoPacks();return null}
+  if(S.packs<2)return openPack(); // a batch needs at least 2 packs; with 1 left this is a normal single pull (button label says so)
   n=Math.min(n,S.packs);const packs=[];
   for(let k=0;k<n;k++){const o=openPack();if(!o)break;packs.push(o)}
   if(!packs.length)return null;
@@ -1449,7 +1450,7 @@ async function frameBase(){const W=1200,H=630,cv=document.createElement('canvas'
   try{const bg=await loadImg('hero/hero3.webp');x.globalAlpha=.35;cover(x,bg,0,0,W,H);x.globalAlpha=1}catch(e){}
   x.fillStyle='rgba(8,6,12,.55)';x.fillRect(0,0,W,H);x.strokeStyle='#c9a24a';x.lineWidth=3;x.strokeRect(14,14,W-28,H-28);return {cv,x,W,H}}
 function brand(x,W,H){const serif='"Noto Serif TC",serif';x.fillStyle='#e9c46a';x.font=`900 30px ${serif}`;x.fillText('MYRIAD LEGENDS · 萬象傳奇錄',40,64);x.fillStyle='#c9a24a';x.font=`700 24px ui-monospace,monospace`;x.textAlign='right';x.fillText('mylegends.org',W-40,H-34);x.textAlign='left'}
-async function resultPNG(res){const {cv,x,W,H}=await frameBase();brand(x,W,H);const serif='"Noto Serif TC",serif';
+async function resultPNG(res){if(res.length>6)return resultPNGMany(res);const {cv,x,W,H}=await frameBase();brand(x,W,H);const serif='"Noto Serif TC",serif';
   const tw=172,th=330,gap=14,x0=(W-(6*tw+5*gap))/2,y0=120;const arts=await Promise.all(res.map(r=>artImg(r.c)));
   res.slice(0,6).forEach(({c,isNew},i)=>{const X=x0+i*(tw+gap),col=RCOLS[c.y]||'#ccc';
     x.fillStyle='#15121c';x.fillRect(X,y0,tw,th);x.strokeStyle=col;x.lineWidth=RAR.indexOf(c.y)>=3?5:2;x.strokeRect(X,y0,tw,th);
@@ -1459,6 +1460,18 @@ async function resultPNG(res){const {cv,x,W,H}=await frameBase();brand(x,W,H);co
     x.fillStyle='#fff';x.font=`700 19px ${serif}`;wrapText(x,nm(c),X+10,y0+272,tw-20,24,2);
     x.fillStyle='#a9a290';x.font='600 14px sans-serif';x.fillText(`ATK ${c.a.toLocaleString()} / DEF ${c.d.toLocaleString()}`,X+10,y0+th-12)});
   const best=res.reduce((a,r)=>RAR.indexOf(r.c.y)>RAR.indexOf(a.c.y)?r:a,res[0]);x.fillStyle=RCOLS[best.c.y];x.font=`900 34px ${serif}`;x.fillText(`${best.c.y} ${nm(best.c)}`,40,H-36);
+  return new Promise(r=>cv.toBlob(r,'image/png'))}
+// 5-pack share image: all cards as small tiles, 10 per row, rarest first
+async function resultPNGMany(res){const {cv,x,W,H}=await frameBase();brand(x,W,H);const serif='"Noto Serif TC",serif';
+  const cols=10,rows=Math.ceil(res.length/cols),gap=10,x0=40,y0=92,tw=(W-2*x0-(cols-1)*gap)/cols,th=Math.min(150,(H-y0-90-(rows-1)*gap)/rows);
+  const arts=await Promise.all(res.map(r=>artImg(r.c)));
+  res.forEach(({c,isNew},i)=>{const X=x0+(i%cols)*(tw+gap),Y=y0+Math.floor(i/cols)*(th+gap),col=RCOLS[c.y]||'#ccc',hi=RAR.indexOf(c.y)>=3;
+    x.fillStyle='#15121c';x.fillRect(X,Y,tw,th);
+    const ah=th-46,a=arts[i];if(a)cover(x,a,X+4,Y+22,tw-8,ah);else sealFallback(x,c,X+4,Y+22,tw-8,ah);
+    x.strokeStyle=col;x.lineWidth=hi?4:1.5;if(hi){x.save();x.shadowColor=col;x.shadowBlur=18;x.strokeRect(X,Y,tw,th);x.restore()}x.strokeRect(X,Y,tw,th);
+    x.fillStyle=col;x.font=`900 16px ${serif}`;x.fillText(c.y,X+5,Y+17);if(isNew){x.fillStyle='#ff9a2a';x.font='800 10px sans-serif';x.textAlign='right';x.fillText('NEW',X+tw-5,Y+15);x.textAlign='left'}
+    x.fillStyle='#fff';x.font=`700 12px ${serif}`;wrapText(x,nm(c),X+5,Y+th-9,tw-10,14,1)});
+  const best=res.reduce((a,r)=>RAR.indexOf(r.c.y)>RAR.indexOf(a.c.y)?r:a,res[0]);x.fillStyle=RCOLS[best.c.y];x.font=`900 30px ${serif}`;x.fillText(`${best.c.y} ${nm(best.c)}  ·  ×${res.length}`,40,H-36);
   return new Promise(r=>cv.toBlob(r,'image/png'))}
 async function cardPNG(c){const {cv,x,W,H}=await frameBase();brand(x,W,H);const serif='"Noto Serif TC",serif',col=RCOLS[c.y]||'#ccc';
   const a=await artImg(c);const AX=60,AY=100,AW=400,AH=470;x.save();x.shadowColor=col;x.shadowBlur=40;x.fillStyle='#000';x.fillRect(AX,AY,AW,AH);x.restore();if(a)cover(x,a,AX,AY,AW,AH);else sealFallback(x,c,AX,AY,AW,AH);x.strokeStyle=col;x.lineWidth=5;x.strokeRect(AX,AY,AW,AH);
@@ -1539,8 +1552,9 @@ async function showReveal({type,res,multi}){
   $('#gShare').onclick=()=>shareImgOr(txt(),()=>resultPNG(res),'myriad-legends-result.png');
   const close=()=>{Lr.innerHTML='';render()};
   $('#gBack').onclick=close;
-  if(multi)$('#gAgain').textContent=M5(0)(MULTI_N);
-  $('#gAgain').onclick=()=>{close();setTimeout(()=>doPull(multi?MULTI_N:1),50)};
+  refill();const againN=multi&&S.packs>=2?Math.min(MULTI_N,S.packs):1;
+  if(againN>1)$('#gAgain').textContent=M5(0)(againN);
+  $('#gAgain').onclick=()=>{close();setTimeout(()=>doPull(againN),50)};
 }
 function shareText(t){
   const done=()=>{S.mission.share=true;save();toast(T('copied'))};
