@@ -1692,7 +1692,7 @@ function cxRows(){
   if(cx.view==='grid'){const g=$('#cg');
     g.innerHTML=rows.length?rows.map(c=>`<div class="cw">${miniHTML(c)}<button class="star ${S.fav[c.i]?'on':''}" data-fav="${c.i}" aria-label="${T('fav')}">${S.fav[c.i]?'★':'☆'}</button><div class="sub2"><span>⚔${c.a.toLocaleString()} 🛡${c.d.toLocaleString()}</span><span>×${S.owned[c.i]}</span></div></div>`).join(''):`<div class="muted" style="grid-column:1/-1;text-align:center;padding:24px">${T('empty')}</div>`;
     hydrateMinis(g);
-    g.querySelectorAll('.mini[data-id]').forEach(m=>m.onclick=()=>detail(+m.dataset.id));
+    g.querySelectorAll('.mini[data-id]').forEach(m=>{m.setAttribute('role','button');m.onclick=()=>detail(+m.dataset.id);m.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();detail(+m.dataset.id)}}});
     g.querySelectorAll('[data-fav]').forEach(b=>b.onclick=e=>{e.stopPropagation();const i=b.dataset.fav;S.fav[i]=!S.fav[i];if(!S.fav[i])delete S.fav[i];save();b.classList.toggle('on');b.textContent=S.fav[i]?'★':'☆'});
     return}
   $('#tb').innerHTML=rows.length?rows.map(c=>`<tr data-id="${c.i}"><td><b class="rb r-${c.y}">${c.y}</b></td><td style="color:#e9a23b">${c.f.toFixed(1)}</td>

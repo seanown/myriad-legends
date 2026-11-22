@@ -92,16 +92,16 @@ pt:{n:'Português',t:'Política de privacidade',upd:'Última atualização',back
 ['Alterações','Se esta política mudar, atualizaremos esta página e a data acima.']]}
 };
 const HL={zh_hant:'zh-Hant',zh_hans:'zh-Hans',ja:'ja',ko:'ko',en:'en',es:'es',fr:'fr',pt:'pt'};
-function pick(){const q=new URLSearchParams(location.search).get('lang');if(TX[q])return q;
-  try{const s=JSON.parse(localStorage.getItem('wanxiang-v2')||'{}');if(TX[s.lang])return s.lang}catch(e){}
+function pick(){const q=new URLSearchParams(location.search).get('lang');const has=k=>Object.prototype.hasOwnProperty.call(TX,k);if(has(q))return q;
+  try{const s=JSON.parse(localStorage.getItem('wanxiang-v2')||'{}');if(has(s.lang))return s.lang}catch(e){}
   const n=(navigator.language||'').toLowerCase();if(/^zh-(cn|sg|hans)/.test(n))return'zh_hans';if(n.startsWith('zh'))return'zh_hant';
-  const b=n.slice(0,2);return TX[b]?b:'zh_hant'}
+  const b=n.slice(0,2);return has(b)?b:'zh_hant'}
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const link=`<a href="${ISSUES}" target="_blank" rel="noopener">github.com/seanown/myriad-legends/issues</a>`;
 function render(L){const t=TX[L];document.documentElement.lang=HL[L];document.title=`${t.t} · MYRIAD LEGENDS 萬象傳奇錄`;
   document.getElementById('root').innerHTML=`<h1>${t.t}</h1><small>MYRIAD LEGENDS · 萬象傳奇錄 · https://mylegends.org · ${t.upd}: ${UPDATED}</small>`+
   t.s.map(([h,p])=>`<h2>${h}</h2><p>${esc(p).replace('{I}',link)}</p>`).join('')+
-  `<p class="back"><a href="/">← ${t.back}</a> · <a href="/terms.html">${t.terms}</a> · <a href="/contact.html?lang=${L}">${t.contact}</a></p>`}
+  `<p class="back"><a href="/">← ${t.back}</a> · <a href="/terms.html?lang=${L}">${t.terms}</a> · <a href="/contact.html?lang=${L}">${t.contact}</a></p>`}
 const sel=document.getElementById('lang');let L=pick();
 sel.innerHTML=Object.keys(TX).map(k=>`<option value="${k}"${k===L?' selected':''}>${TX[k].n}</option>`).join('');
 sel.onchange=()=>{L=sel.value;history.replaceState(null,'','?lang='+L);render(L)};render(L);
