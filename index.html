@@ -162,6 +162,65 @@ table.cards .num{text-align:right;font-variant-numeric:tabular-nums}
 .m-solo{background:linear-gradient(135deg,#132447,#0d1426);border-color:#2f5ba8}.m-solo h3{color:#9cc3ff}
 .m-team{background:linear-gradient(135deg,#0f3238,#0a191d);border-color:#1f7480}.m-team h3{color:#7fe3ee}
 .m-story{background:linear-gradient(135deg,#3a2c0c,#1a1408);border-color:#8a6a1e}.m-story h3{color:var(--gold2)}
+.m-duel{background:linear-gradient(135deg,#3d0f2a,#170a16);border-color:#b0407e;grid-column:1/-1;min-height:96px}.m-duel h3{color:#ff9ad5}
+.m-duel .du-st{position:absolute;right:14px;bottom:12px;font-size:12px;color:#e9c9da}
+/* share one card */
+.shc{background:radial-gradient(ellipse at 50% 38%,#2a2112 0%,#0b0907 45%,#030304 80%)}
+.shc-st{max-width:560px;gap:6px;justify-content:flex-start;padding-top:8px}
+.shc-h{font-family:var(--f-disp);font-size:clamp(26px,7vw,40px);line-height:1.15;text-align:center;margin:10px 0 0;color:#f4efe6;font-weight:700}
+.shc-h b{font-size:1.25em;background:linear-gradient(180deg,#fff6cf,#e9c46a 55%,#a8781e);-webkit-background-clip:text;background-clip:text;color:transparent}
+.shc-from{color:var(--gold2);font-size:14px;border:1px solid #c9a24a66;border-radius:999px;padding:3px 14px}
+.shc-wrap{position:relative;width:min(290px,72vw);margin:26px auto 0}
+.shc-smoke{position:absolute;left:-80%;top:-25%;height:120%;width:260%;z-index:0;pointer-events:none;-webkit-mask-image:radial-gradient(closest-side,#000 55%,transparent);mask-image:radial-gradient(closest-side,#000 55%,transparent)}
+.shc-aura{position:absolute;inset:-18% -40%;z-index:0;background:radial-gradient(closest-side,color-mix(in srgb,var(--rc) 50%,transparent),transparent 72%);filter:blur(10px);animation:shcPulse 3.2s ease-in-out infinite;pointer-events:none}
+@keyframes shcPulse{0%,100%{opacity:.65;transform:scale(1)}50%{opacity:1;transform:scale(1.06)}}
+.shc-card{position:relative;z-index:2}
+.shc-card .tcard{width:100%;animation:rise .6s ease-out;box-shadow:0 0 0 2px color-mix(in srgb,var(--rc) 70%,#fff),0 0 34px var(--rc),0 0 90px color-mix(in srgb,var(--rc) 60%,transparent)}
+.shc-n{position:absolute;right:-6px;bottom:-8px;z-index:3;background:#0b0910;border:1px solid var(--rc);color:#fff;border-radius:999px;padding:2px 10px;font:800 15px Georgia,serif}
+.shc-floor{position:relative;z-index:1;height:2px;margin:6px -40% 0;background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--rc) 70%,#fff),transparent);opacity:.7}
+.shc-reflw{position:relative;z-index:1;height:150px;overflow:hidden;pointer-events:none;margin-top:2px}
+.shc-refl{transform:scaleY(-1);opacity:.32;-webkit-mask-image:linear-gradient(to bottom,transparent 55%,#000);mask-image:linear-gradient(to bottom,transparent 55%,#000);filter:blur(.6px)}
+.shc-refl .tcard{width:100%;animation:none;box-shadow:none}
+.shc-own{font-size:15px;color:#e8dfc8;margin-top:4px}
+.shc-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px}
+/* duel */
+.du-tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:10px}
+.du-tab{flex:1;background:none;border:0;border-bottom:3px solid transparent;color:var(--muted);padding:9px 6px;font-weight:800;letter-spacing:.04em;font-size:15px;cursor:pointer}
+.du-tab.on{color:var(--gold2);border-bottom-color:var(--gold)}
+.du-src .du-tab{font-size:13px}
+.du-fr{margin-bottom:10px}
+.du-arena{position:relative;border:1px solid #3a2f22;border-radius:16px;padding:14px 12px 10px;background:radial-gradient(ellipse at 50% 50%,#2b1f10 0%,#0c0a0e 70%);overflow:hidden}
+.du-side{display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));gap:8px;margin:0 auto;max-width:calc(var(--n) * 150px)}
+.n1 .du-side{max-width:170px}
+.du-slot{position:relative;min-width:0;border-radius:10px}
+.du-slot .mini{pointer-events:none}
+.du-me .du-slot{cursor:pointer}
+.du-empty{aspect-ratio:3/4;border:2px dashed #5a4a36;border-radius:9px;display:grid;place-items:center;color:#8a7a5e;font-size:26px;background:#0006}
+.du-me .du-slot.sel{outline:2px solid var(--gold);outline-offset:3px;border-radius:9px}
+.du-me .du-slot.on .mini{box-shadow:0 0 14px #ff6a3a,0 0 30px #ff6a3a55}
+.du-opp .du-slot.on .mini{box-shadow:0 0 14px #4cc3ff,0 0 30px #4cc3ff55}
+.du-x{position:absolute;top:-7px;right:-7px;z-index:3;width:22px;height:22px;border-radius:50%;border:1px solid var(--line2);background:#120f16;color:#fff;font-size:11px;line-height:1;cursor:pointer}
+.du-m{position:absolute;left:50%;top:-9px;transform:translateX(-50%);z-index:3;font:800 11px Georgia,serif;padding:1px 6px;border-radius:999px;background:#0b0910;white-space:nowrap}
+.du-m.adv{color:#4ade80;border:1px solid #4ade8088}.du-m.dis{color:#f87171;border:1px solid #f8717188}
+.du-mid{display:flex;align-items:center;justify-content:center;gap:clamp(8px,3vw,18px);margin:14px 0}
+.du-pow{min-width:96px;text-align:center;border:2px solid #cfc6b4;border-radius:10px;padding:4px 12px;background:linear-gradient(#34303a,#121016);box-shadow:inset 0 0 0 2px #0008,0 2px 10px #0008}
+.du-pow small{display:block;font-size:11px;color:#d8d0bf;letter-spacing:.06em}
+.du-pow b{font:900 clamp(18px,5vw,24px) Georgia,serif;color:#fff;font-variant-numeric:tabular-nums}
+.du-vs{font:900 clamp(30px,8vw,40px)/1 Georgia,serif;padding:6px 12px;border-radius:10px;background:linear-gradient(100deg,#ff4f6b,#ff9a2a 35%,#ffd24a 55%,#4cc3ff);color:#fff;text-shadow:0 2px 6px #0009;box-shadow:0 0 22px #ff9a2a66}
+.du-hint{font-size:11px;color:var(--muted);text-align:center;margin-top:10px}
+.du-act{display:flex;align-items:center;justify-content:center;gap:12px;margin:14px 0 8px;flex-wrap:wrap}
+.du-go{font-size:18px;padding:12px 34px;border-radius:14px;background:linear-gradient(180deg,#ffe58a,#e0a92a);color:#2a1a00;font-weight:900;letter-spacing:.06em}
+.du-last{border:1px solid var(--line2);border-radius:10px;padding:6px 12px;text-align:center;background:#0b0910}
+.du-last small{display:block;color:var(--muted);font-size:11px}
+.du-r{font:900 18px Georgia,serif}.du-r.du-win{color:var(--gold2)}.du-r.du-lose{color:#f87171}.du-r.du-draw{color:#facc15}
+.du-opts{display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;margin-bottom:12px}
+.du-opts label{display:inline-flex;gap:6px;align-items:center;cursor:pointer}
+.du-round{margin-bottom:12px}
+.du-end{text-align:center;margin:8px 0 18px}
+.du-big{font:900 clamp(40px,12vw,64px)/1 Georgia,serif;letter-spacing:.04em}
+.du-end.du-win .du-big{background:linear-gradient(180deg,#fff6cf,#e9c46a,#a8781e);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 16px #e9c46a88)}
+.du-end.du-lose .du-big{color:#f87171}.du-end.du-draw .du-big{color:#facc15}
+.du-score{font:800 22px Georgia,serif;color:#e8dfc8}
 .newtag{position:absolute;top:12px;right:12px;font-size:11px;border:1px solid var(--gold);color:var(--gold);border-radius:999px;padding:1px 8px}
 .statgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .statgrid div{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:10px 14px}
@@ -1748,7 +1807,7 @@ function detail(id,overReveal){
   host.onclick=e=>{if(e.target===host||e.target.closest('[data-x]'))close()};
   const w=$('[data-wiki]',host);if(w)w.onclick=()=>{S.mission.wiki=true;save()};
   const f=$('[data-favb]',host);if(f)f.onclick=()=>{S.fav[c.i]=!S.fav[c.i];if(!S.fav[c.i])delete S.fav[c.i];save();f.textContent=(S.fav[c.i]?'★ ':'☆ ')+T('fav');const st=$('[data-cstar]',host);if(st){st.textContent=S.fav[c.i]?'★':'☆';st.classList.toggle('on',!!S.fav[c.i])}};
-  const s=$('[data-share]',host);if(s)s.onclick=()=>shareImgOr(`${T('game')} · ${c.y} ${nm(c)} (#${c.i}) ATK ${c.a} / DEF ${c.d}${wl?'\n'+wl:''}`,()=>cardPNG(c),`myriad-legends-${c.i}.png`);
+  const s=$('[data-share]',host);if(s)s.onclick=()=>showShareCard(c);
   const g=$('[data-addg]',host);if(g)g.onchange=()=>{const n=g.value;if(!n)return;if(!S.groups[n].includes(c.i))S.groups[n].push(c.i);save();toast('✓')};
 }
 function showcase(){
@@ -1810,10 +1869,11 @@ function vBattle(){
   const rank={};for(const r of R)for(const id of (r.cards||[])){const c=BYID[id];if(!c)continue;const k=c.y;rank[k]=rank[k]||{};const o=rank[k][id]=rank[k][id]||{g:0,w:0};o.g++;if(r.res==='win')o.w++}
   $('#app').innerHTML=`<h2>${T('battle_menu')}</h2>
   <div class="modes">
+    <button class="mode m-duel" data-m="duel"><span class="newtag">${T('new_mode')}</span><h3>⚔ ${DU('mode')}</h3><p>${DU('md')}</p><span class="du-st">${DU('rec')}: ${duelS().w}-${duelS().l}-${duelS().d}</span></button>
     <button class="mode m-boss" data-m="boss"><h3>${T('boss')}</h3><p>${T('boss_d')}</p></button>
     <button class="mode m-solo" data-m="solo"><h3>${T('solo')}</h3><p>${T('solo_d')}</p></button>
     <button class="mode m-team" data-m="team"><h3>${T('team')}</h3><p>${T('team_d')}</p></button>
-    <button class="mode m-story" data-m="story"><span class="newtag">${T('new_mode')}</span><h3>${T('story')}</h3><p>${T('story_d')}</p></button>
+    <button class="mode m-story" data-m="story"><h3>${T('story')}</h3><p>${T('story_d')}</p></button>
   </div>
   <div class="box" style="margin-top:20px"><h3 style="margin:0 0 10px">${T('records')}</h3>${R.slice(0,8).map(r=>`<div class="rec"><div style="display:flex;justify-content:space-between" class="muted"><span>${new Date(r.t).toLocaleString()}</span><span class="rb r-${r.level}">${r.level}</span></div><div>${esc(r.title)}</div><div style="display:flex;justify-content:space-between"><span>${T('result')}: <b>${T(r.res)}</b></span><span>${T('turns')}: ${r.turns}</span></div></div>`).join('')||`<p class="muted">${T('no_records')}</p>`}</div>
   <div class="box" style="margin-top:14px"><h3 style="margin:0 0 10px">${T('record_stats')}</h3>
@@ -1823,7 +1883,7 @@ function vBattle(){
     <div><small>${T('draws')}</small><b style="color:#facc15">${d}</b></div><div><small>${T('cur_streak')}</small><b style="color:#7dd3fc">${cur}</b></div></div>
    <h4>${T('by_level')}</h4><div style="overflow-x:auto"><table class="lv"><tr><th>${T('level')}</th><th>${T('games')}</th><th>${T('wins')}</th><th>${T('losses')}</th><th>${T('draws')}</th><th>${T('winrate')}</th><th>${T('avg_turn')}</th></tr>${lvRows}</table></div>
    <h4>${T('rank_by_level')}</h4><div class="themes">${Object.entries(rank).map(([k,v])=>`<div class="theme"><b class="rb r-${k}">${k}</b>${Object.entries(v).sort((a,b)=>b[1].w/b[1].g-a[1].w/a[1].g).slice(0,5).map(([id,o],i)=>`<div style="display:flex;justify-content:space-between;font-size:13px"><span>${i+1}. ${esc(nm(BYID[id]))}</span><span style="color:#5eead4">${(o.w/o.g*100).toFixed(1)}%</span></div>`).join('')}</div>`).join('')||`<p class="muted">—</p>`}</div></div>`;
-  document.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>({boss:bBoss,solo:bSolo,team:bTeam,story:bStory})[b.dataset.m]());
+  document.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>({duel:()=>bDuel(),boss:bBoss,solo:bSolo,team:bTeam,story:bStory})[b.dataset.m]());
 }
 function ownedChars(){return Object.keys(S.owned).map(i=>BYID[i]).filter(c=>c&&(c.k==='char'||c.k==='event')).sort((a,b)=>RAR.indexOf(b.y)-RAR.indexOf(a.y)||(b.a+b.d)-(a.a+a.d))}
 function ownedOf(kinds){return Object.keys(S.owned).map(i=>BYID[i]).filter(c=>c&&kinds.includes(c.k)).sort((a,b)=>RAR.indexOf(b.y)-RAR.indexOf(a.y))}
@@ -2117,11 +2177,175 @@ function intro(force){
   addEventListener('resize',rs);$('#introSkip').onclick=end;setTimeout(()=>{if(!el.hidden)end()},6500);
 }
 
+/* ================= share one card with friends (Sean 2026-11-22) ================= */
+const SHT={
+zh_hant:{h1:'分享',h2:'卡牌給好友',img:'分享圖片',link:'分享連結',from:'好友分享給你的卡牌',have:'你也有這張！',not:'你還沒有這張，快去抽抽看',play:'開始抽卡',lcp:'已複製連結',txt:'看看我的卡牌！'},
+zh_hans:{h1:'分享',h2:'卡牌给好友',img:'分享图片',link:'分享链接',from:'好友分享给你的卡牌',have:'你也有这张！',not:'你还没有这张，快去抽抽看',play:'开始抽卡',lcp:'已复制链接',txt:'看看我的卡牌！'},
+ja:{h1:'シェア',h2:'カードを友達に',img:'画像をシェア',link:'リンクをシェア',from:'友達からシェアされたカード',have:'あなたも持っています！',not:'まだ持っていません。ガチャを引こう',play:'ガチャを引く',lcp:'リンクをコピーしました',txt:'私のカードを見て！'},
+ko:{h1:'공유',h2:'친구에게 카드를',img:'이미지 공유',link:'링크 공유',from:'친구가 공유한 카드',have:'당신도 가지고 있어요!',not:'아직 없는 카드예요. 뽑으러 가요',play:'카드 뽑기',lcp:'링크를 복사했습니다',txt:'내 카드 좀 봐!'},
+en:{h1:'Share',h2:'cards with your friends',img:'Share image',link:'Share link',from:'A friend shared this card with you',have:'You own this one too!',not:'You don\'t have this one yet. Go pull!',play:'Start pulling',lcp:'Link copied',txt:'Check out my card!'},
+es:{h1:'Comparte',h2:'cartas con tus amigos',img:'Compartir imagen',link:'Compartir enlace',from:'Un amigo compartió esta carta contigo',have:'¡Tú también la tienes!',not:'Aún no la tienes. ¡Ve a abrir sobres!',play:'Abrir sobres',lcp:'Enlace copiado',txt:'¡Mira mi carta!'},
+fr:{h1:'Partagez',h2:'vos cartes avec vos amis',img:'Partager l\'image',link:'Partager le lien',from:'Un ami a partagé cette carte avec vous',have:'Vous l\'avez aussi !',not:'Vous ne l\'avez pas encore. Allez tirer !',play:'Commencer à tirer',lcp:'Lien copié',txt:'Regarde ma carte !'},
+pt:{h1:'Compartilhe',h2:'cartas com seus amigos',img:'Compartilhar imagem',link:'Compartilhar link',from:'Um amigo compartilhou esta carta com você',have:'Você também tem esta!',not:'Você ainda não tem esta. Vá abrir pacotes!',play:'Abrir pacotes',lcp:'Link copiado',txt:'Olha minha carta!'}};
+const SH=k=>(SHT[L]||SHT.en)[k];
+function cardLink(c){return SITE_URL+'/?card='+c.i}
+async function shareLink(url,text){
+  if(navigator.share){try{await navigator.share({title:'MYRIAD LEGENDS',text,url});S.mission.share=true;save();return}catch(e){if(e&&e.name==='AbortError')return}}
+  try{await navigator.clipboard.writeText(text+'\n'+url);toast(SH('lcp'))}catch(e){prompt('',url)}S.mission.share=true;save();
+}
+function smokeFx(cv,col){
+  const g=cv.getContext('2d'),dpr=Math.min(2,devicePixelRatio||1);let W,H;const rs=()=>{W=cv.width=cv.clientWidth*dpr;H=cv.height=cv.clientHeight*dpr};rs();
+  const P=[];const spawn=()=>{const side=Math.random()<.5?-1:1;P.push({x:W/2+side*W*(.12+Math.random()*.08),y:H*(.25+Math.random()*.5),vx:side*(.2+Math.random()*.9)*dpr,vy:-(Math.random()*.5)*dpr,r:(18+Math.random()*30)*dpr,l:1,c:Math.random()<.65?col:'#ffffff'})};
+  const motes=Array.from({length:40},()=>({x:Math.random(),y:Math.random(),v:.0006+Math.random()*.0016,a:Math.random()*6}));
+  const step=()=>{if(!cv.isConnected)return;if(cv.clientWidth*dpr!==W)rs();g.clearRect(0,0,W,H);g.globalCompositeOperation='lighter';
+    if(P.length<70)spawn();
+    for(const p of P){p.x+=p.vx;p.y+=p.vy;p.r+=.25*dpr;p.l-=.006;if(p.l<=0)continue;const gr=g.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r);gr.addColorStop(0,p.c+'38');gr.addColorStop(1,p.c+'00');g.globalAlpha=p.l*.8;g.fillStyle=gr;g.beginPath();g.arc(p.x,p.y,p.r,0,7);g.fill()}
+    for(let i=P.length-1;i>=0;i--)if(P[i].l<=0)P.splice(i,1);
+    for(const m of motes){m.y-=m.v;if(m.y<0){m.y=1;m.x=Math.random()}g.globalAlpha=.4+.5*Math.abs(Math.sin(Date.now()/500+m.a));g.fillStyle=col;g.fillRect(m.x*W,m.y*H,1.6*dpr,1.6*dpr)}
+    g.globalAlpha=1;g.globalCompositeOperation='source-over';requestAnimationFrame(step)};
+  requestAnimationFrame(step);
+}
+function showShareCard(c,fromLink){
+  if(!c)return;document.getElementById('shcOv')?.remove();const owned=S.owned[c.i]||0,col=RCOLS[c.y]||'#ffd24a';
+  const host=document.createElement('div');host.className='ov shc';host.id='shcOv';host.style.zIndex=60;
+  const face=bigCardHTML(c,false);
+  host.innerHTML=`<div class="stage shc-st"><button class="btn ghost x" data-x>✕</button>
+   <h2 class="shc-h"><b>${esc(SH('h1'))}</b> ${esc(SH('h2'))}</h2>
+   ${fromLink?`<div class="shc-from">${esc(SH('from'))}</div>`:''}
+   <div class="shc-wrap" style="--rc:${col}"><canvas class="shc-smoke"></canvas><div class="shc-aura"></div>
+    <div class="shc-card">${face}${owned>1?`<span class="shc-n">×${owned}</span>`:''}</div>
+    <div class="shc-floor"></div><div class="shc-reflw" aria-hidden="true"><div class="shc-refl">${face}</div></div></div>
+   ${fromLink?`<div class="shc-own">${esc(owned?SH('have')+' ×'+owned:SH('not'))}</div>`:''}
+   <div class="shc-btns">${fromLink?`<button class="btn" data-play>${esc(SH('play'))}</button>`:`<button class="btn" data-img>${esc(SH('img'))}</button><button class="btn ghost" data-lnk>🔗 ${esc(SH('link'))}</button>`}</div></div>`;
+  document.body.appendChild(host);
+  host.querySelectorAll('[data-art]').forEach(el=>setImg(el,c));
+  host.querySelectorAll('.shc-refl a,.shc-refl button').forEach(a=>{a.removeAttribute('href');a.removeAttribute('onclick');a.tabIndex=-1});
+  smokeFx($('.shc-smoke',host),col);
+  const close=()=>host.remove();
+  host.onclick=e=>{if(e.target===host||e.target.closest('[data-x]'))close()};
+  const txt=`${SH('txt')} ${c.y} ${nm(c)} · ATK ${c.a.toLocaleString()} / DEF ${c.d.toLocaleString()} — ${T('game')}`;
+  const im=$('[data-img]',host);if(im)im.onclick=()=>shareImgOr(txt+'\n'+cardLink(c),()=>cardPNG(c),`myriad-legends-${c.i}.png`);
+  const lk=$('[data-lnk]',host);if(lk)lk.onclick=()=>shareLink(cardLink(c),txt);
+  const pl=$('[data-play]',host);if(pl)pl.onclick=()=>{close();go('pull')};
+}
+
+/* ================= duels 1v1 / 3v3 / 5v5 (Sean 2026-11-22) =================
+   Results are kept in S.duel = {w,l,d, byFmt:{1:{w,l,d},3:{..},5:{..}}, last:{t,fmt,res,score,vs}, best, run}
+   and every duel is also pushed to S.records (mode 'duel', fmt) and counts in S.trophies._wins (all-mode wins). */
+const DUT={
+zh_hant:{mode:'卡牌對決',md:'1 對 1、3 對 3、5 對 5！從收藏挑卡，對上隨機對手或好友。',rnd:'隨機對手',fr:'好友對決',you:'我方',opp:'對手',pick:'從收藏選卡',start:'開始對決',last:'上次對決',reroll:'換對手',auto:'自動裝備',code:'複製對決碼',link:'分享對決連結',paste:'貼上好友的對決碼或連結',use:'載入',bad:'對決碼無效',loaded:'已載入好友隊伍',need:'請選滿 {n} 張角色',fmt:'好友隊伍是 {n} 對 {n}，已切換',hint:'五行相剋 ×1.2／×0.8・神魔互剋 ×1.5／×0.75・裝備加成・3 張以上有隊長技與羈絆',fwait:'貼上好友的對決碼，或先把你的對決碼傳給好友',chal:'好友向你發起對決！',rec:'對決戰績',again:'再戰一場',res:'分享結果',back:'回擊好友',none:'還沒有對決紀錄',clear:'清空'},
+zh_hans:{mode:'卡牌对决',md:'1 对 1、3 对 3、5 对 5！从收藏挑卡，对上随机对手或好友。',rnd:'随机对手',fr:'好友对决',you:'我方',opp:'对手',pick:'从收藏选卡',start:'开始对决',last:'上次对决',reroll:'换对手',auto:'自动装备',code:'复制对决码',link:'分享对决链接',paste:'粘贴好友的对决码或链接',use:'载入',bad:'对决码无效',loaded:'已载入好友队伍',need:'请选满 {n} 张角色',fmt:'好友队伍是 {n} 对 {n}，已切换',hint:'五行相克 ×1.2／×0.8・神魔互克 ×1.5／×0.75・装备加成・3 张以上有队长技与羁绊',fwait:'粘贴好友的对决码，或先把你的对决码发给好友',chal:'好友向你发起对决！',rec:'对决战绩',again:'再战一场',res:'分享结果',back:'回击好友',none:'还没有对决记录',clear:'清空'},
+ja:{mode:'カード決闘',md:'1対1・3対3・5対5！コレクションからカードを選び、ランダムな相手や友達と対戦。',rnd:'ランダム',fr:'フレンド決闘',you:'自分',opp:'相手',pick:'コレクションから選ぶ',start:'決闘開始',last:'前回の決闘',reroll:'相手を変える',auto:'自動装備',code:'決闘コードをコピー',link:'決闘リンクをシェア',paste:'友達の決闘コードかリンクを貼り付け',use:'読み込む',bad:'無効な決闘コード',loaded:'友達のチームを読み込みました',need:'キャラを {n} 枚選んでください',fmt:'友達のチームは {n}対{n} なので切り替えました',hint:'五行相剋 ×1.2／×0.8・神魔互剋 ×1.5／×0.75・装備ボーナス・3枚以上でリーダースキルと絆',fwait:'友達の決闘コードを貼るか、自分のコードを友達に送ろう',chal:'友達から決闘を申し込まれました！',rec:'決闘戦績',again:'もう一戦',res:'結果をシェア',back:'友達に反撃',none:'まだ決闘の記録がありません',clear:'クリア'},
+ko:{mode:'카드 결투',md:'1대1, 3대3, 5대5! 컬렉션에서 카드를 골라 랜덤 상대나 친구와 겨루세요.',rnd:'랜덤 상대',fr:'친구 결투',you:'나',opp:'상대',pick:'컬렉션에서 카드 선택',start:'결투 시작',last:'지난 결투',reroll:'상대 바꾸기',auto:'자동 장비',code:'결투 코드 복사',link:'결투 링크 공유',paste:'친구의 결투 코드나 링크 붙여넣기',use:'불러오기',bad:'잘못된 결투 코드',loaded:'친구 팀을 불러왔습니다',need:'캐릭터 {n}장을 골라 주세요',fmt:'친구 팀이 {n}대{n}이라 전환했습니다',hint:'오행 상극 ×1.2／×0.8 · 신마 상극 ×1.5／×0.75 · 장비 보너스 · 3장 이상이면 리더 스킬과 인연',fwait:'친구의 결투 코드를 붙여넣거나 내 코드를 친구에게 보내세요',chal:'친구가 결투를 신청했습니다!',rec:'결투 전적',again:'한 판 더',res:'결과 공유',back:'친구에게 반격',none:'아직 결투 기록이 없습니다',clear:'지우기'},
+en:{mode:'Card Duel',md:'1v1, 3v3 or 5v5! Pick cards from your collection and face a random opponent or a friend.',rnd:'Random opponent',fr:'Friend duel',you:'You',opp:'Opp',pick:'Choose your cards from collection',start:'Start duel',last:'Last duel',reroll:'New opponent',auto:'Auto-equip',code:'Copy duel code',link:'Share duel link',paste:'Paste a friend\'s duel code or link',use:'Load',bad:'Invalid duel code',loaded:'Friend\'s team loaded',need:'Pick {n} characters first',fmt:'Your friend\'s team is {n}v{n}, switched',hint:'Five Elements ×1.2/×0.8 · Gods vs Demons ×1.5/×0.75 · equipment bonus · 3+ cards add leader skill and bonds',fwait:'Paste a friend\'s duel code, or send yours to a friend first',chal:'A friend challenged you to a duel!',rec:'Duel record',again:'Duel again',res:'Share result',back:'Strike back',none:'No duels yet',clear:'Clear'},
+es:{mode:'Duelo de cartas',md:'¡1 contra 1, 3 contra 3 o 5 contra 5! Elige cartas de tu colección y enfréntate a un rival aleatorio o a un amigo.',rnd:'Rival aleatorio',fr:'Duelo con amigo',you:'Tú',opp:'Rival',pick:'Elige tus cartas de la colección',start:'Empezar duelo',last:'Último duelo',reroll:'Otro rival',auto:'Auto-equipar',code:'Copiar código de duelo',link:'Compartir enlace de duelo',paste:'Pega el código o enlace de duelo de un amigo',use:'Cargar',bad:'Código de duelo no válido',loaded:'Equipo del amigo cargado',need:'Elige {n} personajes primero',fmt:'El equipo de tu amigo es {n}c{n}, cambiado',hint:'Cinco Elementos ×1.2/×0.8 · Dioses vs Demonios ×1.5/×0.75 · bono de equipo · con 3+ cartas, habilidad de líder y vínculos',fwait:'Pega el código de un amigo o envíale el tuyo primero',chal:'¡Un amigo te reta a un duelo!',rec:'Récord de duelos',again:'Otro duelo',res:'Compartir resultado',back:'Contraatacar',none:'Aún no hay duelos',clear:'Borrar'},
+fr:{mode:'Duel de cartes',md:'1c1, 3c3 ou 5c5 ! Choisissez des cartes de votre collection et affrontez un adversaire aléatoire ou un ami.',rnd:'Adversaire aléatoire',fr:'Duel entre amis',you:'Vous',opp:'Adv.',pick:'Choisissez vos cartes dans la collection',start:'Lancer le duel',last:'Dernier duel',reroll:'Autre adversaire',auto:'Équipement auto',code:'Copier le code de duel',link:'Partager le lien de duel',paste:'Collez le code ou lien de duel d\'un ami',use:'Charger',bad:'Code de duel invalide',loaded:'Équipe de l\'ami chargée',need:'Choisissez d\'abord {n} personnages',fmt:'L\'équipe de votre ami est en {n}c{n}, format changé',hint:'Cinq Éléments ×1.2/×0.8 · Dieux contre Démons ×1.5/×0.75 · bonus d\'équipement · dès 3 cartes, compétence de chef et liens',fwait:'Collez le code d\'un ami, ou envoyez-lui d\'abord le vôtre',chal:'Un ami vous défie en duel !',rec:'Bilan des duels',again:'Rejouer',res:'Partager le résultat',back:'Riposter',none:'Aucun duel pour l\'instant',clear:'Effacer'},
+pt:{mode:'Duelo de cartas',md:'1x1, 3x3 ou 5x5! Escolha cartas da sua coleção e enfrente um adversário aleatório ou um amigo.',rnd:'Adversário aleatório',fr:'Duelo com amigo',you:'Você',opp:'Adv.',pick:'Escolha suas cartas da coleção',start:'Começar duelo',last:'Último duelo',reroll:'Outro adversário',auto:'Auto-equipar',code:'Copiar código de duelo',link:'Compartilhar link de duelo',paste:'Cole o código ou link de duelo de um amigo',use:'Carregar',bad:'Código de duelo inválido',loaded:'Equipe do amigo carregada',need:'Escolha {n} personagens primeiro',fmt:'A equipe do seu amigo é {n}x{n}, formato trocado',hint:'Cinco Elementos ×1.2/×0.8 · Deuses vs Demônios ×1.5/×0.75 · bônus de equipamento · com 3+ cartas, habilidade de líder e laços',fwait:'Cole o código de um amigo ou envie o seu primeiro',chal:'Um amigo desafiou você para um duelo!',rec:'Recorde de duelos',again:'Duelar de novo',res:'Compartilhar resultado',back:'Contra-atacar',none:'Nenhum duelo ainda',clear:'Limpar'}};
+const DU=(k,n)=>String((DUT[L]||DUT.en)[k]).replace(/\{n\}/g,n);
+const DFMT=[1,3,5];
+function fmtLabel(n){return `${n} VS ${n}`}
+function duelS(){const d=S.duel=S.duel||{};const df={fmt:3,picks:{},auto:true,w:0,l:0,d:0,byFmt:{},last:null,best:0,run:0};for(const k in df)if(d[k]===undefined)d[k]=df[k];for(const f of DFMT){if(!Array.isArray(d.picks[f]))d.picks[f]=[];d.picks[f]=d.picks[f].slice(0,f);while(d.picks[f].length<f)d.picks[f].push(null);d.picks[f]=d.picks[f].map(i=>i!=null&&S.owned[i]&&BYID[i]?i:null);d.byFmt[f]=d.byFmt[f]||{w:0,l:0,d:0}}return d}
+let DOPP=null; // {src:'rnd'|'friend', fmt, cards:[ids], eq:[{weapon,treasure,horse}]}
+let DSRC='rnd';
+function autoEq(ids){const used=new Set();const pools=EQK.map(([k])=>[k,ownedOf([k]).sort((a,b)=>(b.a+b.d)-(a.a+a.d))]);
+  return ids.map(id=>{const o={};if(id==null)return o;for(const [k,list] of pools){const e=list.find(x=>!used.has(x.i));if(e){used.add(e.i);o[k]=e.i}}return o})}
+function rndEq(c){const o={};if(!c)return o;for(const [k] of EQK){const p=(BYRAR[c.y]||[]).filter(x=>x.k===k);if(p.length)o[k]=p[Math.floor(Math.random()*p.length)].i}return o}
+function nearRar(y){let i=RAR.indexOf(y);const r=Math.random();if(r<.2)i--;else if(r>.8)i++;i=Math.max(0,Math.min(RAR.length-1,i));return RAR[i]}
+function duelRandomOpp(fmt){const d=duelS();let base=d.picks[fmt].filter(x=>x!=null).map(i=>BYID[i]);
+  if(!base.length)base=ownedChars().slice(0,fmt);
+  const cards=[];for(let i=0;i<fmt;i++){const ref=base[i%Math.max(1,base.length)];const c=randomOf(ref?nearRar(ref.y):'C')||randomOf('C');cards.push(c?c.i:null)}
+  return {src:'rnd',fmt,cards,eq:d.auto?cards.map(i=>rndEq(BYID[i])):cards.map(()=>({}))}}
+function duelCode(fmt){const d=duelS();const ids=d.picks[fmt];const o={f:fmt,c:ids,e:d.auto?autoEq(ids):ids.map(()=>({}))};return 'MLD1-'+b64u.enc(JSON.stringify(o))}
+function parseDuelCode(s){try{const m=String(s).trim().match(/MLD1-([A-Za-z0-9_-]+)/);if(!m)return null;const o=JSON.parse(b64u.dec(m[1]));const f=DFMT.includes(o.f)?o.f:null;if(!f)return null;
+  const cards=(o.c||[]).slice(0,f).map(i=>BYID[i]&&(BYID[i].k==='char'||BYID[i].k==='event')?i:null);while(cards.length<f)cards.push(null);if(cards.filter(x=>x!=null).length<f)return null;
+  const eq=cards.map((_,j)=>{const x=(o.e||[])[j],r={};for(const [k] of EQK){const v=x&&x[k];if(v!=null&&BYID[v]&&BYID[v].k===k)r[k]=v}return r});return {src:'friend',fmt:f,cards,eq}}catch(e){return null}}
+function duelFighters(ids,eqs){const cards=ids.map(i=>i!=null?BYID[i]:null);const multi=cards.length>1;const bonds=multi?teamBonds(cards):[];const lead=multi?cards[0]:null;
+  return cards.map((c,i)=>c?fighter(c,{eq:eqs&&eqs[i]&&Object.keys(eqs[i]).length?eqs[i]:null,atkB:multi?bonusFor(c,i,bonds):0,lead}):null)}
+function powerOf(fs){return fs.reduce((a,f)=>a+(f?Math.round(f.atk+f.def):0),0)}
+function duelLast(){const d=duelS(),x=d.last;if(!x)return `<span class="muted">${DU('none')}</span>`;return `<b class="du-r du-${x.res}">${T(x.res)}</b> <small>${fmtLabel(x.fmt)} · ${x.score}${x.vs==='friend'?' · '+TC('friend'):''}</small>`}
+function bDuel(opts={}){
+  const d=duelS();if(opts.fmt)d.fmt=opts.fmt;if(opts.opp){DOPP=opts.opp;DSRC='friend';d.fmt=opts.opp.fmt}
+  let selSlot=d.picks[d.fmt].indexOf(null);if(selSlot<0)selSlot=0;let busy=false;
+  if(DSRC==='rnd'&&(!DOPP||DOPP.src!=='rnd'||DOPP.fmt!==d.fmt))DOPP=duelRandomOpp(d.fmt);
+  if(DSRC==='friend'&&DOPP&&DOPP.fmt!==d.fmt)DOPP=null;
+  const draw=()=>{
+    const fmt=d.fmt,picks=d.picks[fmt],full=picks.every(x=>x!=null);
+    const myEq=d.auto?autoEq(picks):picks.map(()=>({}));const myF=duelFighters(picks,myEq);
+    const opp=DOPP;const oppF=opp?duelFighters(opp.cards,opp.eq):[];
+    const chars=ownedChars();
+    const slot=(id,i,side)=>{const c=id!=null?BYID[id]:null;const m=side==='me'&&c&&opp&&opp.cards[i]!=null?cardMult(c,BYID[opp.cards[i]]):1;
+      return `<div class="du-slot ${side==='me'&&i===selSlot?'sel':''} ${c?'on':''}" ${side==='me'?`data-ds="${i}"`:''}>${c?miniHTML(c):`<div class="du-empty">${side==='me'?'+':'?'}</div>`}${side==='me'&&c?`<button class="du-x" data-dx="${i}" aria-label="remove">✕</button>`:''}
+       ${side==='me'&&c&&m!==1?`<span class="du-m ${m>1?'adv':'dis'}">${m>1?'▲':'▼'}×${+m.toFixed(2)}</span>`:''}</div>`};
+    $('#app').innerHTML=backBar(DU('mode'))+`<div class="du">
+     <div class="du-tabs">${DFMT.map(f=>`<button class="du-tab ${f===fmt?'on':''}" data-fmt="${f}">${fmtLabel(f)}</button>`).join('')}</div>
+     <div class="du-tabs du-src"><button class="du-tab ${DSRC==='rnd'?'on':''}" data-src="rnd">🎲 ${DU('rnd')}</button><button class="du-tab ${DSRC==='friend'?'on':''}" data-src="friend">🤝 ${DU('fr')}</button></div>
+     ${DSRC==='friend'?`<div class="box du-fr">${opts.chal&&DOPP?`<b style="color:var(--gold)">⚔ ${DU('chal')}</b><br>`:''}<div class="sub" style="text-align:left;margin:0 0 8px">${DOPP?DU('loaded'):DU('fwait')}</div>
+       <div style="display:flex;gap:8px;flex-wrap:wrap"><input class="inp" id="duIn" placeholder="${esc(DU('paste'))}" style="flex:1;min-width:180px"><button class="btn" id="duUse">${DU('use')}</button></div>
+       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="btn ghost" id="duCode">${DU('code')}</button><button class="btn ghost" id="duLink">🔗 ${DU('link')}</button></div></div>`:''}
+     <div class="du-arena n${fmt}">
+      <div class="du-side du-opp" style="--n:${fmt}">${opp?opp.cards.map((id,i)=>slot(id,i,'opp')).join(''):Array.from({length:fmt},(_,i)=>slot(null,i,'opp')).join('')}</div>
+      <div class="du-mid"><div class="du-pow me"><small>⚡ ${DU('you')}</small><b>${powerOf(myF).toLocaleString()}</b></div><div class="du-vs">VS</div><div class="du-pow op"><small>🔥 ${DU('opp')}</small><b>${opp?powerOf(oppF).toLocaleString():'—'}</b></div></div>
+      <div class="du-side du-me" style="--n:${fmt}">${picks.map((id,i)=>slot(id,i,'me')).join('')}</div>
+      <div class="du-hint">${DU('hint')}</div>
+     </div>
+     <div class="du-act"><button class="btn du-go" id="duGo" ${!full||!opp?'disabled':''}>${DU('start')}</button>
+      <div class="du-last"><small>${DU('last')}</small><div>${duelLast()}</div></div></div>
+     <div class="du-opts">${DSRC==='rnd'?`<button class="chip" id="duRe">🎲 ${DU('reroll')}</button>`:''}<label class="chip"><input type="checkbox" id="duAuto" ${d.auto?'checked':''}> ${DU('auto')}</label>
+      <span class="muted" style="font-size:12px">${DU('rec')}: <b style="color:#4ade80">${d.w}</b>-<b style="color:#f87171">${d.l}</b>-<b style="color:#facc15">${d.d}</b></span></div>
+     <div id="ar" class="du-ar"></div>
+     <div class="box"><b>${DU('pick')}</b>${!full?` <small class="muted">${DU('need',fmt)}</small>`:''}
+      <div class="grid picker" style="margin-top:8px">${chars.map(c=>miniHTML(c,{sel:picks.includes(c.i)})).join('')||`<p class="muted">${T('empty')}</p>`}</div></div></div>`;
+    bindBack();hydrateMinis($('#app'));
+    document.querySelectorAll('[data-fmt]').forEach(b=>b.onclick=()=>{if(busy)return;const f=+b.dataset.fmt;if(f===d.fmt)return;d.fmt=f;save();selSlot=Math.max(0,d.picks[f].indexOf(null));if(DSRC==='rnd')DOPP=duelRandomOpp(f);else if(DOPP&&DOPP.fmt!==f)DOPP=null;draw()});
+    document.querySelectorAll('[data-src]').forEach(b=>b.onclick=()=>{if(busy)return;DSRC=b.dataset.src;DOPP=DSRC==='rnd'?duelRandomOpp(d.fmt):null;draw()});
+    document.querySelectorAll('[data-ds]').forEach(s=>s.onclick=e=>{if(e.target.closest('[data-dx]'))return;selSlot=+s.dataset.ds;draw()});
+    document.querySelectorAll('[data-dx]').forEach(b=>b.onclick=e=>{e.stopPropagation();const i=+b.dataset.dx;d.picks[d.fmt][i]=null;selSlot=i;save();draw()});
+    $('#app').querySelectorAll('.picker .mini').forEach(m=>m.onclick=()=>{if(busy)return;const id=+m.dataset.id,arr=d.picks[d.fmt];const j=arr.indexOf(id);
+      if(j>=0&&j===selSlot){arr[j]=null}else{if(j>=0)arr[j]=arr[selSlot];arr[selSlot]=id;const nx=arr.indexOf(null);if(nx>=0)selSlot=nx}
+      save();const y=scrollY;draw();scrollTo(0,y)});
+    const re=$('#duRe');if(re)re.onclick=()=>{DOPP=duelRandomOpp(d.fmt);draw()};
+    $('#duAuto').onchange=e=>{d.auto=e.target.checked;save();if(DSRC==='rnd'&&DOPP)DOPP.eq=d.auto?DOPP.cards.map(i=>rndEq(BYID[i])):DOPP.cards.map(()=>({}));draw()};
+    const use=$('#duUse');if(use)use.onclick=()=>{const o=parseDuelCode($('#duIn').value);if(!o){toast(DU('bad'));return}DOPP=o;if(o.fmt!==d.fmt){d.fmt=o.fmt;save();toast(DU('fmt',o.fmt))}else toast(DU('loaded'));selSlot=Math.max(0,d.picks[d.fmt].indexOf(null));draw()};
+    const needFull=()=>{if(!d.picks[d.fmt].every(x=>x!=null)){toast(DU('need',d.fmt));return false}return true};
+    const cp=$('#duCode');if(cp)cp.onclick=()=>{if(!needFull())return;const code=duelCode(d.fmt);try{navigator.clipboard.writeText(code).then(()=>toast(T('copied')),()=>prompt('',code))}catch(e){prompt('',code)}};
+    const ln=$('#duLink');if(ln)ln.onclick=()=>{if(!needFull())return;shareLink(SITE_URL+'/?duel='+duelCode(d.fmt),`${T('game')} · ${DU('mode')} ${fmtLabel(d.fmt)}`)};
+    $('#duGo').onclick=async()=>{if(busy||!opp)return;if(!needFull())return;busy=true;$('#duGo').disabled=true;
+      const ar=$('#ar');ar.innerHTML='';ar.scrollIntoView({behavior:'smooth',block:'start'});
+      const fmt=d.fmt,A=duelFighters(picks,myEq),B=duelFighters(opp.cards,opp.eq);const need=Math.floor(fmt/2)+1;let w=0,l=0,turns=0;
+      for(let i=0;i<fmt&&w<need&&l<need;i++){if(!A[i]||!B[i])continue;const box=document.createElement('div');box.className='du-round';ar.appendChild(box);
+        const out=await playDuel(A[i],B[i],box);turns+=out.turns;if(out.res==='win')w++;else if(out.res==='lose')l++;
+        box.insertAdjacentHTML('beforeend',`<p style="text-align:center"><b>${fmt>1?(i+1)+'. ':''}${T(out.res)}</b>${fmt>1?' · '+w+'-'+l:''}</p>`)}
+      const res=w>l?'win':l>w?'lose':'draw',score=`${w}-${l}`;
+      const lvl=opp.cards.reduce((a,i)=>i!=null&&RAR.indexOf(BYID[i].y)>RAR.indexOf(a)?BYID[i].y:a,'C');
+      d[res==='win'?'w':res==='lose'?'l':'d']++;const bf=d.byFmt[fmt];bf[res==='win'?'w':res==='lose'?'l':'d']++;
+      d.run=res==='win'?(d.run||0)+1:0;d.best=Math.max(d.best||0,d.run);d.last={t:Date.now(),fmt,res,score,vs:opp.src};
+      record('duel',`${DU('mode')} ${fmtLabel(fmt)}${opp.src==='friend'?' vs '+TC('friend'):''} ${score}`,lvl,res,turns,picks.slice());S.records[0].fmt=fmt;save();
+      ar.insertAdjacentHTML('beforeend',`<div class="du-end du-${res}"><div class="du-big">${T(res)}</div><div class="du-score">${score}</div>
+        <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:10px"><button class="btn" id="duAgain">${DU('again')}</button><button class="btn ghost" id="duRes">${DU('res')}</button>${opp.src==='friend'?`<button class="btn ghost" id="duBack">⚔ ${DU('back')}</button>`:''}</div></div>`);
+      trophyCheck();busy=false;
+      const rt=`${T('game')} ${DU('mode')} ${fmtLabel(fmt)}${opp.src==='friend'?' vs '+TC('friend'):''}: ${T(res)} ${score}\n`+picks.map(i=>`${BYID[i].y} ${nm(BYID[i])}`).join('、');
+      $('#duRes').onclick=()=>shareLink(SITE_URL+'/?duel='+duelCode(fmt),rt);
+      const bk=$('#duBack');if(bk)bk.onclick=()=>shareLink(SITE_URL+'/?duel='+duelCode(fmt),`${T('game')} · ${DU('mode')} ${fmtLabel(fmt)} — ${T(res)} ${score}`);
+      $('#duAgain').onclick=()=>{if(opp.src==='rnd')DOPP=duelRandomOpp(fmt);draw();scrollTo(0,0)};
+      const lb=$('.du-last div');if(lb)lb.innerHTML=duelLast();$('#duGo').disabled=false;
+    };
+  };draw();
+}
+/* deep links: ?card=<id> shows a friend's shared card, ?duel=MLD1-… opens a friend duel */
+const QP=new URLSearchParams(location.search);
+function deepLink(){
+  const cid=QP.get('card'),dc=QP.get('duel');if(!cid&&!dc)return false;
+  try{history.replaceState(null,'',location.pathname)}catch(e){}
+  if(cid&&BYID[+cid]){showShareCard(BYID[+cid],true);return true}
+  if(dc){const o=parseDuelCode(dc);if(o){go('battle');bDuel({opp:o,chal:true});return true}toast(DU('bad'))}
+  return false;
+}
+
 /* ================= boot ================= */
 document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>go(b.dataset.v));
 $('#lang').onchange=e=>{L=S.lang=e.target.value;save();chrome();render();cloudBtn()};
 $('#btnTrophy').onclick=showTrophies;$('#btnCloud').onclick=openCloud;cloudBtn();$('#btnRules').onclick=showRules;
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('.ov').forEach(o=>o.remove());$('#layer').innerHTML=''}});
-chrome();intro(false);
-(window.DATAP=loadData()).then(()=>{if(S.cloud)cloudSync().then(()=>render()).catch(()=>{});if(S.banner.id!==BANNER.id){S.banner={id:BANNER.id,pulled:0,got:false,start:Date.now()};save()}go('pull');window.__ready=1;if($('#intro').hidden)setTimeout(maybeNotice,300)}).catch(e=>{$('#app').innerHTML='<p>Failed to load cards.json</p>'});
+chrome();if(!(QP.get('card')||QP.get('duel')))intro(false);
+(window.DATAP=loadData()).then(()=>{if(S.cloud)cloudSync().then(()=>render()).catch(()=>{});if(S.banner.id!==BANNER.id){S.banner={id:BANNER.id,pulled:0,got:false,start:Date.now()};save()}go('pull');window.__ready=1;if(deepLink())return;if($('#intro').hidden)setTimeout(maybeNotice,300)}).catch(e=>{$('#app').innerHTML='<p>Failed to load cards.json</p>'});
 </script>
