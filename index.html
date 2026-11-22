@@ -1384,11 +1384,11 @@ function stampCal(){
     else if(d>td){proj++;cls='fut';blk=proj%5===0}
     else if(d===td){cls='on';blk=(S.stamps||0)%5===0}
     else{cls=(start!=null&&t>=start)?'miss':'bef';blk=false}
-    h+=`<div class="cday ${cls} ${blk?'blk':''} ${d===td?'today':''}" title="${new Intl.DateTimeFormat(loc,{dateStyle:'medium'}).format(new Date(y,m,d))}"><em>${d}</em>${cls==='miss'?(mk?`<s data-mk="${k}">${NTT('mk')}</s>`:'<s>'+NTT('ms')+'</s>'):packSVG(blk?'black':'rainbow')}${cls==='on'?'<i>✓</i>':''}</div>`}
+    h+=`<div class="cday ${cls} ${blk?'blk':''} ${d===td?'today':''}" title="${new Intl.DateTimeFormat(loc,{dateStyle:'medium'}).format(new Date(y,m,d))}" role="img" ${d===td?'aria-current="date"':''} aria-label="${new Intl.DateTimeFormat(loc,{dateStyle:'medium'}).format(new Date(y,m,d))}: ${cls==='on'?'✓ ':cls==='miss'?NTT('ms')+' ':''}${cls==='miss'||cls==='bef'?'':NTT(blk?'bk':'rb')}"><em>${d}</em>${cls==='miss'?(mk?`<s data-mk="${k}">${NTT('mk')}</s>`:'<s>'+NTT('ms')+'</s>'):packSVG(blk?'black':'rainbow')}${cls==='on'?'<i>✓</i>':''}</div>`}
   return {html:h,title:new Intl.DateTimeFormat(loc,{year:'numeric',month:'long'}).format(now),got:got+(days[dkey(y,m,td)]?0:1),dim,next:(5-(S.stamps||0)%5)%5||5};
 }
 function showNotice(){
-  document.getElementById('ntOv')?.remove();
+  daily();document.getElementById('ntOv')?.remove();
   const firstDone=S.firstPackDay===today(),black=S.pendingBlack>0,shared=S.shareDay===today(),cal=stampCal();
   const box=([a,b])=>`<div class="ntr"><b>${a}</b><p>${b}</p></div>`;
   const host=document.createElement('div');host.className='ov nt-ov';host.id='ntOv';host.style.zIndex=42;
