@@ -640,6 +640,7 @@ html,body{max-width:100%;overflow-x:hidden}
 
 .sycard{display:flex;align-items:center;gap:12px;margin:16px auto 0;width:min(420px,100%);text-align:left;background:#0d0c12;border:1px solid #3a3550;border-radius:14px;padding:10px 14px;color:#e8e2d4;cursor:pointer}.sycard:hover{border-color:var(--gold)}.syic{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#1c2236;font-size:17px;flex:none}.sytx{flex:1;min-width:0}.sytx b{display:block;font-size:15px;color:#fff}.sytx small{display:block;font-size:12px;color:#a9a290;margin-top:2px}.syar{color:var(--gold);font-size:22px}.sycard.on{border-color:#2f7a5a}.sycard.on .syic{background:#173a2c}.sycard.on small{color:#7fe3b0}
 .foot{text-align:center;font-size:12px;margin-top:6px;color:#8a8473}.foot a{color:#b8ab88}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:10px;margin-top:14px}.cgrid .cw{position:relative}.cgrid .cw .star{position:absolute;top:22px;right:4px;z-index:3;background:#000a;border-radius:50%;width:26px;height:26px;padding:0;line-height:24px}.cgrid .cw .sub2{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);padding:2px 3px 0}
 .tabwarn{position:fixed;left:50%;top:64px;transform:translateX(-50%);z-index:60;background:#3a1414;border:1px solid #b84a4a;color:#ffd6d6;padding:10px 16px;border-radius:12px;max-width:min(560px,92vw);font-size:14px;box-shadow:0 8px 30px #000a;cursor:pointer}
 .ntbar{margin:14px auto 0;display:block;background:#15121c;border:1px solid #3a2f4d;color:#e8e2d4;border-radius:10px;padding:8px 14px;font-size:13px;cursor:pointer}.ntbar u{color:#ff9ec7}
 .unoff{font-size:11px;color:#8a8473;text-align:center;margin-top:8px;padding:0 16px}
@@ -1519,7 +1520,8 @@ function shareText(t){
 }
 
 /* ================= codex ================= */
-let cx={tab:'list',sort:'rarity',dir:-1,q:'',qc:'',page:1,fav:false,group:'all',theme:null,kind:'all',el:'all',race:'all'};
+let cx={tab:'list',sort:'rarity',dir:-1,q:'',qc:'',page:1,fav:false,group:'all',theme:null,kind:'all',el:'all',race:'all',rar:'all',view:'grid'};
+try{const v=localStorage.getItem('ml_cxview');if(v==='grid'||v==='table')cx.view=v}catch(e){}
 const FLT={zh_hant:['類別','屬性','全部','上一頁','下一頁','種族'],zh_hans:['类别','属性','全部','上一页','下一页','种族'],ja:['種類','属性','すべて','前へ','次へ','種族'],ko:['종류','속성','전체','이전','다음','종족'],en:['Type','Element','All','Prev','Next','Race'],es:['Tipo','Elemento','Todo','Anterior','Siguiente','Raza'],fr:['Type','Élément','Tout','Préc.','Suiv.','Race'],pt:['Tipo','Elemento','Tudo','Anterior','Próxima','Raça']};
 const FT=i=>(FLT[L]||FLT.en)[i];
 const CX_KINDS=[['char',c=>c.k==='char'||c.k==='event'],['treasure',c=>c.k==='treasure'],['weapon',c=>c.k==='weapon'],['horse',c=>c.k==='horse'],['battle',c=>c.k==='battle'||c.k==='realm']];
@@ -1615,16 +1617,16 @@ function bindCloud(){
   const sy=$('#clSync');if(sy)sy.onclick=async()=>{sy.disabled=true;try{await cloudSync();toast(CT('ok'));render();cloudRefresh()}catch(e){toast(e.status===404?CT('bad'):CT('err'));sy.disabled=false}};
   $('#clLoad').onclick=async()=>{const v=$('#clIn').value.trim();if(!v)return;try{const j=await cloudCall({action:'get',code:v});if(!mergeSave(JSON.parse(j.data)))throw 0;S.cloud={code:j.code,at:j.updated};save();await cloudPush();toast(CT('ok'));render();cloudRefresh()}catch(e){toast(e&&e.status===404||e&&e.status===400?CT('bad'):CT('off'))}};
 }
-const MTX={zh_hant:{del:'清空收藏',c1:'確定要清空這個裝置上的全部收藏與進度嗎？此動作無法復原。建議先匯出備份。',c2:'最後確認：真的要清空嗎？',done:'已清空',tabs:'另一個分頁也開著《萬象傳奇錄》。請關閉其他分頁，以免存檔互相覆蓋。',rules:'規則',priv:'隱私權',terms:'使用條款',contact:'聯絡我們'},
-zh_hans:{del:'清空收藏',c1:'确定要清空这个设备上的全部收藏与进度吗？此操作无法复原。建议先导出备份。',c2:'最后确认：真的要清空吗？',done:'已清空',tabs:'另一个标签页也开着《万象传奇录》。请关闭其他标签页，以免存档互相覆盖。',rules:'规则',priv:'隐私',terms:'使用条款',contact:'联系我们'},
-ja:{del:'コレクションを削除',c1:'この端末のコレクションと進行状況をすべて削除しますか？元に戻せません。先にバックアップを推奨します。',c2:'最終確認：本当に削除しますか？',done:'削除しました',tabs:'別のタブでもゲームが開いています。データの上書きを防ぐため、他のタブを閉じてください。',rules:'ルール',priv:'プライバシー',terms:'利用規約',contact:'お問い合わせ'},
-ko:{del:'컬렉션 삭제',c1:'이 기기의 모든 컬렉션과 진행 상황을 삭제할까요? 되돌릴 수 없습니다. 먼저 백업하세요.',c2:'마지막 확인: 정말 삭제할까요?',done:'삭제됨',tabs:'다른 탭에서도 게임이 열려 있습니다. 저장 데이터가 덮어쓰이지 않도록 다른 탭을 닫아 주세요.',rules:'규칙',priv:'개인정보',terms:'이용약관',contact:'문의'},
-en:{del:'Delete collection',c1:'Delete all cards and progress on this device? This cannot be undone. Export a backup first.',c2:'Final check: really delete everything?',done:'Deleted',tabs:'MYRIAD LEGENDS is open in another tab. Close the other tabs so your saves do not overwrite each other.',rules:'Rules',priv:'Privacy',terms:'Terms',contact:'Contact'},
-es:{del:'Borrar colección',c1:'¿Borrar todas las cartas y el progreso de este dispositivo? No se puede deshacer.',c2:'Confirmación final: ¿borrar todo?',done:'Borrado',tabs:'El juego está abierto en otra pestaña. Ciérrala para no sobrescribir tu partida.',rules:'Reglas',priv:'Privacidad',terms:'Términos',contact:'Contacto'},
-fr:{del:'Supprimer la collection',c1:'Supprimer toutes les cartes et la progression de cet appareil ? Action irréversible.',c2:'Dernière confirmation : tout supprimer ?',done:'Supprimé',tabs:'Le jeu est ouvert dans un autre onglet. Fermez-le pour éviter d\'écraser votre sauvegarde.',rules:'Règles',priv:'Confidentialité',terms:'Conditions',contact:'Contact'},
-pt:{del:'Apagar coleção',c1:'Apagar todas as cartas e o progresso deste dispositivo? Não pode ser desfeito.',c2:'Confirmação final: apagar tudo?',done:'Apagado',tabs:'O jogo está aberto em outra aba. Feche-a para não sobrescrever seu progresso.',rules:'Regras',priv:'Privacidade',terms:'Termos',contact:'Contato'}};
+const MTX={zh_hant:{grid:'網格',table:'列表',rar:'稀有度',del:'清空收藏',c1:'確定要清空這個裝置上的全部收藏與進度嗎？此動作無法復原。建議先匯出備份。',c2:'最後確認：真的要清空嗎？',done:'已清空',tabs:'另一個分頁也開著《萬象傳奇錄》。請關閉其他分頁，以免存檔互相覆蓋。',rules:'規則',priv:'隱私權',terms:'使用條款',contact:'聯絡我們'},
+zh_hans:{grid:'网格',table:'列表',rar:'稀有度',del:'清空收藏',c1:'确定要清空这个设备上的全部收藏与进度吗？此操作无法复原。建议先导出备份。',c2:'最后确认：真的要清空吗？',done:'已清空',tabs:'另一个标签页也开着《万象传奇录》。请关闭其他标签页，以免存档互相覆盖。',rules:'规则',priv:'隐私',terms:'使用条款',contact:'联系我们'},
+ja:{grid:'グリッド',table:'リスト',rar:'レアリティ',del:'コレクションを削除',c1:'この端末のコレクションと進行状況をすべて削除しますか？元に戻せません。先にバックアップを推奨します。',c2:'最終確認：本当に削除しますか？',done:'削除しました',tabs:'別のタブでもゲームが開いています。データの上書きを防ぐため、他のタブを閉じてください。',rules:'ルール',priv:'プライバシー',terms:'利用規約',contact:'お問い合わせ'},
+ko:{grid:'그리드',table:'목록',rar:'희귀도',del:'컬렉션 삭제',c1:'이 기기의 모든 컬렉션과 진행 상황을 삭제할까요? 되돌릴 수 없습니다. 먼저 백업하세요.',c2:'마지막 확인: 정말 삭제할까요?',done:'삭제됨',tabs:'다른 탭에서도 게임이 열려 있습니다. 저장 데이터가 덮어쓰이지 않도록 다른 탭을 닫아 주세요.',rules:'규칙',priv:'개인정보',terms:'이용약관',contact:'문의'},
+en:{grid:'Grid',table:'List',rar:'Rarity',del:'Delete collection',c1:'Delete all cards and progress on this device? This cannot be undone. Export a backup first.',c2:'Final check: really delete everything?',done:'Deleted',tabs:'MYRIAD LEGENDS is open in another tab. Close the other tabs so your saves do not overwrite each other.',rules:'Rules',priv:'Privacy',terms:'Terms',contact:'Contact'},
+es:{grid:'Cuadrícula',table:'Lista',rar:'Rareza',del:'Borrar colección',c1:'¿Borrar todas las cartas y el progreso de este dispositivo? No se puede deshacer.',c2:'Confirmación final: ¿borrar todo?',done:'Borrado',tabs:'El juego está abierto en otra pestaña. Ciérrala para no sobrescribir tu partida.',rules:'Reglas',priv:'Privacidad',terms:'Términos',contact:'Contacto'},
+fr:{grid:'Grille',table:'Liste',rar:'Rareté',del:'Supprimer la collection',c1:'Supprimer toutes les cartes et la progression de cet appareil ? Action irréversible.',c2:'Dernière confirmation : tout supprimer ?',done:'Supprimé',tabs:'Le jeu est ouvert dans un autre onglet. Fermez-le pour éviter d\'écraser votre sauvegarde.',rules:'Règles',priv:'Confidentialité',terms:'Conditions',contact:'Contact'},
+pt:{grid:'Grade',table:'Lista',rar:'Raridade',del:'Apagar coleção',c1:'Apagar todas as cartas e o progresso deste dispositivo? Não pode ser desfeito.',c2:'Confirmação final: apagar tudo?',done:'Apagado',tabs:'O jogo está aberto em outra aba. Feche-a para não sobrescrever seu progresso.',rules:'Regras',priv:'Privacidade',terms:'Termos',contact:'Contato'}};
 const MT=k=>(MTX[L]||MTX.en)[k];
-function footLinks(){return `<div class="foot"><a href="#" id="ftRules">${MT('rules')}</a> · <a href="/privacy.html" target="_blank" rel="noopener">${MT('priv')}</a> · <a href="/terms.html" target="_blank" rel="noopener">${MT('terms')}</a> · <a href="/contact.html?lang=${L}" target="_blank" rel="noopener">${MT('contact')}</a></div>`}
+function footLinks(){return `<div class="foot"><a href="#" id="ftRules">${MT('rules')}</a> · <a href="/privacy.html?lang=${L}" target="_blank" rel="noopener">${MT('priv')}</a> · <a href="/terms.html?lang=${L}" target="_blank" rel="noopener">${MT('terms')}</a> · <a href="/contact.html?lang=${L}" target="_blank" rel="noopener">${MT('contact')}</a></div>`}
 try{const bc=new BroadcastChannel('ml-tabs');bc.onmessage=e=>{if(e.data==='hello')bc.postMessage('here');else if(e.data==='here'&&!window.__tabWarned){window.__tabWarned=1;const d=document.createElement('div');d.className='tabwarn';d.textContent=MT('tabs');d.onclick=()=>d.remove();document.body.appendChild(d)}};bc.postMessage('hello')}catch(e){}
 function bindBackup(){
   const dl=$('#bkDel');if(dl)dl.onclick=()=>{if(!confirm(MT('c1'))||!confirm(MT('c2')))return;const keep={lang:S.lang,introSeen:true,noticeHide:S.noticeHide};S=Object.assign(FRESH(),keep);save();toast(MT('done'));cloudBtn();render()};
@@ -1645,15 +1647,18 @@ function cxList(){
   <div class="box" style="margin-top:14px"><b>${T('groups')}</b><div class="ctrl" style="margin-top:8px"><select class="chip" id="grp"><option value="all">${T('all')}</option>${groups.map(g=>`<option ${cx.group===g?'selected':''}>${esc(g)}</option>`).join('')}</select>
     <input class="chip" id="grpName" placeholder="+" style="width:120px"><button class="chip" id="grpNew">${T('create')}</button></div></div>
   ${comboGrid()}
-  <div class="box" style="margin-top:14px"><div class="ctrl"><span class="muted">${T('sort')}:</span>${sorts.map(s=>`<button class="chip" data-s="${s}" aria-pressed="${cx.sort===s}">${T('s_'+(s==='rarity'?'rarity':s))}${cx.sort===s?(cx.dir>0?' ▲':' ▼'):''}</button>`).join('')}<button class="chip" id="favOnly" aria-pressed="${cx.fav}">${T('s_fav')}</button></div>
+  <div class="box" style="margin-top:14px"><div class="ctrl"><span class="muted">${T('sort')}:</span>${sorts.map(s=>`<button class="chip" data-s="${s}" aria-pressed="${cx.sort===s}">${T('s_'+(s==='rarity'?'rarity':s))}${cx.sort===s?(cx.dir>0?' ▲':' ▼'):''}</button>`).join('')}<button class="chip" id="favOnly" aria-pressed="${cx.fav}">${T('s_fav')}</button><span style="margin-left:auto;display:flex;gap:4px"><button class="chip" data-vw="grid" aria-pressed="${cx.view==='grid'}">▦ ${MT('grid')}</button><button class="chip" data-vw="table" aria-pressed="${cx.view==='table'}">☰ ${MT('table')}</button></span></div>
+    <div class="ctrl" style="margin-top:8px"><span class="muted">${MT('rar')}:</span><button class="chip" data-yf="all" aria-pressed="${cx.rar==='all'}">${FT(2)}</button>${RAR.slice().reverse().map(r=>`<button class="chip" data-yf="${r}" aria-pressed="${cx.rar===r}"><b class="rb r-${r}">${r}</b></button>`).join('')}</div>
    <div class="ctrl" style="margin-top:8px"><span class="muted">${FT(0)}:</span><button class="chip" data-kf="all" aria-pressed="${cx.kind==='all'}">${FT(2)}</button>${CX_KINDS.map(([k])=>`<button class="chip ichip" data-kf="${k}" aria-pressed="${cx.kind===k}"><span class="ci">${CX_KI[k]}</span>${kindName(k)}</button>`).join('')}</div>
    <div class="ctrl" style="margin-top:8px"><span class="muted">${FT(5)}:</span><button class="chip" data-rf="all" aria-pressed="${cx.race==='all'}">${FT(2)}</button>${CX_RACES.map(r=>`<button class="chip ichip" data-rf="${r}" aria-pressed="${cx.race===r}">${raceBadge(r,20)}${raceName(r)}</button>`).join('')}</div>
    <div class="ctrl" style="margin-top:8px"><span class="muted">${FT(1)}:</span><button class="chip" data-ef="all" aria-pressed="${cx.el==='all'}">${FT(2)}</button>${CX_ELS.map(([e])=>`<button class="chip ichip" data-ef="${e}" aria-pressed="${cx.el===e}">${e==='神'||e==='魔'?raceBadge(e,20)+raceName(e):orbSVG(e,20)+elName(e)}</button>`).join('')}</div>
    <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;margin-top:10px;align-items:start"><div style="display:grid;gap:8px"><input class="inp" id="qn" placeholder="${esc(T('search_name'))}" value="${esc(cx.q)}"><input class="inp" id="qc" placeholder="${esc(T('search_cat'))}" value="${esc(cx.qc)}"></div>
    <div class="pager" id="pager"></div></div></div>
-  <div class="tblwrap"><table class="cards"><thead><tr><th>${T('col_rar')}</th><th>${T('col_fame')}</th><th></th><th>${T('col_title')}</th><th class="num">ATK</th><th class="num">DEF</th><th class="num">${T('col_count')}</th></tr></thead><tbody id="tb"></tbody></table></div><div class="pager" id="pager2" style="justify-content:center;margin:14px 0;flex-wrap:wrap"></div>`;
+  <div class="cgrid" id="cg" ${cx.view==='grid'?'':'hidden'}></div><div class="tblwrap" ${cx.view==='table'?'':'hidden'}><table class="cards"><thead><tr><th>${T('col_rar')}</th><th>${T('col_fame')}</th><th></th><th>${T('col_title')}</th><th class="num">ATK</th><th class="num">DEF</th><th class="num">${T('col_count')}</th></tr></thead><tbody id="tb"></tbody></table></div><div class="pager" id="pager2" style="justify-content:center;margin:14px 0;flex-wrap:wrap"></div>`;
   document.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{if(cx.sort===b.dataset.s)cx.dir*=-1;else{cx.sort=b.dataset.s;cx.dir=['name','id','order'].includes(cx.sort)?1:-1}cx.page=1;cxList()});
   $('#favOnly').onclick=()=>{cx.fav=!cx.fav;cx.page=1;cxList()};
+   document.querySelectorAll('[data-vw]').forEach(b=>b.onclick=()=>{cx.view=b.dataset.vw;try{localStorage.setItem('ml_cxview',cx.view)}catch(e){}cxList()});
+   document.querySelectorAll('[data-yf]').forEach(b=>b.onclick=()=>{cx.rar=b.dataset.yf;cx.page=1;cxList()});
   document.querySelectorAll('[data-kf]').forEach(b=>b.onclick=()=>{cx.kind=b.dataset.kf;cx.page=1;cxList()});
   document.querySelectorAll('[data-rf]').forEach(b=>b.onclick=()=>{cx.race=b.dataset.rf;cx.page=1;cxList()});
   document.querySelectorAll('[data-cr]').forEach(b=>b.onclick=()=>{const r=b.dataset.cr,e=b.dataset.ce;if(b.classList.contains('on')){cx.race='all';cx.el='all';cx.kind='all'}else{cx.race=r;cx.el=e||'all';cx.kind='char'}cx.page=1;cxList()});
@@ -1669,6 +1674,7 @@ function cxRows(){
   if(cx.fav)list=list.filter(c=>S.fav[c.i]);
   if(cx.kind!=='all'){const f=CX_KINDS.find(x=>x[0]===cx.kind);if(f)list=list.filter(f[1])}
   if(cx.race!=='all')list=list.filter(c=>c.r===cx.race);
+  if(cx.rar!=='all')list=list.filter(c=>c.y===cx.rar);
   if(cx.el!=='all'){const f=CX_ELS.find(x=>x[0]===cx.el);if(f)list=list.filter(f[1])}
   if(cx.group!=='all')list=list.filter(c=>(S.groups[cx.group]||[]).includes(c.i));
   const q=cx.q.trim().toLowerCase();if(q)list=list.filter(c=>Object.values(c.n).some(v=>v&&v.toLowerCase().includes(q)));
@@ -1682,7 +1688,13 @@ function cxRows(){
   {const P=cx.page,nums=[...new Set([1,P-2,P-1,P,P+1,P+2,pages])].filter(n=>n>=1&&n<=pages).sort((a,b)=>a-b);let h=`<button class="chip" data-pg="${P-1}" ${P<=1?'disabled':''}>‹ ${FT(3)}</button>`,last=0;
    for(const n of nums){if(n-last>1)h+='<span class="muted">…</span>';h+=`<button class="chip" data-pg="${n}" aria-pressed="${n===P}">${n}</button>`;last=n}
    h+=`<button class="chip" data-pg="${P+1}" ${P>=pages?'disabled':''}>${FT(4)} ›</button><span class="muted" style="margin-left:6px">${list.length.toLocaleString()}</span>`;
-   $('#pager2').innerHTML=h;$('#pager2').querySelectorAll('[data-pg]').forEach(b=>b.onclick=()=>{cx.page=+b.dataset.pg;cxRows();$('.tblwrap').scrollIntoView({block:'start'})})}
+   $('#pager2').innerHTML=h;$('#pager2').querySelectorAll('[data-pg]').forEach(b=>b.onclick=()=>{cx.page=+b.dataset.pg;cxRows();$(cx.view==='grid'?'#cg':'.tblwrap').scrollIntoView({block:'start'})})}
+  if(cx.view==='grid'){const g=$('#cg');
+    g.innerHTML=rows.length?rows.map(c=>`<div class="cw">${miniHTML(c)}<button class="star ${S.fav[c.i]?'on':''}" data-fav="${c.i}" aria-label="${T('fav')}">${S.fav[c.i]?'★':'☆'}</button><div class="sub2"><span>⚔${c.a.toLocaleString()} 🛡${c.d.toLocaleString()}</span><span>×${S.owned[c.i]}</span></div></div>`).join(''):`<div class="muted" style="grid-column:1/-1;text-align:center;padding:24px">${T('empty')}</div>`;
+    hydrateMinis(g);
+    g.querySelectorAll('.mini[data-id]').forEach(m=>m.onclick=()=>detail(+m.dataset.id));
+    g.querySelectorAll('[data-fav]').forEach(b=>b.onclick=e=>{e.stopPropagation();const i=b.dataset.fav;S.fav[i]=!S.fav[i];if(!S.fav[i])delete S.fav[i];save();b.classList.toggle('on');b.textContent=S.fav[i]?'★':'☆'});
+    return}
   $('#tb').innerHTML=rows.length?rows.map(c=>`<tr data-id="${c.i}"><td><b class="rb r-${c.y}">${c.y}</b></td><td style="color:#e9a23b">${c.f.toFixed(1)}</td>
     <td><button class="star ${S.fav[c.i]?'on':''}" data-fav="${c.i}" aria-label="${T('fav')}">${S.fav[c.i]?'★':'☆'}</button></td>
     <td><div class="tcell"><div class="thumb" data-im="${c.i}">${glyph(c)}</div><div style="min-width:0"><div style="font-weight:700">${esc(nm(c))} <span class="idc">#${c.i}</span></div>

@@ -1,31 +1,35 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Terms of Use · MYRIAD LEGENDS 萬象傳奇錄</title>
-<style>body{margin:0;background:#0e0d12;color:#e8e2d4;font:16px/1.7 system-ui,"Noto Sans TC",sans-serif}main{max-width:760px;margin:0 auto;padding:32px 16px 64px}h1,h2{color:#e9c46a}h1{font-size:26px}h2{font-size:19px;margin-top:28px}a{color:#e9c46a}hr{border:0;border-top:1px solid #333;margin:36px 0}small{color:#9a937f}</style></head>
+<style>body{margin:0;background:#0e0d12;color:#e8e2d4;font:16px/1.75 system-ui,"Noto Sans TC","Noto Sans SC","Noto Sans JP","Noto Sans KR",sans-serif}main{max-width:760px;margin:0 auto;padding:28px 16px 64px}h1,h2{color:#e9c46a}h1{font-size:28px;margin:8px 0 2px}h2{font-size:19px;margin-top:30px}a{color:#e9c46a}small{color:#9a937f}.bar{display:flex;justify-content:flex-end}select{background:#1a1820;color:#e8e2d4;border:1px solid #444;border-radius:6px;padding:4px 8px;font:inherit;font-size:14px}.back{margin-top:36px}ul{padding-left:1.3em}</style></head>
 <body><main>
-<h1>Terms of Use</h1>
-<small>MYRIAD LEGENDS (萬象傳奇錄) · https://mylegends.org · Last updated 2026-11-22</small>
-<h2>The game</h2>
-<p>MYRIAD LEGENDS is a free, non-commercial educational card game. There are no purchases. Packs, cards and rewards have no money value and cannot be sold or exchanged for money.</p>
-<h2>Content and credits</h2>
-<p>Card text comes from Wikipedia and is shared under CC BY-SA 4.0. Pictures come from Wikimedia Commons, the National Palace Museum (Taipei, CC BY 4.0), the Cleveland Museum of Art (CC0) and other open sources. Each card shows its source and license. This is an unofficial fan project, not affiliated with Wikipedia, the Wikimedia Foundation or any museum.</p>
-<h2>Fair play</h2>
-<p>Please do not attack the service, overload it, or tamper with the global counter or other players' cloud saves.</p>
-<h2>No warranty</h2>
-<p>The game is provided as is. Saves may be lost (for example, if browser data is cleared). Export a backup from the Collection page, or use cloud save. The game, its rules and its cards may change at any time.</p>
-<h2>Contact</h2>
-<p>Questions, corrections or takedown requests: <a href="https://github.com/seanown/myriad-legends/issues">github.com/seanown/myriad-legends/issues</a>. See the <a href="/contact.html?lang=en">Contact page</a> and the <a href="/privacy.html">Privacy Policy</a>.</p>
-<hr>
-<h1>使用條款</h1>
-<h2>遊戲</h2>
-<p>萬象傳奇錄是免費、非商業的教育卡牌遊戲，沒有任何付費內容。卡包、卡牌與獎勵沒有金錢價值，不能買賣或換成金錢。</p>
-<h2>內容與出處</h2>
-<p>卡牌文字來自維基百科，依 CC BY-SA 4.0 授權分享。圖片來自維基共享資源、國立故宮博物院（CC BY 4.0）、克里夫蘭藝術博物館（CC0）等開放來源，每張卡都標示出處與授權。本遊戲為非官方作品，與維基百科、維基媒體基金會及各博物館無關。</p>
-<h2>公平遊戲</h2>
-<p>請勿攻擊或濫用本服務，也不要竄改全服計數或他人的雲端存檔。</p>
-<h2>免責</h2>
-<p>本遊戲依現狀提供。存檔可能遺失（例如清除瀏覽器資料），請在圖鑑頁匯出備份或使用雲端存檔。遊戲、規則與卡牌可能隨時調整。</p>
-<h2>聯絡</h2>
-<p>問題、更正或下架要求：<a href="https://github.com/seanown/myriad-legends/issues">github.com/seanown/myriad-legends/issues</a>。另見<a href="/contact.html">聯絡我們</a>與<a href="/privacy.html">隱私權政策</a>。</p>
-<p><a href="/">← 回到遊戲 / Back to the game</a></p>
-</main></body></html>
+<div class="bar"><select id="lang" aria-label="Language"></select></div>
+<div id="root"></div>
+</main>
+<script>
+const UPDATED='2026-11-22',ISSUES='https://github.com/seanown/myriad-legends/issues';
+// Each language: n name, t title, upd, then [heading, paragraph] sections, back, terms, contact
+const TX={
+zh_hant:{n:"繁體中文",t:"使用條款",upd:"最後更新",back:"回到遊戲",terms:"隱私權政策",contact:"聯絡我們",s:[["遊戲", "萬象傳奇錄是免費、非商業的教育卡牌遊戲，沒有任何付費內容。卡包、卡牌與獎勵沒有金錢價值，不能買賣或換成金錢。"], ["內容與出處", "卡牌文字來自維基百科，依 CC BY-SA 4.0 授權分享。圖片來自維基共享資源、國立故宮博物院（CC BY 4.0）、克里夫蘭藝術博物館（CC0）等開放來源，每張卡都標示出處與授權。本遊戲為非官方作品，與維基百科、維基媒體基金會或任何博物館無關。"], ["公平遊戲", "請勿攻擊或濫用本服務，也不要竄改全服計數或他人的雲端存檔。"], ["免責", "本遊戲依現狀提供。存檔可能遺失（例如清除瀏覽器資料），請在圖鑑頁匯出備份或使用雲端存檔。遊戲、規則與卡牌可能隨時調整。"], ["聯絡", "問題、更正或下架要求：{I}。"]]},
+zh_hans:{n:"简体中文",t:"使用条款",upd:"最后更新",back:"回到游戏",terms:"隐私政策",contact:"联系我们",s:[["游戏", "万象传奇录是免费、非商业的教育卡牌游戏，没有任何付费内容。卡包、卡牌与奖励没有金钱价值，不能买卖或换成金钱。"], ["内容与出处", "卡牌文字来自维基百科，依 CC BY-SA 4.0 授权分享。图片来自维基共享资源、台北故宫博物院（CC BY 4.0）、克利夫兰艺术博物馆（CC0）等开放来源，每张卡都标明出处与授权。本游戏为非官方作品，与维基百科、维基媒体基金会或任何博物馆无关。"], ["公平游戏", "请勿攻击或滥用本服务，也不要篡改全服计数或他人的云端存档。"], ["免责", "本游戏按现状提供。存档可能丢失（例如清除浏览器数据），请在图鉴页导出备份或使用云端存档。游戏、规则与卡牌可能随时调整。"], ["联系", "问题、更正或下架要求：{I}。"]]},
+ja:{n:"日本語",t:"利用規約",upd:"最終更新",back:"ゲームに戻る",terms:"プライバシーポリシー",contact:"お問い合わせ",s:[["ゲームについて", "萬象傳奇錄は無料・非営利の教育カードゲームで、課金要素はありません。パック、カード、報酬に金銭的価値はなく、売買や換金はできません。"], ["コンテンツと出典", "カードの文章は Wikipedia より CC BY-SA 4.0 で共有しています。画像はウィキメディア・コモンズ、國立故宮博物院（CC BY 4.0）、クリーブランド美術館（CC0）などのオープンソースによるもので、各カードに出典とライセンスを表示しています。本作は非公式のファン作品であり、Wikipedia、ウィキメディア財団、いかなる博物館とも関係ありません。"], ["フェアプレイ", "サービスへの攻撃や過負荷、全サーバーカウンターや他人のクラウドセーブの改ざんはおやめください。"], ["免責", "本ゲームは現状のまま提供されます。ブラウザのデータ消去などでセーブが失われる場合があります。図鑑ページからバックアップを書き出すか、クラウドセーブをご利用ください。ゲーム、ルール、カードは予告なく変更されることがあります。"], ["お問い合わせ", "ご質問、訂正、削除依頼：{I}"]]},
+ko:{n:"한국어",t:"이용약관",upd:"최종 업데이트",back:"게임으로 돌아가기",terms:"개인정보 처리방침",contact:"문의하기",s:[["게임", "萬象傳奇錄은 무료 비상업 교육용 카드 게임이며 결제 요소가 없습니다. 팩, 카드, 보상은 금전적 가치가 없으며 판매하거나 현금으로 바꿀 수 없습니다."], ["콘텐츠와 출처", "카드 글은 위키백과에서 가져와 CC BY-SA 4.0으로 공유합니다. 이미지는 위키미디어 공용, 국립고궁박물원(CC BY 4.0), 클리블랜드 미술관(CC0) 등 공개 자료이며, 카드마다 출처와 라이선스를 표시합니다. 이 게임은 비공식 팬 프로젝트로 위키백과, 위키미디어 재단, 어떤 박물관과도 관련이 없습니다."], ["공정한 플레이", "서비스를 공격하거나 과부하를 주지 말고, 전체 카운터나 다른 사람의 클라우드 저장 데이터를 조작하지 마세요."], ["면책", "게임은 있는 그대로 제공됩니다. 브라우저 데이터 삭제 등으로 저장 데이터가 사라질 수 있으니 도감 페이지에서 백업하거나 클라우드 저장을 사용하세요. 게임, 규칙, 카드는 언제든 바뀔 수 있습니다."], ["문의", "질문, 정정, 삭제 요청: {I}"]]},
+en:{n:"English",t:"Terms of Use",upd:"Last updated",back:"Back to the game",terms:"Privacy Policy",contact:"Contact",s:[["The game", "MYRIAD LEGENDS is a free, non-commercial educational card game. There are no purchases. Packs, cards and rewards have no money value and cannot be sold or exchanged for money."], ["Content and credits", "Card text comes from Wikipedia and is shared under CC BY-SA 4.0. Pictures come from Wikimedia Commons, the National Palace Museum (Taipei, CC BY 4.0), the Cleveland Museum of Art (CC0) and other open sources. Each card shows its source and license. This is an unofficial fan project, not affiliated with Wikipedia, the Wikimedia Foundation or any museum."], ["Fair play", "Please do not attack the service, overload it, or tamper with the global counter or other players' cloud saves."], ["No warranty", "The game is provided as is. Saves may be lost (for example, if browser data is cleared). Export a backup from the Collection page, or use cloud save. The game, its rules and its cards may change at any time."], ["Contact", "Questions, corrections or takedown requests: {I}"]]},
+es:{n:"Español",t:"Términos de uso",upd:"Última actualización",back:"Volver al juego",terms:"Política de privacidad",contact:"Contacto",s:[["El juego", "MYRIAD LEGENDS es un juego de cartas educativo, gratuito y sin fines comerciales. No hay compras. Los sobres, cartas y recompensas no tienen valor monetario y no pueden venderse ni cambiarse por dinero."], ["Contenido y créditos", "El texto de las cartas procede de Wikipedia y se comparte bajo CC BY-SA 4.0. Las imágenes proceden de Wikimedia Commons, el Museo del Palacio Nacional (Taipéi, CC BY 4.0), el Museo de Arte de Cleveland (CC0) y otras fuentes abiertas. Cada carta indica su fuente y licencia. Es un proyecto no oficial, sin relación con Wikipedia, la Fundación Wikimedia ni ningún museo."], ["Juego limpio", "No ataques ni sobrecargues el servicio, ni manipules el contador global o las partidas en la nube de otros jugadores."], ["Sin garantía", "El juego se ofrece tal cual. Las partidas pueden perderse (por ejemplo, al borrar los datos del navegador). Exporta una copia desde la página Colección o usa el guardado en la nube. El juego, sus reglas y sus cartas pueden cambiar en cualquier momento."], ["Contacto", "Preguntas, correcciones o solicitudes de retirada: {I}"]]},
+fr:{n:"Français",t:"Conditions d'utilisation",upd:"Dernière mise à jour",back:"Retour au jeu",terms:"Politique de confidentialité",contact:"Contact",s:[["Le jeu", "MYRIAD LEGENDS est un jeu de cartes éducatif gratuit et non commercial. Aucun achat. Les paquets, cartes et récompenses n'ont aucune valeur monétaire et ne peuvent être ni vendus ni échangés contre de l'argent."], ["Contenus et crédits", "Les textes des cartes proviennent de Wikipédia et sont partagés sous CC BY-SA 4.0. Les images proviennent de Wikimedia Commons, du Musée national du Palais (Taipei, CC BY 4.0), du Cleveland Museum of Art (CC0) et d'autres sources ouvertes. Chaque carte indique sa source et sa licence. Ce projet non officiel n'est affilié ni à Wikipédia, ni à la Fondation Wikimedia, ni à aucun musée."], ["Fair-play", "N'attaquez pas et ne surchargez pas le service, et ne modifiez pas le compteur global ni les sauvegardes cloud des autres joueurs."], ["Aucune garantie", "Le jeu est fourni tel quel. Les sauvegardes peuvent être perdues (par exemple si les données du navigateur sont effacées). Exportez une sauvegarde depuis la page Collection ou utilisez la sauvegarde cloud. Le jeu, ses règles et ses cartes peuvent changer à tout moment."], ["Contact", "Questions, corrections ou demandes de retrait : {I}"]]},
+pt:{n:"Português",t:"Termos de uso",upd:"Última atualização",back:"Voltar ao jogo",terms:"Política de privacidade",contact:"Contato",s:[["O jogo", "MYRIAD LEGENDS é um jogo de cartas educativo, gratuito e sem fins comerciais. Não há compras. Pacotes, cartas e recompensas não têm valor monetário e não podem ser vendidos nem trocados por dinheiro."], ["Conteúdo e créditos", "O texto das cartas vem da Wikipédia e é compartilhado sob CC BY-SA 4.0. As imagens vêm do Wikimedia Commons, do Museu do Palácio Nacional (Taipé, CC BY 4.0), do Museu de Arte de Cleveland (CC0) e de outras fontes abertas. Cada carta mostra a fonte e a licença. É um projeto não oficial, sem vínculo com a Wikipédia, a Fundação Wikimedia ou qualquer museu."], ["Jogo limpo", "Não ataque nem sobrecarregue o serviço, nem altere o contador global ou os salvamentos na nuvem de outros jogadores."], ["Sem garantia", "O jogo é fornecido como está. Salvamentos podem ser perdidos (por exemplo, ao limpar os dados do navegador). Exporte um backup na página Coleção ou use o salvamento na nuvem. O jogo, as regras e as cartas podem mudar a qualquer momento."], ["Contato", "Dúvidas, correções ou pedidos de remoção: {I}"]]}};
+const HL={zh_hant:'zh-Hant',zh_hans:'zh-Hans',ja:'ja',ko:'ko',en:'en',es:'es',fr:'fr',pt:'pt'};
+function pick(){const q=new URLSearchParams(location.search).get('lang');if(TX[q])return q;
+  try{const s=JSON.parse(localStorage.getItem('wanxiang-v2')||'{}');if(TX[s.lang])return s.lang}catch(e){}
+  const n=(navigator.language||'').toLowerCase();if(/^zh-(cn|sg|hans)/.test(n))return'zh_hans';if(n.startsWith('zh'))return'zh_hant';
+  const b=n.slice(0,2);return TX[b]?b:'zh_hant'}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const link=`<a href="${ISSUES}" target="_blank" rel="noopener">github.com/seanown/myriad-legends/issues</a>`;
+function render(L){const t=TX[L];document.documentElement.lang=HL[L];document.title=`${t.t} · MYRIAD LEGENDS 萬象傳奇錄`;
+  document.getElementById('root').innerHTML=`<h1>${t.t}</h1><small>MYRIAD LEGENDS · 萬象傳奇錄 · https://mylegends.org · ${t.upd}: ${UPDATED}</small>`+
+  t.s.map(([h,p])=>`<h2>${h}</h2><p>${esc(p).replace('{I}',link)}</p>`).join('')+
+  `<p class="back"><a href="/">← ${t.back}</a> · <a href="/privacy.html?lang=${L}">${t.terms}</a> · <a href="/contact.html?lang=${L}">${t.contact}</a></p>`}
+const sel=document.getElementById('lang');let L=pick();
+sel.innerHTML=Object.keys(TX).map(k=>`<option value="${k}"${k===L?' selected':''}>${TX[k].n}</option>`).join('');
+sel.onchange=()=>{L=sel.value;history.replaceState(null,'','?lang='+L);render(L)};render(L);
+</script></body></html>

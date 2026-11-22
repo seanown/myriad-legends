@@ -1,39 +1,108 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Privacy Policy · MYRIAD LEGENDS 萬象傳奇錄</title>
-<style>body{margin:0;background:#0e0d12;color:#e8e2d4;font:16px/1.7 system-ui,"Noto Sans TC",sans-serif}main{max-width:760px;margin:0 auto;padding:32px 16px 64px}h1,h2{color:#e9c46a}h1{font-size:26px}h2{font-size:19px;margin-top:28px}a{color:#e9c46a}hr{border:0;border-top:1px solid #333;margin:36px 0}small{color:#9a937f}</style></head>
+<style>body{margin:0;background:#0e0d12;color:#e8e2d4;font:16px/1.75 system-ui,"Noto Sans TC","Noto Sans SC","Noto Sans JP","Noto Sans KR",sans-serif}main{max-width:760px;margin:0 auto;padding:28px 16px 64px}h1,h2{color:#e9c46a}h1{font-size:28px;margin:8px 0 2px}h2{font-size:19px;margin-top:30px}a{color:#e9c46a}small{color:#9a937f}.bar{display:flex;justify-content:flex-end}select{background:#1a1820;color:#e8e2d4;border:1px solid #444;border-radius:6px;padding:4px 8px;font:inherit;font-size:14px}.back{margin-top:36px}ul{padding-left:1.3em}</style></head>
 <body><main>
-<h1>Privacy Policy</h1>
-<small>MYRIAD LEGENDS (萬象傳奇錄) · https://mylegends.org · Last updated 2026-11-22</small>
-<p>MYRIAD LEGENDS is a free, non-commercial educational card game. There are no ads, no tracking scripts, and we never sell or share personal data.</p>
-<h2>What is stored in your browser</h2>
-<p>Your card collection, settings and progress are saved in your browser's local storage on your own device. You can export or import a backup file at any time from the Collection page.</p>
-<h2>Cloud save (optional)</h2>
-<p>If you create a transfer code or sign in with Google, a copy of your game save (cards, progress, settings) is stored on our server (Cloudflare D1) so you can play on several devices. The save is linked to a random transfer code. Anyone who knows your code can load that save, so keep it private.</p>
-<h2>Google sign-in (optional)</h2>
-<p>When you sign in with Google, we only keep Google's anonymous account identifier (the "sub" ID) to find your save. We do not store your name, email address, photo or any other Google account data, and we request no extra permissions.</p>
-<h2>Global pack counter</h2>
-<p>When you open packs, the site sends only a number (how many packs were opened) to a shared counter. No identity is attached.</p>
-<h2>Third parties</h2>
-<p>The site is hosted on Cloudflare, which may keep standard technical logs (such as IP address) for security. Some card pictures are loaded directly from Wikipedia / Wikimedia Commons, so those servers receive normal web requests from your browser. Google sign-in is provided by Google under Google's own privacy policy.</p>
-<h2>Deleting your data</h2>
-<p>Clearing your browser data removes the local save. To delete a cloud save, open an issue at <a href="https://github.com/seanown/myriad-legends/issues">github.com/seanown/myriad-legends/issues</a> with your transfer code (shown on the Collection page) and we will remove it.</p>
-<h2>Children</h2>
-<p>The game does not ask for any personal information and is suitable for all ages.</p>
-<hr>
-<h1>隱私權政策</h1>
-<p>萬象傳奇錄是免費、非商業的教育卡牌遊戲。沒有廣告、沒有追蹤程式，也絕不販售或分享個人資料。</p>
-<h2>存在你瀏覽器裡的資料</h2>
-<p>卡牌收藏、設定與進度存在你自己裝置的瀏覽器本機儲存中。你可以隨時在「圖鑑」頁匯出或匯入備份檔。</p>
-<h2>雲端存檔（選用）</h2>
-<p>如果你建立引繼碼或用 Google 登入，你的遊戲存檔（卡牌、進度、設定）會在我們的伺服器（Cloudflare D1）存一份，方便在多個裝置遊玩。存檔對應一組隨機引繼碼，知道這組碼的人就能讀取存檔，請妥善保管。</p>
-<h2>Google 登入（選用）</h2>
-<p>用 Google 登入時，我們只保存 Google 提供的匿名帳號編號（sub ID）來找到你的存檔。我們不保存你的姓名、電子郵件、頭像或任何其他 Google 帳號資料，也不要求額外權限。</p>
-<h2>全服開包計數</h2>
-<p>開包時，網站只會送出一個數字（開了幾包）到共用計數器，不附帶任何身分資料。</p>
-<h2>第三方</h2>
-<p>網站架設在 Cloudflare，Cloudflare 可能為了安全保留一般技術紀錄（例如 IP 位址）。部分卡牌圖片直接從維基百科／維基共享資源載入，這些伺服器會收到你瀏覽器的一般網頁請求。Google 登入由 Google 提供，適用 Google 自己的隱私權政策。</p>
-<h2>刪除資料</h2>
-<p>清除瀏覽器資料即可刪除本機存檔。要刪除雲端存檔，請到 <a href="https://github.com/seanown/myriad-legends/issues">github.com/seanown/myriad-legends/issues</a> 留下你的引繼碼（顯示在圖鑑頁），我們會將它移除。</p>
-<p><a href="/">← 回到遊戲 / Back to the game</a></p>
-</main></body></html>
+<div class="bar"><select id="lang" aria-label="Language"></select></div>
+<div id="root"></div>
+</main>
+<script>
+const UPDATED='2026-11-22',ISSUES='https://github.com/seanown/myriad-legends/issues';
+// Each language: n name, t title, upd, then [heading, paragraph] sections, back, terms, contact
+const TX={
+zh_hant:{n:'繁體中文',t:'隱私權政策',upd:'最後更新',back:'回到遊戲',terms:'使用條款',contact:'聯絡我們',s:[
+['簡介','萬象傳奇錄（MYRIAD LEGENDS）是免費、非商業的教育卡牌遊戲。沒有廣告、沒有付費內容、沒有追蹤或分析程式，也絕不販售或分享個人資料。'],
+['存在你瀏覽器裡的資料','卡牌收藏、設定與進度存在你自己裝置的瀏覽器本機儲存（localStorage）中，不會自動上傳。你可以隨時在「圖鑑」頁匯出或匯入備份檔。'],
+['雲端存檔（選用）','只有在你建立引繼碼或用 Google 登入時，你的遊戲存檔（卡牌、進度、設定）以及建立／更新時間才會存到我們的伺服器（Cloudflare D1），方便在多個裝置遊玩。存檔對應一組隨機引繼碼，知道這組碼的人就能讀取存檔，請妥善保管。'],
+['Google 登入（選用）','用 Google 登入時，我們只保存 Google 提供的匿名帳號編號（sub ID），用來找到你的存檔。我們不保存你的姓名、電子郵件、頭像或任何其他 Google 帳號資料，也不要求額外權限。'],
+['全服開包計數','開包時，網站只會送出一個數字（開了幾包）到共用計數器，不附帶任何身分資料。'],
+['第三方','網站架設在 Cloudflare，Cloudflare 可能為了安全保留一般技術紀錄（例如 IP 位址）。部分卡牌圖片直接從維基百科／維基共享資源載入，這些伺服器會收到你瀏覽器的一般網頁請求。Google 登入由 Google 提供，適用 Google 自己的隱私權政策。'],
+['刪除資料','清除瀏覽器資料，或在圖鑑頁按「清空收藏」，即可刪除本機存檔。要刪除雲端存檔，請到 {I} 留下你的引繼碼，我們會將它移除。'],
+['兒童','本遊戲不要求任何個人資料，適合所有年齡。'],
+['政策變更','若本政策有變更，我們會更新本頁與上方的日期。']]},
+zh_hans:{n:'简体中文',t:'隐私政策',upd:'最后更新',back:'回到游戏',terms:'使用条款',contact:'联系我们',s:[
+['简介','万象传奇录（MYRIAD LEGENDS）是免费、非商业的教育卡牌游戏。没有广告、没有付费内容、没有追踪或分析程序，也绝不出售或分享个人数据。'],
+['存在你浏览器里的数据','卡牌收藏、设置与进度保存在你自己设备的浏览器本地存储（localStorage）中，不会自动上传。你可以随时在「图鉴」页导出或导入备份文件。'],
+['云端存档（可选）','只有在你创建引继码或用 Google 登录时，你的游戏存档（卡牌、进度、设置）以及创建／更新时间才会保存到我们的服务器（Cloudflare D1），方便在多台设备上游玩。存档对应一组随机引继码，知道这组码的人就能读取存档，请妥善保管。'],
+['Google 登录（可选）','用 Google 登录时，我们只保存 Google 提供的匿名账号编号（sub ID），用来找到你的存档。我们不保存你的姓名、电子邮件、头像或任何其他 Google 账号数据，也不申请额外权限。'],
+['全服开包计数','开包时，网站只会发送一个数字（开了几包）到共享计数器，不附带任何身份信息。'],
+['第三方','网站托管在 Cloudflare，Cloudflare 可能出于安全保留一般技术日志（例如 IP 地址）。部分卡牌图片直接从维基百科／维基共享资源加载，这些服务器会收到你浏览器的普通网页请求。Google 登录由 Google 提供，适用 Google 自己的隐私政策。'],
+['删除数据','清除浏览器数据，或在图鉴页点「清空收藏」，即可删除本地存档。要删除云端存档，请到 {I} 留下你的引继码，我们会将其删除。'],
+['儿童','本游戏不要求任何个人信息，适合所有年龄。'],
+['政策变更','如本政策有变更，我们会更新本页及上方的日期。']]},
+ja:{n:'日本語',t:'プライバシーポリシー',upd:'最終更新',back:'ゲームに戻る',terms:'利用規約',contact:'お問い合わせ',s:[
+['はじめに','萬象傳奇錄（MYRIAD LEGENDS）は無料・非営利の教育カードゲームです。広告、課金、トラッキングや解析ツールは一切なく、個人データを販売・共有することもありません。'],
+['ブラウザに保存されるデータ','カードコレクション、設定、進行状況はお使いの端末のブラウザ（localStorage）に保存され、自動でアップロードされることはありません。「図鑑」ページからいつでもバックアップファイルを書き出し・読み込みできます。'],
+['クラウドセーブ（任意）','引き継ぎコードを作成した場合、または Google でログインした場合に限り、ゲームデータ（カード、進行状況、設定）と作成・更新日時を当サーバー（Cloudflare D1）に保存し、複数の端末で遊べるようにします。セーブはランダムな引き継ぎコードに紐づき、コードを知っている人は誰でも読み込めるため、大切に保管してください。'],
+['Google ログイン（任意）','Google でログインした場合、セーブを見つけるために Google の匿名アカウント ID（sub）のみを保存します。氏名、メールアドレス、写真などの Google アカウント情報は保存せず、追加の権限も求めません。'],
+['全サーバー開封カウンター','パック開封時、開封数という数値だけを共有カウンターに送信します。個人を識別する情報は含まれません。'],
+['第三者','本サイトは Cloudflare でホストされており、Cloudflare がセキュリティのために一般的な技術ログ（IP アドレスなど）を保持する場合があります。一部のカード画像は Wikipedia／ウィキメディア・コモンズから直接読み込まれるため、これらのサーバーには通常のウェブリクエストが届きます。Google ログインは Google が提供し、Google のプライバシーポリシーが適用されます。'],
+['データの削除','ブラウザのデータを消去するか、図鑑ページの「コレクションを削除」でローカルのセーブを削除できます。クラウドセーブの削除は、{I} に引き継ぎコードを添えてご連絡ください。'],
+['お子さま','本ゲームは個人情報を一切求めず、全年齢向けです。'],
+['ポリシーの変更','本ポリシーを変更する場合は、このページと上記の日付を更新します。']]},
+ko:{n:'한국어',t:'개인정보 처리방침',upd:'최종 업데이트',back:'게임으로 돌아가기',terms:'이용약관',contact:'문의하기',s:[
+['소개','萬象傳奇錄(MYRIAD LEGENDS)은 무료 비상업 교육용 카드 게임입니다. 광고, 결제, 추적·분석 도구가 없으며 개인정보를 판매하거나 공유하지 않습니다.'],
+['브라우저에 저장되는 데이터','카드 컬렉션, 설정, 진행 상황은 사용자 기기의 브라우저(localStorage)에 저장되며 자동으로 업로드되지 않습니다. 「도감」 페이지에서 언제든 백업 파일을 내보내거나 가져올 수 있습니다.'],
+['클라우드 저장(선택)','인계 코드를 만들거나 Google로 로그인한 경우에만 게임 저장 데이터(카드, 진행 상황, 설정)와 생성·수정 시각이 저희 서버(Cloudflare D1)에 저장되어 여러 기기에서 플레이할 수 있습니다. 저장 데이터는 무작위 인계 코드와 연결되며, 코드를 아는 사람은 누구나 불러올 수 있으니 안전하게 보관하세요.'],
+['Google 로그인(선택)','Google로 로그인하면 저장 데이터를 찾기 위해 Google의 익명 계정 ID(sub)만 보관합니다. 이름, 이메일, 사진 등 다른 Google 계정 정보는 저장하지 않으며 추가 권한도 요청하지 않습니다.'],
+['전체 서버 개봉 카운터','팩을 열 때 개봉 수라는 숫자만 공용 카운터로 전송되며, 신원 정보는 포함되지 않습니다.'],
+['제3자','사이트는 Cloudflare에서 호스팅되며, Cloudflare는 보안을 위해 일반적인 기술 로그(IP 주소 등)를 보관할 수 있습니다. 일부 카드 이미지는 위키백과/위키미디어 공용에서 직접 불러오므로 해당 서버가 일반적인 웹 요청을 받습니다. Google 로그인은 Google이 제공하며 Google의 개인정보처리방침이 적용됩니다.'],
+['데이터 삭제','브라우저 데이터를 지우거나 도감 페이지의 「컬렉션 삭제」로 로컬 저장 데이터를 삭제할 수 있습니다. 클라우드 저장 데이터 삭제는 {I} 에 인계 코드를 남겨 주시면 처리해 드립니다.'],
+['어린이','이 게임은 어떤 개인정보도 요구하지 않으며 모든 연령에 적합합니다.'],
+['방침 변경','방침이 바뀌면 이 페이지와 위의 날짜를 업데이트합니다.']]},
+en:{n:'English',t:'Privacy Policy',upd:'Last updated',back:'Back to the game',terms:'Terms',contact:'Contact',s:[
+['About','MYRIAD LEGENDS (萬象傳奇錄) is a free, non-commercial educational card game. There are no ads, no purchases, no tracking or analytics scripts, and we never sell or share personal data.'],
+['What is stored in your browser','Your card collection, settings and progress are saved in your browser\'s local storage on your own device and are not uploaded automatically. You can export or import a backup file at any time from the Collection page.'],
+['Cloud save (optional)','Only if you create a transfer code or sign in with Google, a copy of your game save (cards, progress, settings) and its created/updated times are stored on our server (Cloudflare D1) so you can play on several devices. The save is linked to a random transfer code. Anyone who knows your code can load that save, so keep it private.'],
+['Google sign-in (optional)','When you sign in with Google, we only keep Google\'s anonymous account identifier (the "sub" ID) to find your save. We do not store your name, email address, photo or any other Google account data, and we request no extra permissions.'],
+['Global pack counter','When you open packs, the site sends only a number (how many packs were opened) to a shared counter. No identity is attached.'],
+['Third parties','The site is hosted on Cloudflare, which may keep standard technical logs (such as IP address) for security. Some card pictures are loaded directly from Wikipedia / Wikimedia Commons, so those servers receive normal web requests from your browser. Google sign-in is provided by Google under Google\'s own privacy policy.'],
+['Deleting your data','Clearing your browser data, or pressing "Delete collection" on the Collection page, removes the local save. To delete a cloud save, open an issue at {I} with your transfer code and we will remove it.'],
+['Children','The game does not ask for any personal information and is suitable for all ages.'],
+['Changes','If this policy changes, we will update this page and the date above.']]},
+es:{n:'Español',t:'Política de privacidad',upd:'Última actualización',back:'Volver al juego',terms:'Términos',contact:'Contacto',s:[
+['Acerca de','MYRIAD LEGENDS (萬象傳奇錄) es un juego de cartas educativo, gratuito y sin fines comerciales. No hay anuncios, ni compras, ni scripts de seguimiento o analítica, y nunca vendemos ni compartimos datos personales.'],
+['Qué se guarda en tu navegador','Tu colección, ajustes y progreso se guardan en el almacenamiento local del navegador de tu propio dispositivo y no se suben automáticamente. Puedes exportar o importar una copia de seguridad en cualquier momento desde la página Colección.'],
+['Guardado en la nube (opcional)','Solo si creas un código de transferencia o inicias sesión con Google, se guarda una copia de tu partida (cartas, progreso, ajustes) y sus fechas de creación/actualización en nuestro servidor (Cloudflare D1) para jugar en varios dispositivos. La partida está ligada a un código aleatorio. Quien conozca tu código puede cargarla, así que mantenlo en privado.'],
+['Inicio de sesión con Google (opcional)','Al iniciar sesión con Google solo guardamos el identificador anónimo de cuenta de Google (el ID "sub") para encontrar tu partida. No guardamos tu nombre, correo, foto ni ningún otro dato de tu cuenta de Google, y no pedimos permisos adicionales.'],
+['Contador global de sobres','Al abrir sobres, el sitio envía solo un número (cuántos sobres se abrieron) a un contador compartido, sin ningún dato de identidad.'],
+['Terceros','El sitio está alojado en Cloudflare, que puede conservar registros técnicos estándar (como la dirección IP) por seguridad. Algunas imágenes de cartas se cargan directamente desde Wikipedia / Wikimedia Commons, por lo que esos servidores reciben solicitudes web normales de tu navegador. El inicio de sesión con Google lo presta Google bajo su propia política de privacidad.'],
+['Borrar tus datos','Borrar los datos del navegador, o pulsar «Borrar colección» en la página Colección, elimina la partida local. Para borrar una partida en la nube, abre un issue en {I} con tu código de transferencia y la eliminaremos.'],
+['Menores','El juego no pide ningún dato personal y es apto para todas las edades.'],
+['Cambios','Si esta política cambia, actualizaremos esta página y la fecha de arriba.']]},
+fr:{n:'Français',t:'Politique de confidentialité',upd:'Dernière mise à jour',back:'Retour au jeu',terms:'Conditions',contact:'Contact',s:[
+['À propos','MYRIAD LEGENDS (萬象傳奇錄) est un jeu de cartes éducatif gratuit et non commercial. Pas de publicité, pas d\'achats, pas de scripts de suivi ou d\'analyse, et nous ne vendons ni ne partageons jamais de données personnelles.'],
+['Ce qui est stocké dans votre navigateur','Votre collection, vos réglages et votre progression sont enregistrés dans le stockage local du navigateur de votre appareil et ne sont pas envoyés automatiquement. Vous pouvez exporter ou importer une sauvegarde à tout moment depuis la page Collection.'],
+['Sauvegarde cloud (facultative)','Uniquement si vous créez un code de transfert ou vous connectez avec Google, une copie de votre partie (cartes, progression, réglages) et ses dates de création/mise à jour sont stockées sur notre serveur (Cloudflare D1) pour jouer sur plusieurs appareils. La sauvegarde est liée à un code aléatoire. Toute personne qui connaît ce code peut la charger : gardez-le privé.'],
+['Connexion Google (facultative)','Lorsque vous vous connectez avec Google, nous conservons uniquement l\'identifiant anonyme du compte Google (l\'ID « sub ») pour retrouver votre sauvegarde. Nous ne stockons ni votre nom, ni votre e-mail, ni votre photo, ni aucune autre donnée du compte Google, et ne demandons aucune autorisation supplémentaire.'],
+['Compteur global de paquets','Lorsque vous ouvrez des paquets, le site envoie seulement un nombre (combien de paquets ont été ouverts) à un compteur partagé, sans aucune identité.'],
+['Tiers','Le site est hébergé par Cloudflare, qui peut conserver des journaux techniques standard (comme l\'adresse IP) pour la sécurité. Certaines images de cartes sont chargées directement depuis Wikipédia / Wikimedia Commons, ces serveurs reçoivent donc des requêtes web normales de votre navigateur. La connexion Google est fournie par Google selon sa propre politique de confidentialité.'],
+['Supprimer vos données','Effacer les données du navigateur, ou appuyer sur « Supprimer la collection » dans la page Collection, supprime la sauvegarde locale. Pour supprimer une sauvegarde cloud, ouvrez un ticket sur {I} avec votre code de transfert et nous la supprimerons.'],
+['Enfants','Le jeu ne demande aucune information personnelle et convient à tous les âges.'],
+['Modifications','Si cette politique change, nous mettrons à jour cette page et la date ci-dessus.']]},
+pt:{n:'Português',t:'Política de privacidade',upd:'Última atualização',back:'Voltar ao jogo',terms:'Termos',contact:'Contato',s:[
+['Sobre','MYRIAD LEGENDS (萬象傳奇錄) é um jogo de cartas educativo, gratuito e sem fins comerciais. Não há anúncios, compras, scripts de rastreamento ou análise, e nunca vendemos nem compartilhamos dados pessoais.'],
+['O que fica no seu navegador','Sua coleção, configurações e progresso ficam salvos no armazenamento local do navegador do seu próprio dispositivo e não são enviados automaticamente. Você pode exportar ou importar um backup a qualquer momento na página Coleção.'],
+['Salvamento na nuvem (opcional)','Somente se você criar um código de transferência ou entrar com o Google, uma cópia do seu progresso (cartas, progresso, configurações) e as datas de criação/atualização ficam no nosso servidor (Cloudflare D1) para jogar em vários dispositivos. O salvamento fica ligado a um código aleatório. Quem souber o código pode carregá-lo, então mantenha-o em sigilo.'],
+['Login com Google (opcional)','Ao entrar com o Google, guardamos apenas o identificador anônimo da conta Google (o ID "sub") para encontrar seu salvamento. Não guardamos seu nome, e-mail, foto nem outros dados da conta Google, e não pedimos permissões extras.'],
+['Contador global de pacotes','Ao abrir pacotes, o site envia apenas um número (quantos pacotes foram abertos) a um contador compartilhado, sem nenhuma identidade.'],
+['Terceiros','O site é hospedado na Cloudflare, que pode manter registros técnicos padrão (como endereço IP) por segurança. Algumas imagens de cartas são carregadas diretamente da Wikipédia / Wikimedia Commons, então esses servidores recebem requisições web normais do seu navegador. O login com Google é fornecido pelo Google sob a política de privacidade do próprio Google.'],
+['Apagar seus dados','Limpar os dados do navegador, ou tocar em «Apagar coleção» na página Coleção, remove o salvamento local. Para apagar um salvamento na nuvem, abra uma issue em {I} com seu código de transferência e nós o removeremos.'],
+['Crianças','O jogo não pede nenhuma informação pessoal e é adequado para todas as idades.'],
+['Alterações','Se esta política mudar, atualizaremos esta página e a data acima.']]}
+};
+const HL={zh_hant:'zh-Hant',zh_hans:'zh-Hans',ja:'ja',ko:'ko',en:'en',es:'es',fr:'fr',pt:'pt'};
+function pick(){const q=new URLSearchParams(location.search).get('lang');if(TX[q])return q;
+  try{const s=JSON.parse(localStorage.getItem('wanxiang-v2')||'{}');if(TX[s.lang])return s.lang}catch(e){}
+  const n=(navigator.language||'').toLowerCase();if(/^zh-(cn|sg|hans)/.test(n))return'zh_hans';if(n.startsWith('zh'))return'zh_hant';
+  const b=n.slice(0,2);return TX[b]?b:'zh_hant'}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const link=`<a href="${ISSUES}" target="_blank" rel="noopener">github.com/seanown/myriad-legends/issues</a>`;
+function render(L){const t=TX[L];document.documentElement.lang=HL[L];document.title=`${t.t} · MYRIAD LEGENDS 萬象傳奇錄`;
+  document.getElementById('root').innerHTML=`<h1>${t.t}</h1><small>MYRIAD LEGENDS · 萬象傳奇錄 · https://mylegends.org · ${t.upd}: ${UPDATED}</small>`+
+  t.s.map(([h,p])=>`<h2>${h}</h2><p>${esc(p).replace('{I}',link)}</p>`).join('')+
+  `<p class="back"><a href="/">← ${t.back}</a> · <a href="/terms.html">${t.terms}</a> · <a href="/contact.html?lang=${L}">${t.contact}</a></p>`}
+const sel=document.getElementById('lang');let L=pick();
+sel.innerHTML=Object.keys(TX).map(k=>`<option value="${k}"${k===L?' selected':''}>${TX[k].n}</option>`).join('');
+sel.onchange=()=>{L=sel.value;history.replaceState(null,'','?lang='+L);render(L)};render(L);
+</script></body></html>
