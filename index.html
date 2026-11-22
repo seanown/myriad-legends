@@ -898,7 +898,7 @@ function refill(){
 }
 function daily(){
   const d=today();
-  if(S.lastLogin!==d){const y=new Date(Date.now()-864e5),yd=y.getFullYear()+'-'+(y.getMonth()+1)+'-'+y.getDate();S.streak=S.lastLogin===yd?(S.streak||1)+1:1;S.bestStreak=Math.max(S.bestStreak||0,S.streak);S.lastLogin=d;S.stamps++;if(S.stamps%5===0)S.pendingBlack++;save()}
+  if(S.lastLogin!==d){const n0=new Date(),y=new Date(n0.getFullYear(),n0.getMonth(),n0.getDate()-1),yd=y.getFullYear()+'-'+(y.getMonth()+1)+'-'+y.getDate();S.streak=S.lastLogin===yd?(S.streak||1)+1:1;S.bestStreak=Math.max(S.bestStreak||0,S.streak);S.lastLogin=d;S.stamps++;if(S.stamps%5===0)S.pendingBlack++;save()}
   if(S.mission.date!==d){S.mission={date:d,open:0,sr:false,wiki:false,share:false,show:false,claimed:{}};save()}
   if(S.boss.date!==d){S.boss.date=d;S.boss.tries=3;if(S.boss.dmg>=bossHP())S.boss.dmg=0;save()}
 }
@@ -1613,7 +1613,7 @@ function mergeSave(sv){if(!sv||typeof sv.owned!=='object')return false;
   Object.assign(S.trophies,sv.trophies||{});if(sv.story&&((sv.story.arch||0)>(S.story.arch||0)||((sv.story.arch||0)===(S.story.arch||0)&&(sv.story.stage||0)>(S.story.stage||0))))S.story=sv.story;if(sv.coins){S.coins=S.coins||{};Object.assign(S.coins,sv.coins)}
   if(sv.boss&&(sv.boss.kills||0)>(S.boss.kills||0))S.boss.kills=sv.boss.kills;
   if(Array.isArray(sv.showcase)&&!S.showcase.length)S.showcase=sv.showcase;
-  S.bestStreak=Math.max(S.bestStreak||0,sv.bestStreak||0);if(sv.profile&&typeof sv.profile==='object'&&(sv.profile.at||0)>((S.profile&&S.profile.at)||0))S.profile=sv.profile;return true}
+  S.bestStreak=Math.max(S.bestStreak||0,sv.bestStreak||0);if(sv.streak&&sv.lastLogin){const n0=new Date(),y=new Date(n0.getFullYear(),n0.getMonth(),n0.getDate()-1),yd=y.getFullYear()+'-'+(y.getMonth()+1)+'-'+y.getDate();const v=sv.lastLogin===today()?sv.streak:sv.lastLogin===yd?(S.lastLogin===today()?sv.streak+1:sv.streak):0;if(v>(S.streak||0)){S.streak=v;S.bestStreak=Math.max(S.bestStreak,v)}}if(sv.profile&&typeof sv.profile==='object'&&(sv.profile.at||0)>((S.profile&&S.profile.at)||0))S.profile=sv.profile;return true}
 /* ===== cloud save by transfer code (Pages Function /api/save + D1) ===== */
 const CLT={zh_hant:{t:'雲端存檔・引繼碼',n:'建立引繼碼後，進度會自動存到伺服器。在手機或其他電腦輸入同一組引繼碼，就能玩同一份卡牌。請保管好引繼碼，知道它的人就能讀取這份存檔。',make:'建立引繼碼',code:'你的引繼碼',sync:'立即同步',copy:'複製',enter:'輸入引繼碼（例：ML-ABCDE-12345）',load:'載入',ok:'已同步',bad:'找不到這組引繼碼',err:'同步失敗，稍後會再試',last:'上次同步',off:'雲端存檔暫時無法使用'},
  zh_hans:{t:'云端存档・引继码',n:'建立引继码后，进度会自动存到服务器。在手机或其他电脑输入同一组引继码，就能玩同一份卡牌。请保管好引继码，知道它的人就能读取这份存档。',make:'建立引继码',code:'你的引继码',sync:'立即同步',copy:'复制',enter:'输入引继码（例：ML-ABCDE-12345）',load:'载入',ok:'已同步',bad:'找不到这组引继码',err:'同步失败，稍后会再试',last:'上次同步',off:'云端存档暂时无法使用'},
@@ -2180,7 +2180,7 @@ const PROF=()=>S.profile||(S.profile={name:'',av:'',show:[],at:0});
 /* avatar markup; card art is filled in later by avHydrate() */
 function avHTML(av,cls=''){
   const [k,v]=String(av||'').split(':');
-  if(k==='c'&&BYID[v]){const c=BYID[v];return `<span class="av ${cls}" style="--rc:var(--r${c.y})"><span class="avi" data-avc="${c.i}">${glyph(c)}</span></span>`}
+  if(k==='c'&&BYID[v]){const c=BYID[v];return `<span class="av ${cls}" style="--rc:var(--r${c.y})"><span class="avi" data-avc="${c.i}"><span class="gl">${glyph(c)}</span></span></span>`}
   if(k==='r'&&DIAIMG[v])return `<span class="av ${cls}" style="--rc:${RCOL[v]}"><span class="avi avr">${diaSVG(v)}</span></span>`;
   if(k==='e'&&ORBP[v])return `<span class="av ${cls}" style="--rc:${ORBC[v][1]}"><span class="avi ave">${orbSVG(v,100)}</span></span>`;
   if(k==='z'&&ZOD[v])return `<span class="av ${cls}"><span class="avi avz">${ZOD[v]}</span></span>`;
@@ -2193,9 +2193,9 @@ function profBtn(){const b=$('#btnProfile');if(!b)return;const p=PROF();b.innerH
 function showProfile(){
   document.getElementById('profOv')?.remove();
   const p=PROF();const d={name:p.name||'',av:p.av||'',show:(p.show||[]).filter(i=>S.owned[i]).slice(0,3)};
-  let cat=Object.keys(S.owned).some(i=>BYID[i]&&BYID[i].k==='char')?'card':'race',q='';
+  let cat=Object.keys(S.owned).some(i=>BYID[i]&&(BYID[i].k==='char'||BYID[i].k==='event'))?'card':'race',q='';
   const host=document.createElement('div');host.className='ov prof';host.id='profOv';host.style.zIndex=40;
-  const ownedChars=()=>Object.keys(S.owned).map(i=>BYID[i]).filter(c=>c&&c.k==='char').sort((a,b)=>RAR.indexOf(b.y)-RAR.indexOf(a.y)||(b.f||0)-(a.f||0)||a.i-b.i);
+  const ownedChars=()=>Object.keys(S.owned).map(i=>BYID[i]).filter(c=>c&&(c.k==='char'||c.k==='event')).sort((a,b)=>RAR.indexOf(b.y)-RAR.indexOf(a.y)||(b.f||0)-(a.f||0)||a.i-b.i);
   const opts=()=>{
     if(cat==='race')return ['人','仙','妖','鬼','龍','神','魔'].map(r=>['r:'+r,raceName(r)]);
     if(cat==='el')return ['木','火','土','金','水'].map(e=>['e:'+e,elName(e)]);
@@ -2207,7 +2207,7 @@ function showProfile(){
   const strip=()=>{const all=opts(),o=all.slice(0,LIM);
     if(!o.length)return `<p class="muted pfnone">${cat==='card'&&q?'—':PT('none')}</p>`;
     return o.map(([v,t])=>`<button class="pfopt ${d.av===v?'on':''}" data-av="${v}" title="${esc(t)}">${avHTML(v)}<small>${esc(t)}</small></button>`).join('')+(all.length>LIM?`<span class="pfmore">${PT('more')(all.length-LIM)}</span>`:'')};
-  const dots=()=>{const s=$('.pfstrip',host);const dt=$('.pfdots',host);if(!s||!dt)return;const n=Math.max(1,Math.ceil(s.scrollWidth/Math.max(1,s.clientWidth)));const k=Math.min(n-1,Math.round(s.scrollLeft/Math.max(1,s.clientWidth)));dt.innerHTML=n>1?Array.from({length:Math.min(n,12)},(_,i)=>`<i class="${i===Math.min(k,11)?'on':''}"></i>`).join(''):''};
+  const dots=()=>{if(!host.isConnected){removeEventListener('resize',dots);return}const s=$('.pfstrip',host);const dt=$('.pfdots',host);if(!s||!dt)return;const n=Math.max(1,Math.ceil(s.scrollWidth/Math.max(1,s.clientWidth)));const k=Math.min(n-1,Math.round(s.scrollLeft/Math.max(1,s.clientWidth)));dt.innerHTML=n>1?Array.from({length:Math.min(n,12)},(_,i)=>`<i class="${i===Math.min(k,11)?'on':''}"></i>`).join(''):''};
   const bindStrip=()=>{const s=$('.pfstrip',host);s.innerHTML=strip();avHydrate(s);
     s.querySelectorAll('.pfopt').forEach(b=>b.onclick=()=>{d.av=b.dataset.av;s.querySelectorAll('.pfopt').forEach(x=>x.classList.toggle('on',x===b));const big=$('.pfbig',host);big.innerHTML=avHTML(d.av,'lg');avHydrate(big)});
     s.onscroll=dots;s.scrollLeft=0;requestAnimationFrame(dots)};
@@ -2221,7 +2221,7 @@ function showProfile(){
     const draw=()=>{const t=s.trim().toLowerCase();const l=t?all.filter(c=>Object.values(c.n).some(n=>String(n).toLowerCase().includes(t))):all;
       const g=$('.grid',ov);g.innerHTML=l.slice(0,200).map(c=>miniHTML(c,{sel:d.show.includes(c.i)})).join('')||`<p class="muted">${all.length?'—':PT('none')}</p>`;
       $('.pfmore2',ov).textContent=l.length>200?PT('more')(l.length-200):'';hydrateMinis(g);
-      g.querySelectorAll('.mini').forEach(m=>m.onclick=()=>{const i=+m.dataset.id;const j=d.show.indexOf(i);if(j>=0)d.show.splice(j,1);if(k<d.show.length)d.show[k]=i;else d.show.push(i);d.show=d.show.slice(0,3);ov.remove();bindSlots()})};
+      g.querySelectorAll('.mini').forEach(m=>{m.setAttribute('role','button');m.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();m.click()}};m.onclick=()=>{const i=+m.dataset.id;const a=d.show.slice();if(a[k]!==i){const j=a.indexOf(i);if(k<a.length)a[k]=i;else a.push(i);if(j>=0&&j!==k)a.splice(j,1)}d.show=a.slice(0,3);ov.remove();bindSlots()}})};
     ov.innerHTML=`<div class="stage" style="justify-content:flex-start;max-width:900px;width:100%"><div class="pfhd"><button class="pfback" data-x aria-label="${esc(T('close'))}">‹</button><b>${PT('pick')}</b><span></span></div>
       <input class="pfsearch" type="search" placeholder="${esc(PT('search'))}"><div class="grid" style="width:100%;margin-top:10px"></div><p class="muted pfmore2" style="text-align:center"></p></div>`;
     document.body.appendChild(ov);$('[data-x]',ov).onclick=()=>ov.remove();$('.pfsearch',ov).oninput=e=>{s=e.target.value;draw()};draw()};
@@ -2250,7 +2250,7 @@ function showProfile(){
 }
 
 function statsHTML(){
-  const ids=Object.keys(S.owned).filter(i=>BYID[i]);const kinds=ids.length,tot=POOL.length||1;
+  const ids=Object.keys(S.owned).filter(i=>BYID[i]);const kinds=ids.filter(i=>BYID[i].k!=='event').length,tot=POOL.length||1;
   const hi=ids.filter(i=>RAR.indexOf(BYID[i].y)>=4).length;const tr=TROPHIES.filter(t=>S.trophies[t[0]]).length;
   const f=n=>Number(n||0).toLocaleString();
   const rows=[['📦','s_packs',f(S.packsOpened)],['🎴','s_pulls',f(S.pulls)],['📚','s_kinds',`${f(kinds)} <small>/ ${f(tot)} · ${(kinds/tot*100).toFixed(kinds/tot<.1?2:1)}%</small>`],['✨','s_high',f(hi)],
@@ -2275,5 +2275,5 @@ $('#lang').onchange=e=>{L=S.lang=e.target.value;save();chrome();render();cloudBt
 $('#btnTrophy').onclick=showTrophies;$('#btnCloud').onclick=openCloud;$('#btnProfile').onclick=()=>window.DATAP.then(showProfile);cloudBtn();$('#btnRules').onclick=showRules;
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('.ov').forEach(o=>o.remove());$('#layer').innerHTML=''}});
 chrome();topFit();intro(false);
-(window.DATAP=loadData()).then(()=>{if(S.cloud)cloudSync().then(()=>render()).catch(()=>{});if(S.banner.id!==BANNER.id){S.banner={id:BANNER.id,pulled:0,got:false,start:Date.now()};save()}go('pull');profBtn();window.__ready=1;if($('#intro').hidden)setTimeout(maybeNotice,300)}).catch(e=>{$('#app').innerHTML='<p>Failed to load cards.json</p>'});
+(window.DATAP=loadData()).then(()=>{if(S.cloud)cloudSync().then(()=>{render();profBtn()}).catch(()=>{});if(S.banner.id!==BANNER.id){S.banner={id:BANNER.id,pulled:0,got:false,start:Date.now()};save()}go('pull');profBtn();window.__ready=1;if($('#intro').hidden)setTimeout(maybeNotice,300)}).catch(e=>{$('#app').innerHTML='<p>Failed to load cards.json</p>'});
 </script>
