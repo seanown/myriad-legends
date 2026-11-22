@@ -1624,7 +1624,10 @@ function mergeSave(sv){if(!sv||typeof sv.owned!=='object')return false;
   S.pulls=Math.max(S.pulls,sv.pulls||0);S.packsOpened=Math.max(S.packsOpened,sv.packsOpened||0);S.stamps=Math.max(S.stamps||0,sv.stamps||0);
   Object.assign(S.trophies,sv.trophies||{});if(sv.story&&((sv.story.arch||0)>(S.story.arch||0)||((sv.story.arch||0)===(S.story.arch||0)&&(sv.story.stage||0)>(S.story.stage||0))))S.story=sv.story;if(sv.coins){S.coins=S.coins||{};Object.assign(S.coins,sv.coins)}
   if(sv.boss&&(sv.boss.kills||0)>(S.boss.kills||0))S.boss.kills=sv.boss.kills;
-  if(Array.isArray(sv.showcase)&&!S.showcase.length)S.showcase=sv.showcase;return true}
+  if(Array.isArray(sv.showcase)&&!S.showcase.length)S.showcase=sv.showcase;
+  if(Array.isArray(sv.records)&&sv.records.length){const seen=new Set(S.records.map(r=>r.t+'|'+r.mode));S.records=S.records.concat(sv.records.filter(r=>r&&!seen.has(r.t+'|'+r.mode))).sort((a,b)=>b.t-a.t).slice(0,200)}
+  if(sv.duel){const g=x=>x?(x.w||0)+(x.l||0)+(x.d||0):0;if(g(sv.duel)>g(S.duel))S.duel=Object.assign({},sv.duel,{picks:(S.duel&&S.duel.picks)||sv.duel.picks,fmt:(S.duel&&S.duel.fmt)||sv.duel.fmt})}
+  return true}
 /* ===== cloud save by transfer code (Pages Function /api/save + D1) ===== */
 const CLT={zh_hant:{t:'雲端存檔・引繼碼',n:'建立引繼碼後，進度會自動存到伺服器。在手機或其他電腦輸入同一組引繼碼，就能玩同一份卡牌。請保管好引繼碼，知道它的人就能讀取這份存檔。',make:'建立引繼碼',code:'你的引繼碼',sync:'立即同步',copy:'複製',enter:'輸入引繼碼（例：ML-ABCDE-12345）',load:'載入',ok:'已同步',bad:'找不到這組引繼碼',err:'同步失敗，稍後會再試',last:'上次同步',off:'雲端存檔暫時無法使用'},
  zh_hans:{t:'云端存档・引继码',n:'建立引继码后，进度会自动存到服务器。在手机或其他电脑输入同一组引继码，就能玩同一份卡牌。请保管好引继码，知道它的人就能读取这份存档。',make:'建立引继码',code:'你的引继码',sync:'立即同步',copy:'复制',enter:'输入引继码（例：ML-ABCDE-12345）',load:'载入',ok:'已同步',bad:'找不到这组引继码',err:'同步失败，稍后会再试',last:'上次同步',off:'云端存档暂时无法使用'},
@@ -2298,14 +2301,14 @@ function bDuel(opts={}){
     bindBack();hydrateMinis($('#app'));
     document.querySelectorAll('[data-fmt]').forEach(b=>b.onclick=()=>{if(busy)return;const f=+b.dataset.fmt;if(f===d.fmt)return;d.fmt=f;save();selSlot=Math.max(0,d.picks[f].indexOf(null));if(DSRC==='rnd')DOPP=duelRandomOpp(f);else if(DOPP&&DOPP.fmt!==f)DOPP=null;draw()});
     document.querySelectorAll('[data-src]').forEach(b=>b.onclick=()=>{if(busy)return;DSRC=b.dataset.src;DOPP=DSRC==='rnd'?duelRandomOpp(d.fmt):null;draw()});
-    document.querySelectorAll('[data-ds]').forEach(s=>s.onclick=e=>{if(e.target.closest('[data-dx]'))return;selSlot=+s.dataset.ds;draw()});
-    document.querySelectorAll('[data-dx]').forEach(b=>b.onclick=e=>{e.stopPropagation();const i=+b.dataset.dx;d.picks[d.fmt][i]=null;selSlot=i;save();draw()});
+    document.querySelectorAll('[data-ds]').forEach(s=>s.onclick=e=>{if(busy||e.target.closest('[data-dx]'))return;selSlot=+s.dataset.ds;draw()});
+    document.querySelectorAll('[data-dx]').forEach(b=>b.onclick=e=>{e.stopPropagation();if(busy)return;const i=+b.dataset.dx;d.picks[d.fmt][i]=null;selSlot=i;save();draw()});
     $('#app').querySelectorAll('.picker .mini').forEach(m=>m.onclick=()=>{if(busy)return;const id=+m.dataset.id,arr=d.picks[d.fmt];const j=arr.indexOf(id);
       if(j>=0&&j===selSlot){arr[j]=null}else{if(j>=0)arr[j]=arr[selSlot];arr[selSlot]=id;const nx=arr.indexOf(null);if(nx>=0)selSlot=nx}
       save();const y=scrollY;draw();scrollTo(0,y)});
-    const re=$('#duRe');if(re)re.onclick=()=>{DOPP=duelRandomOpp(d.fmt);draw()};
-    $('#duAuto').onchange=e=>{d.auto=e.target.checked;save();if(DSRC==='rnd'&&DOPP)DOPP.eq=d.auto?DOPP.cards.map(i=>rndEq(BYID[i])):DOPP.cards.map(()=>({}));draw()};
-    const use=$('#duUse');if(use)use.onclick=()=>{const o=parseDuelCode($('#duIn').value);if(!o){toast(DU('bad'));return}DOPP=o;if(o.fmt!==d.fmt){d.fmt=o.fmt;save();toast(DU('fmt',o.fmt))}else toast(DU('loaded'));selSlot=Math.max(0,d.picks[d.fmt].indexOf(null));draw()};
+    const re=$('#duRe');if(re)re.onclick=()=>{if(busy)return;DOPP=duelRandomOpp(d.fmt);draw()};
+    $('#duAuto').onchange=e=>{if(busy){e.target.checked=d.auto;return}d.auto=e.target.checked;save();if(DSRC==='rnd'&&DOPP)DOPP.eq=d.auto?DOPP.cards.map(i=>rndEq(BYID[i])):DOPP.cards.map(()=>({}));draw()};
+    const use=$('#duUse');if(use)use.onclick=()=>{if(busy)return;const o=parseDuelCode($('#duIn').value);if(!o){toast(DU('bad'));return}DOPP=o;if(o.fmt!==d.fmt){d.fmt=o.fmt;save();toast(DU('fmt',o.fmt))}else toast(DU('loaded'));selSlot=Math.max(0,d.picks[d.fmt].indexOf(null));draw()};
     const needFull=()=>{if(!d.picks[d.fmt].every(x=>x!=null)){toast(DU('need',d.fmt));return false}return true};
     const cp=$('#duCode');if(cp)cp.onclick=()=>{if(!needFull())return;const code=duelCode(d.fmt);try{navigator.clipboard.writeText(code).then(()=>toast(T('copied')),()=>prompt('',code))}catch(e){prompt('',code)}};
     const ln=$('#duLink');if(ln)ln.onclick=()=>{if(!needFull())return;shareLink(SITE_URL+'/?duel='+duelCode(d.fmt),`${T('game')} · ${DU('mode')} ${fmtLabel(d.fmt)}`)};
@@ -2347,5 +2350,5 @@ $('#lang').onchange=e=>{L=S.lang=e.target.value;save();chrome();render();cloudBt
 $('#btnTrophy').onclick=showTrophies;$('#btnCloud').onclick=openCloud;cloudBtn();$('#btnRules').onclick=showRules;
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('.ov').forEach(o=>o.remove());$('#layer').innerHTML=''}});
 chrome();if(!(QP.get('card')||QP.get('duel')))intro(false);
-(window.DATAP=loadData()).then(()=>{if(S.cloud)cloudSync().then(()=>render()).catch(()=>{});if(S.banner.id!==BANNER.id){S.banner={id:BANNER.id,pulled:0,got:false,start:Date.now()};save()}go('pull');window.__ready=1;if(deepLink())return;if($('#intro').hidden)setTimeout(maybeNotice,300)}).catch(e=>{$('#app').innerHTML='<p>Failed to load cards.json</p>'});
+(window.DATAP=loadData()).then(()=>{const dl=QP.get('card')||QP.get('duel');const sync=S.cloud?cloudSync().catch(()=>{}):null;if(sync&&!dl)sync.then(()=>render());if(S.banner.id!==BANNER.id){S.banner={id:BANNER.id,pulled:0,got:false,start:Date.now()};save()}go('pull');window.__ready=1;if(dl){(sync||Promise.resolve()).then(()=>{if(view==='pull')render();deepLink()});return}if($('#intro').hidden)setTimeout(maybeNotice,300)}).catch(e=>{$('#app').innerHTML='<p>Failed to load cards.json</p>'});
 </script>
