@@ -79,7 +79,7 @@ h2{font-size:24px;margin:6px 0 14px}
 .pav[data-frame="violet"]{border-color:var(--rEXR);box-shadow:0 0 0 2px #000 inset,0 0 12px rgba(197,140,255,.5)}
 .pav.sm{--sz:36px}
 .pav.lg{--sz:82px}
-.icon .pav{--sz:34px;border-width:1.5px}
+.icon .pav{--sz:40px;border-width:2px}
 .icon .pav .nm{display:none}
 .av-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:10px;width:100%;max-height:42vh;overflow-y:auto;padding:4px}
 .av-cell{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:6px;border-radius:10px;border:1px solid var(--line2);background:var(--panel)}
@@ -831,7 +831,8 @@ html,body{max-width:100%;overflow-x:hidden}
 /* ===== 頂欄玩家頭像＋暱稱（軒哥 2026-11-27：主畫面右上要看得到名字與自己選的頭像） ===== */
 .cloudb .pn{font-size:13px;font-weight:800;color:#f3e6c4;max-width:92px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;letter-spacing:.02em}
 .cloudb .pn:empty{display:none}
-.cloudb .pav{box-shadow:0 0 0 1.5px #000, 0 0 10px rgba(227,184,102,.55)}
+.cloudb .pav{box-shadow:0 0 0 2px #000, 0 0 12px rgba(227,184,102,.6)}
+.cloudb{padding:4px 12px 4px 6px!important;border-radius:999px!important;min-height:46px}
 /* ===== 卡牌固定規格 v6（2026-11-27 軒哥確認：圖片佔 2/3） =====
    卡牌 340×510（2:3）｜圖片區 100cqw = 340px = 66.7%｜文字區 3 行上限約 30 字
    全部 cqw 等比，任何縮放比例完全相同 */
@@ -956,6 +957,9 @@ async function loadData(){
   S1CARDS=CARDS;
   for(const c of CARDS){BYID[c.i]=c;BYCID[c.cid]=c;(BYRAR[c.y]=BYRAR[c.y]||[]).push(c);(PRAR[c.y]=PRAR[c.y]||[]).push(c)}
   POOL=CARDS;
+  /* 軒哥 2026-11-27：卡池載入完成後再同步一次主畫面頭像 ——
+     初始呼叫時 BYCID 還是空的，avatarOptions() 找不到任何卡，才會一直顯示 👤 */
+  try{syncProfileChrome()}catch(e){}
 }
 /* live Wikipedia thumbnails for cards without a bundled image (free-licensed lead images only) */
 let WIMG={};try{WIMG=JSON.parse(localStorage.getItem('ml_wimg')||'{}')}catch(e){}
@@ -1954,7 +1958,9 @@ function mergeSave(sv){if(!sv||typeof sv.owned!=='object')return false;
   if(sv.name&&!S.name)S.name=sv.name;
   if(sv.avatar&&!S.avatar)S.avatar=sv.avatar;
   if(sv.frame&&!S.frame)S.frame=sv.frame;
-  if(Array.isArray(sv.showcase))S.showcase=[...new Set([...S.showcase,...sv.showcase])].slice(0,6);return true}
+  if(Array.isArray(sv.showcase))S.showcase=[...new Set([...S.showcase,...sv.showcase])].slice(0,6);
+  try{syncProfileChrome()}catch(e){}   // 軒哥 2026-11-27：雲端存檔載入後同步主畫面頭像與暱稱
+  return true}
 /* ===== cloud save by transfer code (Pages Function /api/save + D1) ===== */
 const CLT={zh_hant:{t:'雲端存檔・引繼碼',n:'建立引繼碼後，進度會自動存到伺服器。在手機或其他電腦輸入同一組引繼碼，就能玩同一份卡牌。請保管好引繼碼，知道它的人就能讀取這份存檔。',make:'建立引繼碼',code:'你的引繼碼',sync:'立即同步',copy:'複製',enter:'輸入引繼碼（例：ML-ABCDE-12345）',load:'載入',ok:'已同步',bad:'找不到這組引繼碼',err:'同步失敗，稍後會再試',last:'上次同步',off:'雲端存檔暫時無法使用'},
  zh_hans:{t:'云端存档・引继码',n:'建立引继码后，进度会自动存到服务器。在手机或其他电脑输入同一组引继码，就能玩同一份卡牌。请保管好引继码，知道它的人就能读取这份存档。',make:'建立引继码',code:'你的引继码',sync:'立即同步',copy:'复制',enter:'输入引继码（例：ML-ABCDE-12345）',load:'载入',ok:'已同步',bad:'找不到这组引继码',err:'同步失败，稍后会再试',last:'上次同步',off:'云端存档暂时无法使用'},
@@ -2235,9 +2241,11 @@ function openProfile(){
     };
     host.querySelectorAll('.av-cell').forEach(el=>el.onclick=()=>{
       S.avatar=el.dataset.cid;save();cloudPush();draw();
+      try{syncProfileChrome()}catch(e){}          // 軒哥 2026-11-27：選完頭像要立即同步到主畫面右上
     });
     host.querySelectorAll('.fr-opt').forEach(el=>el.onclick=()=>{
       S.frame=el.dataset.f;save();cloudPush();draw();
+      try{syncProfileChrome()}catch(e){}
     });
     $('#pfShow',host).onclick=()=>showcase();
     $('#pfCloud',host).onclick=()=>openCloud();
@@ -2248,6 +2256,17 @@ function syncProfileChrome(){
   const b=$('#btnCloud');if(!b)return;
   // 玩家暱稱顯示在頭像旁（軒哥 2026-11-27 要求：主畫面右上要看得到名字與頭像）
   const pn=b.querySelector('.pn'); if(pn) pn.textContent=S.name||'';
+  /* 軒哥 2026-11-27：頭像一直顯示不出來，原因是 S.avatar 可能存了舊 CID／空值，
+     avatarOptions() 找不到就退回 👤。這裡加一層自動修正：
+     ① S.avatar 失效時用暱稱反查 ② 反查不到且有名字，就用名字對應的預設頭像 */
+  try{
+    const opts=avatarOptions();
+    const valid=S.avatar&&opts.find(x=>x.cid===S.avatar);
+    if(!valid&&S.name){
+      const hit=opts.find(x=>nm(x.c)===S.name);
+      if(hit){ S.avatar=hit.cid; try{save()}catch(e){} }
+    }
+  }catch(e){}
   // 先還原成預設圖標，保證函式可重複呼叫（冪等）
   const prev=b.querySelector('.pav');if(prev)prev.outerHTML='<span class="ci">👤</span>';
   const o=S.avatar&&avatarOptions().find(x=>x.cid===S.avatar);
