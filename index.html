@@ -865,6 +865,11 @@ html,body{max-width:100%;overflow-x:hidden}
 .tcard.v4 .vpt b{font-size:clamp(11px,4.8cqw,16px)!important}
 .face.front .tcard .ds{font-size:clamp(10px,4.4cqw,13px)!important;line-height:1.5!important}
 /* ===== 結束 ===== */
+
+/* ===== 抽卡結果：強制 3 欄 × 2 行（軒哥 2026-11-27：之前是三上三下） ===== */
+.gal-row{grid-template-columns:repeat(3,minmax(0,1fr))!important;row-gap:18px!important;column-gap:20px!important;max-width:min(960px,100%)!important;margin:0 auto!important;justify-items:center!important}
+@media (max-width:640px){.gal-row{grid-template-columns:repeat(2,minmax(0,1fr))!important;column-gap:12px!important}}
+/* ===== 結束 ===== */
 </style>
 
 <div id="intro" hidden>
