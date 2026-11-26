@@ -79,7 +79,7 @@ h2{font-size:24px;margin:6px 0 14px}
 .pav[data-frame="violet"]{border-color:var(--rEXR);box-shadow:0 0 0 2px #000 inset,0 0 12px rgba(197,140,255,.5)}
 .pav.sm{--sz:36px}
 .pav.lg{--sz:82px}
-.icon .pav{--sz:30px;border-width:1px}
+.icon .pav{--sz:34px;border-width:1.5px}
 .icon .pav .nm{display:none}
 .av-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:10px;width:100%;max-height:42vh;overflow-y:auto;padding:4px}
 .av-cell{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:6px;border-radius:10px;border:1px solid var(--line2);background:var(--panel)}
@@ -828,6 +828,10 @@ html,body{max-width:100%;overflow-x:hidden}
 .np-t{font:900 30px/1.2 var(--f-disp);color:#ff3b3b;margin-bottom:10px}.np-cd{color:#9fb0c8;font-size:17px}.np-cd b{color:#dfe7f2;font-variant-numeric:tabular-nums}
 .np-g{color:#ffd24a;font-weight:700;font-size:14px;margin-top:10px}.np-r{color:#8a93a6;font-size:12px;margin-top:6px}.np-n{color:#8fa0bb;font-size:12px;margin:16px 0 14px}
 
+/* ===== 頂欄玩家頭像＋暱稱（軒哥 2026-11-27：主畫面右上要看得到名字與自己選的頭像） ===== */
+.cloudb .pn{font-size:13px;font-weight:800;color:#f3e6c4;max-width:92px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;letter-spacing:.02em}
+.cloudb .pn:empty{display:none}
+.cloudb .pav{box-shadow:0 0 0 1.5px #000, 0 0 10px rgba(227,184,102,.55)}
 /* ===== 卡牌固定規格 v6（2026-11-27 軒哥確認：圖片佔 2/3） =====
    卡牌 340×510（2:3）｜圖片區 100cqw = 340px = 66.7%｜文字區 3 行上限約 30 字
    全部 cqw 等比，任何縮放比例完全相同 */
@@ -860,7 +864,7 @@ html,body{max-width:100%;overflow-x:hidden}
   <nav class="tabs" role="tablist">
     <button role="tab" data-v="pull"></button><button role="tab" data-v="codex"></button><button role="tab" data-v="battle"></button>
   </nav>
-  <div class="rt"><button class="icon cloudb" id="btnCloud" title="Sign in"><span class="ci">👤</span><span class="cl"></span></button><button class="icon" id="btnTrophy" title="Trophies">🏆</button><button class="icon" id="btnRules" title="Rules">?</button></div>
+  <div class="rt"><button class="icon cloudb" id="btnCloud" title="Sign in"><span class="ci">👤</span><span class="pn"></span><span class="cl"></span></button><button class="icon" id="btnTrophy" title="Trophies">🏆</button><button class="icon" id="btnRules" title="Rules">?</button></div>
 </div></header>
 <main id="app"><p class="muted" style="text-align:center">載入卡池中… Loading cards…</p></main>
 <div id="layer"></div>
@@ -2242,6 +2246,8 @@ function openProfile(){
 }
 function syncProfileChrome(){
   const b=$('#btnCloud');if(!b)return;
+  // 玩家暱稱顯示在頭像旁（軒哥 2026-11-27 要求：主畫面右上要看得到名字與頭像）
+  const pn=b.querySelector('.pn'); if(pn) pn.textContent=S.name||'';
   // 先還原成預設圖標，保證函式可重複呼叫（冪等）
   const prev=b.querySelector('.pav');if(prev)prev.outerHTML='<span class="ci">👤</span>';
   const o=S.avatar&&avatarOptions().find(x=>x.cid===S.avatar);
