@@ -833,22 +833,20 @@ html,body{max-width:100%;overflow-x:hidden}
 .cloudb .pn:empty{display:none}
 .cloudb .pav{box-shadow:0 0 0 2px #000, 0 0 12px rgba(227,184,102,.6)}
 .cloudb{padding:4px 12px 4px 6px!important;border-radius:999px!important;min-height:46px}
-/* ===== 卡牌固定規格 v6（2026-11-27 軒哥確認：圖片佔 2/3） =====
-   卡牌 340×510（2:3）｜圖片區 100cqw = 340px = 66.7%｜文字區 3 行上限約 30 字
-   全部 cqw 等比，任何縮放比例完全相同 */
+/* ===== 卡牌固定規格 v7（2026-11-27 軒哥：圖片拉大到 72%、下方框收窄，參照 MTG） =====
+   卡牌 2:3 不變（150cqw 高）｜圖片 108cqw = 72%｜標題 10｜類型 6｜文字 19｜數值 7 */
 .tcard.v4{width:340px!important;height:510px!important;aspect-ratio:2/3!important}
-.tcard.v4 .vart{flex:0 0 100cqw!important;height:100cqw!important;max-height:100cqw!important;aspect-ratio:auto!important;margin:0!important;border-radius:3.2cqw 3.2cqw 0 0!important}
+.tcard.v4 .vart{flex:0 0 108cqw!important;height:108cqw!important;max-height:108cqw!important;aspect-ratio:auto!important;margin:0!important;border-radius:3.2cqw 3.2cqw 0 0!important}
 .tcard.v4 .vart img,.tcard.v4 .vart .ph{width:100%!important;height:100%!important;object-fit:cover!important;object-position:center 25%!important}
-.tcard.v4 .vnb{flex:0 0 11.18cqw!important;min-height:11.18cqw!important;max-height:11.18cqw!important}
-.tcard.v4 .vtl{flex:0 0 7.06cqw!important;min-height:7.06cqw!important;max-height:7.06cqw!important}
-.tcard.v4 .vtx{flex:1 1 0!important;min-height:0!important;overflow:hidden!important}
-.tcard.v4 .vpt{flex:0 0 11.76cqw!important;max-height:11.76cqw!important;margin:0!important}
-.tcard.v4 .vtx .vds{display:-webkit-box!important;-webkit-line-clamp:3!important;-webkit-box-orient:vertical!important;overflow:hidden!important;max-height:none!important;font-size:3.4cqw!important}
-/* 舊版 .tcard（非 v4）也鎖定 */
-.tcard:not(.v4){width:340px!important;height:510px!important;aspect-ratio:2/3!important;display:flex!important;flex-direction:column!important}
-.tcard:not(.v4) .art{flex:0 0 66.7%!important;height:66.7%!important;aspect-ratio:auto!important}
-.tcard:not(.v4) .art img{width:100%!important;height:100%!important;object-fit:cover!important;object-position:center 25%!important}
-.tcard:not(.v4) .ds{display:-webkit-box!important;-webkit-line-clamp:3!important;-webkit-box-orient:vertical!important;overflow:hidden!important;max-height:none!important}
+.tcard.v4 .vnb{flex:0 0 10cqw!important;min-height:10cqw!important;max-height:10cqw!important;padding:0 2.6cqw!important}
+.tcard.v4 .vnb .vn{font-size:clamp(12px,5.4cqw,17px)!important}
+.tcard.v4 .vtl{flex:0 0 6cqw!important;min-height:6cqw!important;max-height:6cqw!important;padding:0 2.6cqw!important}
+.tcard.v4 .vtl .ty{font-size:clamp(9px,3.6cqw,12px)!important}
+.tcard.v4 .vtx{flex:1 1 0!important;min-height:0!important;overflow:hidden!important;padding:1cqw 2.6cqw!important}
+.tcard.v4 .vtx .vds{display:-webkit-box!important;-webkit-line-clamp:3!important;-webkit-box-orient:vertical!important;overflow:hidden!important;max-height:none!important;font-size:clamp(10px,4.2cqw,12.5px)!important;line-height:1.45!important;margin:0!important;padding:0!important;border:0!important}
+/* 數值：MTG 式──收窄成一條細帶，靠右 */
+.tcard.v4 .vpt{flex:0 0 7cqw!important;max-height:7cqw!important;margin:0!important;padding:0 2.6cqw!important;justify-content:flex-end!important;gap:0.6cqw!important}
+.tcard.v4 .vpt b{font-size:clamp(11px,4.4cqw,15px)!important}
 /* 各場合維持比例（不強制尺寸，讓容器決定） */
 .mp-slot .tcard,.sp-card .tcard,.obo-card .tcard,.face.front .tcard,.anat-card .tcard{aspect-ratio:2/3!important}
 /* ===== 規格結束 ===== */
