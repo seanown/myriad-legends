@@ -883,6 +883,11 @@ html,body{max-width:100%;overflow-x:hidden}
 /* 抽卡結果頁：燃燒天空環（暗幕確保文字可讀） */
 .gal{background:linear-gradient(180deg,rgba(6,5,9,.78) 0%,rgba(6,5,9,.9) 55%,rgba(6,5,9,.96) 100%),url(img/packs/pack-1-burning-ring.webp) center/cover no-repeat!important;border-radius:16px!important}
 /* ===== 結束 ===== */
+
+/* ===== 抽到 EXR 的金龍影片層（軒哥 2026-11-27） ===== */
+.exr-video{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:58;pointer-events:none;background:#000;animation:exrVidIn .35s ease-out}
+@keyframes exrVidIn{from{opacity:0}to{opacity:1}}
+/* ===== 結束 ===== */
 </style>
 
 <div id="intro" hidden>
@@ -1750,6 +1755,16 @@ const PR=()=>PRE[L]||PRE.en;
 function bestOf(res){return res.reduce((a,r)=>RAR.indexOf(r.c.y)>RAR.indexOf(a)?r.c.y:a,'C')}
 function prelude(res){return new Promise(done=>{if(S.fx===false)return done();
   const best=bestOf(res),hi=RAR.indexOf(best)>=3,P=PR(),line=P.lines[Math.floor(Math.random()*P.lines.length)];
+  /* 軒哥 2026-11-27：抽到 EXR 時播放「金龍飛過中國地圖」5 秒動畫（並行播放，不延遲抽卡流程） */
+  if(best==='EXR'){try{
+    const v=document.createElement('video');
+    v.src='img/video/exr-dragon.mp4';v.muted=true;v.autoplay=true;v.playsInline=true;v.preload='auto';
+    v.className='exr-video';
+    document.body.appendChild(v);
+    const kill=()=>{if(v.parentNode)v.remove()};
+    v.addEventListener('ended',kill);v.addEventListener('error',kill);
+    setTimeout(kill,7000);
+  }catch(e){}}
   const host=document.createElement('div');host.className='pre pre-'+best;host.style.setProperty('--rc',`var(--r${best})`);
   host.innerHTML=`<div class="pre-sky">${Array.from({length:40},()=>`<i style="left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${(Math.random()*3).toFixed(2)}s;--s:${(2+Math.random()*5).toFixed(1)}px"></i>`).join('')}</div>
    <div class="pre-top">MYRIAD LEGENDS</div><div class="pre-line">${esc(line)}</div><div class="pre-rule"><i></i>✧<i></i></div>
