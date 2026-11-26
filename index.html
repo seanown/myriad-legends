@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 
-<title>萬象傳奇錄</title>
+<title>[v27] 萬象傳奇錄</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -867,7 +867,7 @@ html,body{max-width:100%;overflow-x:hidden}
 /* ===== 結束 ===== */
 
 /* ===== 抽卡結果：強制 3 欄 × 2 行（軒哥 2026-11-27：之前是三上三下） ===== */
-.gal-row{grid-template-columns:repeat(3,minmax(0,1fr))!important;row-gap:18px!important;column-gap:20px!important;max-width:min(960px,100%)!important;margin:0 auto!important;justify-items:center!important}
+.gal-row{display:grid!important;grid-template-columns:repeat(3,1fr)!important;grid-auto-flow:row!important;row-gap:18px!important;column-gap:20px!important;max-width:960px!important;width:100%!important;margin:0 auto!important;justify-items:center!important;align-items:start!important}
 @media (max-width:640px){.gal-row{grid-template-columns:repeat(2,minmax(0,1fr))!important;column-gap:12px!important}}
 /* ===== 結束 ===== */
 
