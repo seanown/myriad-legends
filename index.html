@@ -870,6 +870,14 @@ html,body{max-width:100%;overflow-x:hidden}
 .gal-row{grid-template-columns:repeat(3,minmax(0,1fr))!important;row-gap:18px!important;column-gap:20px!important;max-width:min(960px,100%)!important;margin:0 auto!important;justify-items:center!important}
 @media (max-width:640px){.gal-row{grid-template-columns:repeat(2,minmax(0,1fr))!important;column-gap:12px!important}}
 /* ===== 結束 ===== */
+
+/* ===== 單卡詳情的人物介紹 .vintro 顯示（軒哥 2026-11-27：詳情卡面沒文字） ===== */
+.tcard.v4 .vtx .vintro{display:block!important;margin:0!important;padding:0!important;background:none!important;border:0!important;border-radius:0!important;font-size:clamp(10px,4cqw,12px)!important;line-height:1.4!important;color:inherit!important;overflow:hidden!important;max-height:none!important}
+.tcard.v4 .vtx p{display:block!important;margin:0 0 .8cqw!important}
+/* short / mid 變體也一併解鎖，避免高度被鎖死 */
+.tcard.v4.short .vtx,.tcard.v4.mid .vtx{display:flex!important;flex-direction:column!important;flex:1 1 0!important;min-height:0!important;overflow:hidden!important}
+.tcard.v4.short .vart,.tcard.v4.mid .vart{flex:0 0 117cqw!important;height:117cqw!important;max-height:117cqw!important;aspect-ratio:auto!important}
+/* ===== 結束 ===== */
 </style>
 
 <div id="intro" hidden>
