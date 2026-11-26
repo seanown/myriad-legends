@@ -852,6 +852,21 @@ html,body{max-width:100%;overflow-x:hidden}
 /* 各場合維持比例（不強制尺寸，讓容器決定） */
 .mp-slot .tcard,.sp-card .tcard,.obo-card .tcard,.face.front .tcard,.anat-card .tcard{aspect-ratio:2/3!important}
 /* ===== 規格結束 ===== */
+
+/* ===== 抽卡頁比例鎖定 + 文字放大（軒哥 2026-11-27） =====
+   問題：.flip 高度由格線撐開、.tcard height:100% 覆蓋 aspect-ratio → 卡牌變 1:2
+   解法：直接鎖 .flip 為 2:3，卡牌填滿；文字用 clamp 兼顧大小卡可讀性 */
+.gslot .flip{aspect-ratio:2/3!important;height:auto!important;flex:0 0 auto!important}
+.gslot .flip .face{height:100%!important}
+.gslot .face.front .tcard{width:100%!important;height:100%!important;aspect-ratio:2/3!important}
+/* 文字：大卡 12.5-13px、小卡不低於 10px */
+.tcard.v4 .vtx .vds{font-size:clamp(10px,3.68cqw,13px)!important;line-height:1.5!important}
+.tcard.v4 .vnb .vn{font-size:clamp(12px,6cqw,20px)!important}
+.tcard.v4 .vtl .ty{font-size:clamp(9px,4cqw,13px)!important}
+.tcard.v4 .vpt b{font-size:clamp(11px,4.4cqw,16px)!important}
+/* 舊版 .tcard 同樣處理 */
+.face.front .tcard .ds{font-size:clamp(10px,3.68cqw,13px)!important;line-height:1.5!important;-webkit-line-clamp:3!important}
+/* ===== 結束 ===== */
 </style>
 
 <div id="intro" hidden>
