@@ -382,14 +382,15 @@ a.tag{text-decoration:none}
 .openn button.on{background:var(--gold);color:#1a1206;border-color:var(--gold);font-weight:700}
 .mp-scale{width:100%;max-width:1240px}
 .mp-meta{font-size:12px;color:var(--jade);letter-spacing:.06em;text-align:center}
-.mp-row{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:14px;width:100%;box-sizing:border-box;padding:0 4px}
+/* Sean 2026-11-28: 多包總覽對齊單包「三上三下」——3 欄 × 2 行、960px 置中（原六欄橫排是亂掉主因） */
+.mp-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));row-gap:18px;column-gap:20px;max-width:960px;width:100%;box-sizing:border-box;margin:0 auto;padding:0 4px;justify-items:center;align-items:start}
 .mp-slot{position:relative;min-width:0;cursor:pointer;animation:deal .45s cubic-bezier(.2,.9,.3,1) both}
 /* Sean 2026-11-26: 六張卡的 Display 卡片統一等高——以內容最多（最長）的那張為準，
    其餘卡片文字區用 flex 撐滿、不足處留白，避免一長一短。 */
 .mp-slot{display:flex}
 .mp-slot .tcard{width:100%!important;height:100%!important;animation:none;box-shadow:0 0 14px var(--rc);display:flex}
 .mp-slot .tcard .in{display:flex;flex-direction:column;flex:1;min-height:0}
-.mp-slot .tcard .vart{aspect-ratio:5/4;flex:none}
+.mp-slot .tcard .vart{aspect-ratio:1/1;flex:none}
 .mp-slot .tcard .vnb,.mp-slot .tcard .vtl,.mp-slot .tcard .vcl{flex:none}
 .mp-slot .tcard .vtx{min-height:0;flex:1;overflow:hidden}
 /* Sean 2026-11-26: short/mid 卡原本的描述區不伸展，會讓 ATK/DEF 隨字數上下浮動；
