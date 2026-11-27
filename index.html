@@ -845,15 +845,17 @@ html,body{max-width:100%;overflow-x:hidden}
 .tcard.v4 .vtx{display:flex!important;flex-direction:column!important;flex:1 1 0!important;min-height:0!important;overflow:hidden!important;padding:1cqw 2.6cqw!important}
 .tcard.v4 .vtx .vds{display:-webkit-box!important;-webkit-line-clamp:2!important;-webkit-box-orient:vertical!important;overflow:hidden!important;max-height:none!important;font-size:clamp(10px,4cqw,12px)!important;line-height:1.4!important;margin:0!important;padding:0!important;border:0!important}
 /* 數值：MTG 式──收窄成一條細帶，靠右 */
-.tcard.v4 .vpt{flex:0 0 7cqw!important;max-height:7cqw!important;margin:0!important;padding:0 2.4cqw!important;justify-content:center!important;gap:0!important;background:linear-gradient(180deg,rgba(12,14,20,.92),rgba(6,8,12,.96))!important;border-top:.35cqw solid rgba(255,255,255,.18)!important;box-shadow:none!important}
+/* Sean 2026-11-28: ATK/DEF 提高可見度——數值改包 <b>（原本裸文字讓颜色規則從未生效），
+   字色改亮金／亮青並加發光；細帶高度與卡片比例維持不變。 */
+.tcard.v4 .vpt{flex:0 0 7cqw!important;max-height:7cqw!important;margin:0!important;padding:0 2.4cqw!important;justify-content:center!important;gap:0!important;background:linear-gradient(180deg,rgba(18,16,10,.96),rgba(8,7,5,.98))!important;border-top:.45cqw solid rgba(255,207,74,.6)!important;box-shadow:inset 0 .5cqw 1cqw #ffcf4a12!important}
 .tcard.v4 .vpt span{display:flex!important;align-items:center!important;justify-content:center!important;gap:.8cqw!important;flex:1 1 0!important;min-width:0!important}
-.tcard.v4 .vpt span:first-child{border-right:.25cqw solid rgba(255,255,255,.14)!important}
-.tcard.v4 .vpt i{display:inline!important;font-size:clamp(6px,2.2cqw,8px)!important;font-weight:800!important;letter-spacing:.04em!important;opacity:.65!important;font-style:normal!important;color:#fff!important}
-.tcard.v4 .vpt b{font-size:clamp(12px,5cqw,17px)!important;font-weight:900!important;line-height:1!important}
-.tcard.v4 .vpt span:first-child b{color:#ff9a8a!important}
-.tcard.v4 .vpt span:last-child b{color:#8fb8ff!important}
-.tcard.v4 .vpt em{border:none!important}
-.tcard.v4 .vpt b{font-size:clamp(11px,4.4cqw,15px)!important}
+.tcard.v4 .vpt span:first-child{border-right:.25cqw solid rgba(255,255,255,.22)!important}
+.tcard.v4 .vpt i{display:inline!important;font-size:clamp(6px,2.4cqw,9px)!important;font-weight:900!important;letter-spacing:.06em!important;opacity:1!important;font-style:normal!important;color:#fff3d0!important;text-shadow:0 1px 2px #000!important}
+.tcard.v4 .vpt b{font-size:clamp(12px,5cqw,17px)!important;font-weight:900!important;line-height:1!important;text-shadow:0 1px 2px #000,0 0 1.2cqw currentColor!important}
+.tcard.v4 .vpt span:first-child b{color:#ffcf4a!important}
+.tcard.v4 .vpt span:last-child b{color:#5ce1ff!important}
+.tcard.v4 .vpt em{font-style:normal!important;opacity:.75!important;color:#fff!important;border:none!important}
+.tcard.v4 .vpt b{font-size:clamp(11px,4.8cqw,16px)!important}
 /* 各場合維持比例（不強制尺寸，讓容器決定） */
 .mp-slot .tcard,.sp-card .tcard,.obo-card .tcard,.face.front .tcard,.anat-card .tcard{aspect-ratio:2/3!important}
 /* ===== 規格結束 ===== */
@@ -1416,7 +1418,7 @@ function bigCardHTML(c,isNew){
    <div class="art vart" data-art="${c.i}">${phArt(c)}<span class="rbig rbig-${c.y}">${c.y}</span>${isNew?`<span class="newb">${T('new_card')}</span>`:''}<div class="holo"></div><div class="shine"></div><span class="idn">#${String(c.i).padStart(5,'0')}</span></div>
    <div class="vtl"><span class="rarity-tag">${c.y}</span><span class="ty">${esc(ty)}</span>${setSym(c.y,30)}</div>
    <div class="vtx">${ls?`<p><span class="lb">${lsLabel(c)}</span>${ls}</p>`:''}${sk?`<p><span class="lb s2">${c.k==='treasure'?t.sk2:t.sk}</span>${sk}</p>`:''}${c.intro?`<div class="vintro" title="${esc(T('card_intro')||'人物介紹')}">${esc(c.intro)}</div>`:''}${c.e?`<span class="vwm">${symSVG(c.e)}</span>`:''}</div>
-   <div class="vpt"><span><i>ATK</i>${(c.a??0).toLocaleString()}</span><em>/</em><span><i>DEF</i>${(c.d??0).toLocaleString()}</span></div>
+   <div class="vpt"><span><i>ATK</i><b>${(c.a??0).toLocaleString()}</b></span><em>/</em><span><i>DEF</i><b>${(c.d??0).toLocaleString()}</b></span></div>
    <div class="vcl">${(c.wiki_url||w)?`<a class="vinfo" href="${esc(c.wiki_url||w)}" target="_blank" rel="noopener" title="${esc(T('card_detail')||'卡片詳情')}" ${lk}>i</a>`:''}<span class="cl"><b>${c.y}</b> · ${String(c.i).padStart(5,'0')}${cred?' · © '+esc(cred):c.wk?`<span data-cred="${c.i}" data-pre=" · © ">${WIMG[c.i]?' · © '+esc(wCred(c)):''}</span>`:''}</span></div></div></div>`;
 }
 /* per-rarity entrance: SSR = 金光破符, UR = 七彩法陣, EXR = 黑雷天印 */
